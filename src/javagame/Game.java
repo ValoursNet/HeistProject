@@ -1,0 +1,40 @@
+package javagame;
+
+import org.newdawn.slick.*;
+import org.newdawn.slick.state.*;
+
+public class Game extends StateBasedGame{
+
+	public static final String gamename = "Heist: First prototype";
+	public static final int menu = 0;
+	public static final int play = 0;
+	
+	public Game(String gamename) {
+		super(gamename);
+		this.addState(new Menu(menu));
+		this.addState(new Play(play));
+	}
+
+	@Override
+	public void initStatesList(GameContainer gc) throws SlickException {
+		this.getState(menu).init(gc, this);
+		this.getState(play).init(gc, this);
+		this.enterState(menu);
+	}
+	
+	public static void main(String[] args) {
+		AppGameContainer appgc;
+		try{
+			appgc = new AppGameContainer(new Game(gamename));
+			appgc.setDisplayMode(640, 480, false);
+			appgc.start();
+			//appgc.setIcons( new String[] {"32x32.tga", "24x24.tga", "16x16.tga"} );
+			
+		}catch(SlickException e){
+			e.printStackTrace();
+		}
+	}
+
+	
+
+}
