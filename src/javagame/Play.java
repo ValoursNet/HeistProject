@@ -12,8 +12,10 @@ public class Play extends BasicGameState{
 	double playerSpeed = 0.2;
 	Float playerR = (float) 0;
 	
+	Map levelOne = new Map();
+	
 	public Play(int state){
-		
+	
 	}
 	
 	@Override
@@ -42,6 +44,10 @@ public class Play extends BasicGameState{
 
 	private void inputHandler(GameContainer gc){
 		Input input = gc.getInput();
+		
+		double prevY = playerY;
+		double prevX = playerX;
+		
 		if(input.isKeyDown(Input.KEY_UP)){
 			playerY = playerY - playerSpeed;
 		}
@@ -53,7 +59,17 @@ public class Play extends BasicGameState{
 		}
 		if(input.isKeyDown(Input.KEY_RIGHT)){
 			playerX = playerX + playerSpeed;
-		}		
+		}	
+		
+		levelOne.showPos(playerX, playerY);
+		
+		
+		if(levelOne.isColliding(playerX,playerY)){
+			playerY = prevY;
+			playerX = prevX;
+			//System.out.println("collision");
+		}
+		
 		
 		int xPos = input.getMouseX();
 		int yPos = input.getMouseY();
