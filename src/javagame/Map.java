@@ -16,6 +16,7 @@ public class Map {
 		printMapCollisions();
 	}
 	
+	//Doesn't need them zeros.
 	private int[][] createMap(){
 		int board[][] = new int[mapHeight][mapWidth]; // 8x8
         
