@@ -13,24 +13,19 @@ public class Map {
 		mapCollisions[0][1] = 1;
 		mapCollisions[0][2] = 1;
 		
+		mapCollisions[2][2] = 1;
+		
 		printMapCollisions();
 	}
 	
-	//Doesn't need them zeros.
 	private int[][] createMap(){
-		int board[][] = new int[mapHeight][mapWidth]; // 8x8
-        
-		for (int i=0; i < mapHeight; i++){
-		   for (int j=0; j < mapWidth; j++){
-		      board[i][j] = 0;
-		   }
-		}
+		int board[][] = new int[mapHeight][mapWidth];
 		return board;
 	}
 	
 	public boolean isColliding(double playerX, double playerY){
 		int xPos = (int) Math.floor((playerX)/tileSize);
-		int yPos = (int) Math.floor((playerY+tileSize)/tileSize);
+		int yPos = (int) Math.floor((playerY)/tileSize);
 		
 		if(yPos < mapHeight && xPos < mapWidth && yPos >= 0 && xPos >= 0){
 			if(mapCollisions[yPos][xPos] != 0){
@@ -48,6 +43,10 @@ public class Map {
 		int yPos = (int) Math.floor((playerY+tileSize)/tileSize);
 
 		System.out.println("x: "+xPos+"  yPos: "+yPos);
+	}
+	
+	public int[][] getMap(){
+		return mapCollisions;
 	}
 	
 	private void printMapCollisions(){

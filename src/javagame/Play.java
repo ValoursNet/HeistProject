@@ -31,8 +31,15 @@ public class Play extends BasicGameState{
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
+		g.setColor(Color.white);
+		drawMap(levelOne.getMap(),g);
+		
+		g.setColor(Color.red);
+		g.fillRect((float)playerX-19, (float)playerY-22, (float)40, (float)40);
+		
 		g.drawImage(wall,0,0);
-		g.drawImage(player,(int) playerX,(int) playerY);
+		g.drawImage(player,(int) playerX-39,(int) playerY-72);
+		
 		player.setCenterOfRotation(39,72);
 		player.setRotation(playerR);
 	}
@@ -42,40 +49,51 @@ public class Play extends BasicGameState{
 		inputHandler(gc);
 	}
 
+	private void drawMap(int[][] mapArray,Graphics g){
+		int tSize = levelOne.tileSize;
+		for (int i =0; i < mapArray.length; i++) {
+			for (int j = 0; j < mapArray[i].length; j++) {
+				if(mapArray[i][j] == 0){
+					g.fillRect(j*tSize, i*tSize, tSize, tSize);
+				}
+			}
+		}
+	}
+	
 	private void inputHandler(GameContainer gc){
 		Input input = gc.getInput();
 		
 		double prevY = playerY;
 		double prevX = playerX;
 		
-		if(input.isKeyDown(Input.KEY_UP)){
+		if(input.isKeyDown(Input.KEY_W)){
 			playerY = playerY - playerSpeed;
 		}
-		if(input.isKeyDown(Input.KEY_DOWN)){
+		if(input.isKeyDown(Input.KEY_S)){
 			playerY = playerY + playerSpeed;
 		}
-		if(input.isKeyDown(Input.KEY_LEFT)){
-			playerX = playerX - playerSpeed;
-		}
-		if(input.isKeyDown(Input.KEY_RIGHT)){
-			playerX = playerX + playerSpeed;
-		}	
-		
-		levelOne.showPos(playerX, playerY);
-		
 		
 		if(levelOne.isColliding(playerX,playerY)){
 			playerY = prevY;
+		}
+		
+		if(input.isKeyDown(Input.KEY_A)){
+			playerX = playerX - playerSpeed;
+		}
+		if(input.isKeyDown(Input.KEY_D)){
+			playerX = playerX + playerSpeed;
+		}	
+		
+		if(levelOne.isColliding(playerX,playerY)){
 			playerX = prevX;
-			//System.out.println("collision");
 		}
 		
 		
 		int xPos = input.getMouseX();
 		int yPos = input.getMouseY();
 		
-		float xDistance = (float) (xPos - (playerX+39));
-		float yDistance = (float) (yPos - (playerY+72));
+		float xDistance = (float) (xPos - (playerX));
+		float yDistance = (float) (yPos - (playerY));
 		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
 		playerR = (float) angleToTurn+90;
 	}
