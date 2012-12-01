@@ -9,7 +9,7 @@ public class Play extends BasicGameState{
 
 	Image player;
 	Image wall;
-	double playerX = 100;
+	double playerX = 70;
 	double playerY = 100;
 	double playerSpeed = 0.2;
 	Float playerR = (float) 0;
@@ -120,26 +120,51 @@ public class Play extends BasicGameState{
 		
 		double prevY = playerY;
 		double prevX = playerX;
+		/*
+		 * g.fillRect((float)playerX-19, (float)playerY-22, (float)40, (float)40);
+		 */
 		
 		if(input.isKeyDown(Input.KEY_W)){
 			playerY = playerY - playerSpeed;
 		}
+		
+		if(	levelOne.isColliding(playerX,playerY-22)||
+			levelOne.isColliding(playerX-19,playerY-22)||	
+			levelOne.isColliding(playerX+21,playerY-22)
+		){
+			playerY = prevY;
+		}
+		
 		if(input.isKeyDown(Input.KEY_S)){
 			playerY = playerY + playerSpeed;
 		}
 		
-		if(levelOne.isColliding(playerX,playerY)){
+		if(	levelOne.isColliding(playerX,playerY+18)||
+			levelOne.isColliding(playerX-19,playerY+18)||	
+			levelOne.isColliding(playerX+21,playerY+18)
+		){
 			playerY = prevY;
 		}
 		
 		if(input.isKeyDown(Input.KEY_A)){
 			playerX = playerX - playerSpeed;
 		}
+		
+		if(	levelOne.isColliding(playerX-19,playerY)||
+			levelOne.isColliding(playerX-19,playerY-22)||	
+			levelOne.isColliding(playerX-19,playerY+18)
+		){
+			playerX = prevX;
+		}
+		
 		if(input.isKeyDown(Input.KEY_D)){
 			playerX = playerX + playerSpeed;
 		}	
 		
-		if(levelOne.isColliding(playerX,playerY)){
+		if(	levelOne.isColliding(playerX+21,playerY)||
+			levelOne.isColliding(playerX+21,playerY-22)||	
+			levelOne.isColliding(playerX+21,playerY+18)
+		){
 			playerX = prevX;
 		}
 		
