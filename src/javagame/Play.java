@@ -9,17 +9,19 @@ public class Play extends BasicGameState{
 
 	Image player;
 	Image wall;
-	double playerX = 70;
-	double playerY = 100;
-	double playerSpeed = 0.2;
-	Float playerR = (float) 0;
+	Image cop;
+	
 	
 	Map levelOne = new Map();
+	Cop policeUnit = new Cop(levelOne);
+	Criminal Player = new Criminal(levelOne);
+	
+	boolean drawDebug = false;
 	
 	public Play(int state){
 	
 	}
-	
+
 	@Override
 	public int getID() {
 		return 1;
@@ -27,7 +29,8 @@ public class Play extends BasicGameState{
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		player = new Image("res/PlayerAKDrawn.png");		
+		player = new Image("res/PlayerAKDrawn.png");
+		cop = new Image("res/PlayerAKDrawn.png");
 	}
 
 	@Override
@@ -35,47 +38,63 @@ public class Play extends BasicGameState{
 		g.setColor(Color.white);
 		drawMap(levelOne.getMap(),g);
 		
-		g.setColor(Color.red);
-		g.fillRect((float)playerX-19, (float)playerY-22, (float)40, (float)40);
+		if(drawDebug){
+			g.setColor(Color.red);
+			g.fillRect((float)Player.Xpos-19, (float)Player.Ypos-22, (float)40, (float)40);
+		}
 		
-		g.drawImage(player,(int) playerX-39,(int) playerY-72);
-		
+		g.drawImage(player,(int) Player.Xpos-39,(int) Player.Ypos-72);
 		player.setCenterOfRotation(39,72);
-		player.setRotation(playerR);
+		player.setRotation(Player.currentRotation);
 		
-		drawSightline(g);
-		drawSightlineCollision(g,levelOne.getMap());
+		g.drawImage(cop,(int) policeUnit.Xpos-39,(int) policeUnit.Ypos-72);
+		cop.setCenterOfRotation(39,72);
+		cop.setRotation(policeUnit.currentRotation);
+		
+		
+		if(Player.isShooting){
+			drawSightlineCollision(g,levelOne.getMap(),Player.currentRotation);
+		}
+		
+		if(drawDebug){
+			drawSightline(g);
+			for (int i =0; i < 10; i++) {
+				drawSightlineCollision(g,levelOne.getMap(),Player.currentRotation-20+(i*4));
+			}
+		}
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
 		inputHandler(gc);
+		policeUnit.updateSelf();
+		Player.updateSelf();
 	}
 	
 	
 	private void drawSightline(Graphics g){
 		int lineLength = 500;
-		double playerRad = (playerR-90) * Math.PI / 180;
-		float startX = (float) playerX;
-		float startY = (float) playerY;
-		float endX   = (float) (startX + lineLength * Math.cos(playerRad));
-		float endY   = (float) (startY + lineLength * Math.sin(playerRad));
+		double playerRotad = (Player.currentRotation-90) * Math.PI / 180;
+		float startX = (float) Player.Xpos;
+		float startY = (float) Player.Ypos;
+		float endX   = (float) (startX + lineLength * Math.cos(playerRotad));
+		float endY   = (float) (startY + lineLength * Math.sin(playerRotad));
 		
 		g.setColor(Color.blue);
 		g.drawLine(startX, startY, endX, endY);
 	}
 	
-	private void drawSightlineCollision(Graphics g,int[][] mapArray){
+	private void drawSightlineCollision(Graphics g,int[][] mapArray, float gAngle){
 		int lineLength = 500;
-		double playerRad = (playerR-90) * Math.PI / 180;
-		float startX = (float) playerX;
-		float startY = (float) playerY;
+		double playerRotad = (gAngle-90) * Math.PI / 180;
+		float startX = (float) Player.Xpos;
+		float startY = (float) Player.Ypos;
 		
-		float endX   = (float) (startX+ 1 * Math.cos(playerRad));
-		float endY   = (float) (startY+ 1 * Math.sin(playerRad));
+		float endX   = (float) (startX+ 1 * Math.cos(playerRotad));
+		float endY   = (float) (startY+ 1 * Math.sin(playerRotad));
 		for (int i =0; i < lineLength; i++) {
-			endX   = (float) (startX + i * Math.cos(playerRad));
-			endY   = (float) (startY + i * Math.sin(playerRad));
+			endX   = (float) (startX + i * Math.cos(playerRotad));
+			endY   = (float) (startY + i * Math.sin(playerRotad));
 			
 			Point iP = getTileAtPoint(levelOne.tileSize,endX,endY);
 			
@@ -118,63 +137,44 @@ public class Play extends BasicGameState{
 	private void inputHandler(GameContainer gc){
 		Input input = gc.getInput();
 		
-		double prevY = playerY;
-		double prevX = playerX;
 		/*
-		 * g.fillRect((float)playerX-19, (float)playerY-22, (float)40, (float)40);
+		 * g.fillRect((float)Player.Xpos-19, (float)Player.Ypos-22, (float)40, (float)40);
 		 */
 		
 		if(input.isKeyDown(Input.KEY_W)){
-			playerY = playerY - playerSpeed;
+			Player.movingUp = true;
+		} else {
+			Player.movingUp = false;
 		}
-		
-		if(	levelOne.isColliding(playerX,playerY-22)||
-			levelOne.isColliding(playerX-19,playerY-22)||	
-			levelOne.isColliding(playerX+21,playerY-22)
-		){
-			playerY = prevY;
-		}
-		
 		if(input.isKeyDown(Input.KEY_S)){
-			playerY = playerY + playerSpeed;
+			Player.movingDown = true;
+		} else {
+			Player.movingDown = false;
 		}
-		
-		if(	levelOne.isColliding(playerX,playerY+18)||
-			levelOne.isColliding(playerX-19,playerY+18)||	
-			levelOne.isColliding(playerX+21,playerY+18)
-		){
-			playerY = prevY;
-		}
-		
 		if(input.isKeyDown(Input.KEY_A)){
-			playerX = playerX - playerSpeed;
+			Player.movingLeft = true;
+		} else {
+			Player.movingLeft = false;
 		}
-		
-		if(	levelOne.isColliding(playerX-19,playerY)||
-			levelOne.isColliding(playerX-19,playerY-22)||	
-			levelOne.isColliding(playerX-19,playerY+18)
-		){
-			playerX = prevX;
-		}
-		
 		if(input.isKeyDown(Input.KEY_D)){
-			playerX = playerX + playerSpeed;
-		}	
-		
-		if(	levelOne.isColliding(playerX+21,playerY)||
-			levelOne.isColliding(playerX+21,playerY-22)||	
-			levelOne.isColliding(playerX+21,playerY+18)
-		){
-			playerX = prevX;
+			Player.movingRight = true;
+		} else {
+			Player.movingRight = false;
 		}
-		
 		
 		int xPos = input.getMouseX();
 		int yPos = input.getMouseY();
 		
-		float xDistance = (float) (xPos - (playerX));
-		float yDistance = (float) (yPos - (playerY));
+		boolean mouseClick = input.isMouseButtonDown(0);
+		if(mouseClick){
+			Player.isShooting = true;
+		} else {
+			Player.isShooting = false;
+		}
+		
+		float xDistance = (float) (xPos - (Player.Xpos));
+		float yDistance = (float) (yPos - (Player.Ypos));
 		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
-		playerR = (float) angleToTurn+90;
+		Player.currentRotation = (float) angleToTurn+90;
 	}
 }
