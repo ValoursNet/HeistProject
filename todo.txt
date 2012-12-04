@@ -1,0 +1,10 @@
+Split up Play.java into:
+	Application Layer
+		RandomNumberGenerator and utils
+	Game Logic Layer
+		AI, Collisions, Map Data
+	Presentation Layer
+		User Input and Rendering
+		
+Possibly remove slick stuff (or at least simplify usage to only a few files)
+Clean up collision system (using 30 If statements cant be the best way)
