@@ -16,7 +16,7 @@ public class Person {
 	public boolean movingUp,movingDown,movingLeft,movingRight = false;	
 	public boolean isShooting = false;
 	
-	public void updateSelf() {
+	public void update() {
 		
 		//checkDirection();
 		

@@ -10,7 +10,8 @@ public class Cop extends Person {
 	}
 	
 	@Override
-	public void updateSelf() {
+	//Overriding for checkDirection. For testing.
+	public void update() {
 		
 		checkDirection();
 		
