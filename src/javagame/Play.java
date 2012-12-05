@@ -5,6 +5,9 @@ import java.awt.Point;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
+import person.Cop;
+import person.Criminal;
+
 public class Play extends BasicGameState{
 
 	Image player;

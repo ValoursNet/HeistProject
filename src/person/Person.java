@@ -1,18 +1,20 @@
-package javagame;
+package person;
+
+import javagame.Map;
 
 public class Person {
 	
 	Map levelOne;
-	double Xpos = 100;
-	double Ypos = 300;
+	public double Xpos = 100;
+	public double Ypos = 300;
 	double currentSpeed = 0.2;
-	Float currentRotation = (float) 0;
+	public Float currentRotation = (float) 0;
 	
 	int dirNum = 0;
 	int dirCount = 0;
 	
-	boolean movingUp,movingDown,movingLeft,movingRight = false;	
-	boolean isShooting = false;
+	public boolean movingUp,movingDown,movingLeft,movingRight = false;	
+	public boolean isShooting = false;
 	
 	public void updateSelf() {
 		
@@ -24,8 +26,8 @@ public class Person {
 		}
 	}
 	
-	//Ugly poo code for test movement
-	private void checkDirection() {
+	//Ugly code for test movement
+	protected void checkDirection() {
 		dirCount++;
 		if(dirCount >= 1000){
 			dirNum = dirNum + 1;
@@ -60,7 +62,7 @@ public class Person {
 		
 	}
 
-	private void collisionCheck(){
+	protected void collisionCheck(){
 		double prevY = Ypos;
 		double prevX = Xpos;
 		

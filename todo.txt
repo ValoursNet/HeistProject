@@ -8,3 +8,5 @@ Split up Play.java into:
 		
 Possibly remove slick stuff (or at least simplify usage to only a few files)
 Clean up collision system (using 30 If statements cant be the best way)
+	Similar to line method
+	Returns how much movement is allowed

@@ -1,4 +1,6 @@
-package javagame;
+package person;
+
+import javagame.Map;
 
 public class Criminal extends Person{
 	
@@ -6,4 +8,5 @@ public class Criminal extends Person{
 		levelOne = glevelOne;
 		System.out.println("CRIMINAL ERE");
 	}
+	
 }
