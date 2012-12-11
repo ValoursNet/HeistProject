@@ -22,6 +22,8 @@ public class Render {
 	
 	Projectiles projObj = new Projectiles();
 	
+	long lastTimeInMillis = System.currentTimeMillis();
+	
 	public void setMap(Map levelOne){
 		this.levelOne = levelOne;
 	}
@@ -53,19 +55,24 @@ public class Render {
 		cop.setCenterOfRotation(39,72);
 		cop.setRotation(policeUnit.currentRotation);
 		
-		if(Player.isShooting){
+		long timeInMillis = System.currentTimeMillis();
+		
+		if(Player.isShooting && projObj.bulletCount < 50){
 		//	drawSightlineCollision(Player, g,levelOne.getMap(),Player.currentRotation);
-			if(projObj.bulletCount == 0){
-				projObj.createProjectile(levelOne,Player.Xpos,Player.Ypos,0,Player.currentRotation);
+			if(0.02*(timeInMillis-lastTimeInMillis)>= 1){
+				projObj.createProjectile(levelOne,Player.Xpos,Player.Ypos, 2,Player.currentRotation);
+				Player.isShooting = false;
+				lastTimeInMillis=timeInMillis;
 			}
-			
-			Bullet b1 = projObj.getBulletCollection()[0];
-			g.setColor(Color.blue);
-			g.fillRect((float)b1.Xpos, (float)b1.Ypos, (float)4, (float)4);
-			
-			//projObj.update();
 		}
 		
+		for(int i=0; i < projObj.bulletCount; i++){
+			Bullet b1 = projObj.getBulletCollection()[i];
+			g.setColor(Color.red);
+			g.fillRect((float)b1.Xpos, (float)b1.Ypos, (float)4, (float)4);
+		}
+		projObj.update();
+			
 		if(drawDebug){
 			drawSightline(Player,g);
 			for (int i =0; i < 10; i++) {

@@ -16,7 +16,7 @@ public class Projectiles {
 	}
 	
 	public void createProjectile(Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation){
-		bulletCollection[bulletCount] = new Bullet(levelOne, Xpos, Ypos, Ypos, currentRotation);
+		bulletCollection[bulletCount] = new Bullet(levelOne, Xpos, Ypos, currentSpeed, currentRotation);
 		bulletCount++;
 	}
 	

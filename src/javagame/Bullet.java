@@ -11,6 +11,8 @@ public class Bullet {
 	double currentSpeed = 2;
 	public float currentRotation = (float) 0;
 	
+	long lastTimeInMillis = System.currentTimeMillis();
+	
 	public Bullet (Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation){
 		this.levelOne = levelOne;
 		
@@ -33,7 +35,16 @@ public class Bullet {
 		float endX = startX;
 		float endY = startY;
 		
-		for (int i =0; i < currentSpeed; i++) {
+		long timeInMillis = System.currentTimeMillis();
+		
+		double updateSpeed = currentSpeed*(timeInMillis-lastTimeInMillis);
+		
+		if(updateSpeed >= 1){
+			//System.out.println("currentSpeed:" + currentSpeed);
+			lastTimeInMillis = timeInMillis;
+		}
+		
+		for (int i =0; i <= updateSpeed; i++) {
 			endX   = (float) (startX + i * Math.cos(currentRotad));
 			endY   = (float) (startY + i * Math.sin(currentRotad));
 			
