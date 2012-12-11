@@ -1,5 +1,7 @@
 package javagame;
 
+import java.awt.Point;
+
 public class Map {
 	
 	int mapWidth = 8;
@@ -56,5 +58,14 @@ public class Map {
 			}
 		System.out.println("");
 		}
+	}
+	
+	//Util - Should be moved to util class/package/object
+	Point getTileAtPoint(int tileSize, double gX, double gY){
+		int rX = (int) (gX/tileSize);
+		int rY = (int) (gY/tileSize);;
+
+		Point rP = new Point(rX,rY);
+		return rP;
 	}
 }

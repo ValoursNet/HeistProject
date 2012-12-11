@@ -1,7 +1,5 @@
 package javagame;
 
-import java.awt.Point;
-
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
@@ -15,10 +13,13 @@ public class Play extends BasicGameState{
 	Image cop;
 	
 	Render renderObj = new Render();
+	UserInput inputObj = new UserInput();
 	
 	Map levelOne = new Map();
 	Cop policeUnit = new Cop(levelOne);
 	Criminal Player = new Criminal(levelOne);
+	
+	Projectiles projObj = new Projectiles();
 	
 	boolean drawDebug = false;
 	
@@ -38,6 +39,9 @@ public class Play extends BasicGameState{
 		
 		renderObj.setImages(player,wall,cop);
 		renderObj.setMap(levelOne);
+		renderObj.setProjectiles(projObj);
+		
+		System.out.println("name:" + Player.name);
 	}
 
 	@Override
@@ -47,53 +51,8 @@ public class Play extends BasicGameState{
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
-		inputHandler(gc);
+		inputObj.inputHandler(Player, gc);
 		policeUnit.update();
 		Player.update();
-	}
-	
-	//Input - Should be moved to own class.
-	private void inputHandler(GameContainer gc){
-		Input input = gc.getInput();
-		
-		/*
-		 * g.fillRect((float)Player.Xpos-19, (float)Player.Ypos-22, (float)40, (float)40);
-		 */
-		
-		if(input.isKeyDown(Input.KEY_W)){
-			Player.movingUp = true;
-		} else {
-			Player.movingUp = false;
-		}
-		if(input.isKeyDown(Input.KEY_S)){
-			Player.movingDown = true;
-		} else {
-			Player.movingDown = false;
-		}
-		if(input.isKeyDown(Input.KEY_A)){
-			Player.movingLeft = true;
-		} else {
-			Player.movingLeft = false;
-		}
-		if(input.isKeyDown(Input.KEY_D)){
-			Player.movingRight = true;
-		} else {
-			Player.movingRight = false;
-		}
-		
-		int xPos = input.getMouseX();
-		int yPos = input.getMouseY();
-		
-		boolean mouseClick = input.isMouseButtonDown(0);
-		if(mouseClick){
-			Player.isShooting = true;
-		} else {
-			Player.isShooting = false;
-		}
-		
-		float xDistance = (float) (xPos - (Player.Xpos));
-		float yDistance = (float) (yPos - (Player.Ypos));
-		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
-		Player.currentRotation = (float) angleToTurn+90;
 	}
 }

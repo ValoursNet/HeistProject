@@ -20,8 +20,14 @@ public class Render {
 	Image wall;
 	Image cop;
 	
+	Projectiles projObj = new Projectiles();
+	
 	public void setMap(Map levelOne){
 		this.levelOne = levelOne;
+	}
+	
+	public void setProjectiles(Projectiles projObj){
+		this.projObj = projObj;
 	}
 	
 	public void setImages(Image player,	Image wall,	Image cop){
@@ -47,9 +53,17 @@ public class Render {
 		cop.setCenterOfRotation(39,72);
 		cop.setRotation(policeUnit.currentRotation);
 		
-		
 		if(Player.isShooting){
-			drawSightlineCollision(Player, g,levelOne.getMap(),Player.currentRotation);
+		//	drawSightlineCollision(Player, g,levelOne.getMap(),Player.currentRotation);
+			if(projObj.bulletCount == 0){
+				projObj.createProjectile(levelOne,Player.Xpos,Player.Ypos,0,Player.currentRotation);
+			}
+			
+			Bullet b1 = projObj.getBulletCollection()[0];
+			g.setColor(Color.blue);
+			g.fillRect((float)b1.Xpos, (float)b1.Ypos, (float)4, (float)4);
+			
+			//projObj.update();
 		}
 		
 		if(drawDebug){
@@ -98,7 +112,7 @@ public class Render {
 			endX   = (float) (startX + i * Math.cos(playerRotad));
 			endY   = (float) (startY + i * Math.sin(playerRotad));
 			
-			Point iP = getTileAtPoint(levelOne.tileSize,endX,endY);
+			Point iP = levelOne.getTileAtPoint(levelOne.tileSize,endX,endY);
 			
 			//Check if out of bounds
 			if(mapArray.length <= iP.y || iP.y < 0){
@@ -116,14 +130,4 @@ public class Render {
 		g.setColor(Color.red);
 		g.drawLine(startX, startY, endX, endY);
 	}
-	
-	//Util - Should be moved to util class/package/object
-	private Point getTileAtPoint(int tileSize, double gX, double gY){
-		int rX = (int) (gX/tileSize);
-		int rY = (int) (gY/tileSize);;
-
-		Point rP = new Point(rX,rY);
-		return rP;
-	}
-	
 }

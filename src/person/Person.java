@@ -1,5 +1,7 @@
 package person;
 
+import java.util.Random;
+
 import javagame.Map;
 
 public class Person {
@@ -16,6 +18,8 @@ public class Person {
 	public boolean movingUp,movingDown,movingLeft,movingRight = false;	
 	public boolean isShooting = false;
 	
+	public String name = generateName();
+	
 	public void update() {
 		
 		//checkDirection();
@@ -24,6 +28,22 @@ public class Person {
 			collisionCheck();
 			currentRotation = (float) (currentRotation + 0.1);
 		}
+	}
+	
+	//ugly code for testing names
+	protected String generateName() {
+		Random r = new Random();
+		char c = (char) (r.nextInt(26) + 'a');
+		char d = (char) (r.nextInt(26) + 'a');
+		char e = (char) (r.nextInt(26) + 'a');
+		
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append(c);
+		builder.append(d);
+		builder.append(e);
+		
+		return builder.toString();
 	}
 	
 	//Ugly code for test movement
