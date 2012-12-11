@@ -12,6 +12,8 @@ public class Person {
 	double currentSpeed = 0.2;
 	public Float currentRotation = (float) 0;
 	
+	long lastTimeInMillis = System.currentTimeMillis();
+	
 	int dirNum = 0;
 	int dirCount = 0;
 	
@@ -85,6 +87,12 @@ public class Person {
 	protected void collisionCheck(){
 		double prevY = Ypos;
 		double prevX = Xpos;
+		
+		long timeInMillis = System.currentTimeMillis();
+		
+		double currentSpeed = 0.2*(timeInMillis-lastTimeInMillis);
+		
+		lastTimeInMillis = timeInMillis;
 		
 		if(movingUp){
 			Ypos = Ypos - currentSpeed;
