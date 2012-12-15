@@ -48,6 +48,7 @@ public class Person {
 		return builder.toString();
 	}
 	
+	//TODO delete
 	//Ugly code for test movement
 	protected void checkDirection() {
 		dirCount++;
