@@ -39,8 +39,17 @@ public class Render {
 	}
 	
 	public void update(GameContainer gc, StateBasedGame sbg, Graphics g, Person Player, Person policeUnit)throws SlickException {
-		g.setColor(Color.white);
-		drawMap(levelOne.getMap(),g);
+		Color cOne = new Color(33, 65, 104);
+		Color cTwo = new Color(27, 47, 72);
+		
+		g.setColor(cTwo);
+		g.fillRect(0, 0, 1024, 768);
+		
+		g.setColor(cOne);
+		drawMap(levelOne.getMap(),g,0);
+		
+		g.setColor(cTwo);
+		drawMap(levelOne.getMap(),g,1);
 		
 		if(drawDebug){
 			g.setColor(Color.red);
@@ -82,11 +91,11 @@ public class Render {
 	}
 	
 	//Should be based on paramater map, not class defined levelOne
-	void drawMap(int[][] mapArray,Graphics g){
+	void drawMap(int[][] mapArray,Graphics g, int drawNum){
 		int tSize = levelOne.tileSize;
 		for (int i =0; i < mapArray.length; i++) {
 			for (int j = 0; j < mapArray[i].length; j++) {
-				if(mapArray[i][j] == 0){
+				if(mapArray[i][j] == drawNum){
 					g.fillRect(j*tSize, i*tSize, tSize, tSize);
 				}
 			}

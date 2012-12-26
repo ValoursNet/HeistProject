@@ -26,7 +26,8 @@ public class Game extends StateBasedGame{
 		AppGameContainer appgc;
 		try{
 			appgc = new AppGameContainer(new Game(gamename));
-			appgc.setDisplayMode(640, 480, false);
+			//appgc.setDisplayMode(640, 480, false);
+			appgc.setDisplayMode(1024, 768, false);
 			appgc.start();
 			//appgc.setIcons( new String[] {"32x32.tga", "24x24.tga", "16x16.tga"} );
 			
