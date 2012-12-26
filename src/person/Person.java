@@ -1,5 +1,6 @@
 package person;
 
+import java.awt.Point;
 import java.util.Random;
 
 import javagame.Map;
@@ -9,7 +10,11 @@ public class Person {
 	Map levelOne;
 	public double Xpos = 100;
 	public double Ypos = 300;
-	double currentSpeed = 0.2;
+	public double ySpeed = 0;
+	public double xSpeed = 0;
+	public double yForce = 0;
+	public double xForce = 0;
+	double currentSpeed = 0.4;
 	public Float currentRotation = (float) 0;
 	
 	long lastTimeInMillis = System.currentTimeMillis();
@@ -27,7 +32,8 @@ public class Person {
 		//checkDirection();
 		
 		if(levelOne != null){
-			collisionCheck();
+			//collisionCheck();
+			updatePosition(levelOne.getMap());
 			currentRotation = (float) (currentRotation + 0.1);
 		}
 	}
@@ -84,7 +90,102 @@ public class Person {
 		}
 		
 	}
+	
+	protected void updateX(int[][] mapArray, double currentXSpeed, double updateSpeed){
+		float startX = (float) Xpos;
+		float startY = (float) Ypos;
+		
+		float endX = startX;
+		float endY = startY;
+		
+		float testX = endX;
+		
+		for (int i =0; i <= updateSpeed; i++) {
+			//endX   = (float) (startX + i * currentXSpeed);
+			testX   = (float) (startX + i * currentXSpeed);
+			
+			Point iP = levelOne.getTileAtPoint(levelOne.tileSize,testX,endY);
+			
+			//Check if out of bounds
+			if(mapArray[0].length <= iP.x || iP.x < 0){
+				break;
+			}
+			if(mapArray[0].length <= iP.y || iP.y < 0){
+				break;
+			}
+			//Check for collision with solid tile
+			if(mapArray[iP.y][iP.x] == 1){
+				break;
+			}
+			
+			endX   = testX;
+		}
+		
+		Xpos = endX;
+		Ypos = endY;
+	}
+	
+	protected void updateY(int[][] mapArray, double currentYSpeed, double updateSpeed){
+		float startX = (float) Xpos;
+		float startY = (float) Ypos;
+		
+		float endX = startX;
+		float endY = startY;
+		
+		float testY = endY;
+	
+		for (int i =0; i <= updateSpeed; i++) {
+			testY   = (float) (startY + i * currentYSpeed);
+			
+			Point iP = levelOne.getTileAtPoint(levelOne.tileSize,endX,testY);
+			
+			//Check if out of bounds
+			if(mapArray[0].length <= iP.x || iP.x < 0){
+				break;
+			}
+			if(mapArray[0].length <= iP.y || iP.y < 0){
+				break;
+			}
+			//Check for collision with solid tile
+			if(mapArray[iP.y][iP.x] == 1){
+				break;
+			}
+			
+			endY = testY;
+		}
+		
+		Xpos = endX;
+		Ypos = endY;
+	}
+	
+	protected void updatePosition(int[][] mapArray){
+		
+		ySpeed = 0;
+		xSpeed = 0;
+		
+		ySpeed = ySpeed + yForce;
+		ySpeed = ySpeed + xSpeed;
+		
+		if(movingDown)ySpeed = ySpeed + currentSpeed;
+		if(movingUp)ySpeed = ySpeed - currentSpeed;
+		
+		if(movingRight)xSpeed = xSpeed + currentSpeed;
+		if(movingLeft)xSpeed = xSpeed - currentSpeed;
+		
+		long timeInMillis = System.currentTimeMillis();
+		
+		double updateXspeed = currentSpeed*(timeInMillis-lastTimeInMillis);
+		double updateYspeed = currentSpeed*(timeInMillis-lastTimeInMillis);
+		
+		if(updateYspeed >= 1 || updateXspeed >= 1 || (ySpeed == 0 && xSpeed == 0)){
+			lastTimeInMillis = timeInMillis;
+		}
+		
+		updateX(mapArray,xSpeed,updateXspeed);
+		updateY(mapArray,ySpeed,updateYspeed);
+	}
 
+	
 	protected void collisionCheck(){
 		double prevY = Ypos;
 		double prevX = Xpos;
@@ -138,6 +239,5 @@ public class Person {
 				Xpos = prevX;
 			}
 		}
-		
 	}
 }
