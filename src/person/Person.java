@@ -3,11 +3,18 @@ package person;
 import java.awt.Point;
 import java.util.Random;
 
+import org.newdawn.slick.Image;
+
 import javagame.Map;
+import gun.Gun;
 
 public class Person {
 	
 	Map levelOne;
+	Gun gun = null;
+	
+	public int type = 0;
+	public Image image;
 	public double Xpos = 100;
 	public double Ypos = 300;
 	public double ySpeed = 0;
@@ -58,6 +65,10 @@ public class Person {
 		
 		if(health <= 0){
 			isDead = true;
+		}
+		
+		if(isShooting && !gun.equals(null)) {
+			gun.fire();
 		}
 		
 	}

@@ -1,6 +1,7 @@
 package javagame;
 
 import java.awt.Point;
+import java.util.HashSet;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -22,8 +23,8 @@ public class Render {
 
 	public float offsetX = 0;
 	public float offsetY = 0;
-
-	Projectiles projObj = new Projectiles();
+	
+	Projectiles projObj;
 
 	long lastTimeInMillis = System.currentTimeMillis();
 
@@ -42,14 +43,14 @@ public class Render {
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, Graphics g,
-			float offsetX, float offsetY, Person Player, Person policeUnit)
+			float offsetX, float offsetY, HashSet<Person> people)
 			throws SlickException {
 		// float gX = (float) (1024/2 -Player.Xpos);
 		// float gY = (float) (768/2 -Player.Ypos);
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		g.translate(offsetX, offsetY);
-
+		
 		Color cZero = new Color(33, 65, 104);
 		Color cOne = new Color(27, 47, 72);
 		Color cTwo = new Color(27, 107, 72);
@@ -66,13 +67,7 @@ public class Render {
 		g.setColor(cTwo);
 		drawMap(levelOne.getMap(), g, 2);
 
-		if (drawDebug) {
-			g.setColor(Color.red);
-			g.fillRect((float) Player.Xpos - 19, (float) Player.Ypos - 22,
-					(float) 40, (float) 40);
-		}
-
-		if (!Player.isDead) {
+		/*if (!Player.isDead) {
 			g.drawImage(player, (int) Player.Xpos - 39, (int) Player.Ypos - 72);
 			player.setCenterOfRotation(39, 72);
 			player.setRotation(Player.currentRotation);
@@ -83,13 +78,37 @@ public class Render {
 					(int) policeUnit.Ypos - 72);
 			cop.setCenterOfRotation(39, 72);
 			cop.setRotation(policeUnit.currentRotation);
+		}*/
+		
+		long timeInMillis = System.currentTimeMillis();
+		
+		for (Person person : people) {
+			if (!person.isDead) {
+				/* Draw the person. */
+				g.drawImage(person.image, (int) person.Xpos - 39, (int) person.Ypos - 72);
+				person.image.setCenterOfRotation(39, 72);
+				person.image.setRotation(person.currentRotation);
+				/* Render hit boxes if in debug mode. */
+				if (drawDebug) {
+					g.setColor(Color.red);
+					g.fillRect((float) person.Xpos - 19, (float) person.Ypos - 22,
+							(float) 40, (float) 40);
+				}	
+				/* Render lines of sight. */
+				if (drawDebug) {
+					drawSightline(person, g);
+					for (int i = 0; i < 10; i++) {
+						drawSightlineCollision(person, g, levelOne.getMap(),
+								person.currentRotation - 20 + (i * 4));
+					}
+				}
+			}
 		}
 
-		long timeInMillis = System.currentTimeMillis();
 
 		// drawSightlineCollision(Player,
 		// g,levelOne.getMap(),Player.currentRotation);
-		if (Player.isShooting
+		/*if (Player.isShooting
 				&& (0.02 * (timeInMillis - lastTimeInMillis) >= 1)) {
 			Person[] people = new Person[1];// = [policeUnit];
 			people[0] = policeUnit;
@@ -97,7 +116,7 @@ public class Render {
 					Player.currentRotation, people);
 			Player.isShooting = false;
 			lastTimeInMillis = timeInMillis;
-		}
+		}*/
 
 		for (Bullet bullet : projObj.bulletCollection) {
 			g.setColor(Color.red);
@@ -107,14 +126,6 @@ public class Render {
 			}
 		}
 		projObj.update();
-
-		if (drawDebug) {
-			drawSightline(Player, g);
-			for (int i = 0; i < 10; i++) {
-				drawSightlineCollision(Player, g, levelOne.getMap(),
-						Player.currentRotation - 20 + (i * 4));
-			}
-		}
 	}
 
 	// Should be based on paramater map, not class defined levelOne

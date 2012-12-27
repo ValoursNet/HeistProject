@@ -1,14 +1,13 @@
 package javagame;
 
 import java.awt.Point;
-
 import person.Person;
+import javagame.Play;
 
 public class Bullet {
 	
+	Person shooter;
 	Map levelOne;
-	Person[] people;
-	
 	public double Xpos = 100;
 	public double Ypos = 300;
 	double currentSpeed = 2;
@@ -18,16 +17,13 @@ public class Bullet {
 	
 	long lastTimeInMillis = System.currentTimeMillis();
 	
-	public Bullet (Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation, Person[] people){
-		this.levelOne = levelOne;
-		
+	public Bullet (Map level, double Xpos, double Ypos, double currentSpeed, float currentRotation, Person shooter){		
 		this.Xpos = Xpos;
 		this.Ypos = Ypos;
 		this.currentSpeed = currentSpeed;
 		this.currentRotation = currentRotation;
-		
-		this.people = people;
-		
+		this.levelOne = level;
+		this.shooter = shooter;
 	}
 	
 	void update(){
@@ -71,7 +67,7 @@ public class Bullet {
 				break;
 			}
 			
-			for(int n=0; n < people.length; n++){
+			/*for(int n=0; n < people.length; n++){
 				//System.out.println("objName: " + people[0].name);
 				if(bulletWithin(endX,endY,people[0].Xpos,people[0].Ypos,people[0].width,people[0].height)){
 					System.out.println("objName: " + people[0].name);
@@ -80,6 +76,18 @@ public class Bullet {
 					people[0].health =  people[0].health - 10;
 					stopped = true;
 					break;
+				}
+			} */
+			for (Person person : Play.people) {
+				if (!person.equals(shooter)) {
+					if(bulletWithin(endX,endY,person.Xpos,person.Ypos,person.width,person.height)){
+						System.out.println("objName: " + person.name);
+						person.xForce = person.xForce + (Math.cos(currentRotad) * 1);
+						person.yForce = person.yForce + (Math.sin(currentRotad) * 1);
+						person.health =  person.health - 10;
+						stopped = true;
+						break;
+					}
 				}
 			}
 		}

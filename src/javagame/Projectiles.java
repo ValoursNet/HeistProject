@@ -5,29 +5,31 @@ import java.util.HashSet;
 import person.Person;
 
 public class Projectiles {
-	
+
 	HashSet<Bullet> bulletCollection = new HashSet<Bullet>();
-	
-	public Projectiles(){
-		
-	}
-	
-	public void update(){
+	Map level;
+
+	public void update() {
 		for (Bullet bullet : bulletCollection) {
 			bullet.update();
 		}
 	}
-	
-	public void createProjectile(Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation, Person[] people){
-		bulletCollection.add(new Bullet(levelOne, Xpos, Ypos, currentSpeed, currentRotation, people));
+
+	public void setMap(Map level) {
+		this.level = level;
 	}
 	
-	public void removeProjectile(Bullet bullet){
+	public void createProjectile(double Xpos, double Ypos,
+			double currentSpeed, float currentRotation, Person person) {
+		bulletCollection.add(new Bullet(level, Xpos, Ypos, currentSpeed,currentRotation, person));
+	}
+
+	public void removeProjectile(Bullet bullet) {
 		bulletCollection.remove(bullet);
 	}
-	
-	public HashSet<Bullet> getBulletCollection(){
+
+	public HashSet<Bullet> getBulletCollection() {
 		return bulletCollection;
 	}
-	
+
 }
