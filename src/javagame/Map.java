@@ -43,8 +43,8 @@ public class Map {
 
 		System.out.println("path: " + path);
 		createDirectory();
-		//writefile();
-		readTextFile(path + mapsDirectory + "/map1.txt");
+		writefile();
+		//readTextFile(path + mapsDirectory + "/map1.txt");
 	}
 
 	 private void readTextFile(String aFileName) {

@@ -91,8 +91,8 @@ public class Render {
 			System.out.println(projObj.bulletCollection.size());
 		}
 		
-		g.setColor(cTwo);
-		g.fillRect(0, 0, 1024, 768);
+		//g.setColor(cTwo);
+		//g.fillRect(0, 0, 1024, 768);
 
 		g.setColor(colours[0]);
 		

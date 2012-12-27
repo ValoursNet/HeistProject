@@ -22,7 +22,7 @@ import server.Server;
 
 public class Play extends BasicGameState {
 
-	public static boolean host = false;
+	public static boolean host = true;
 	String ip = "127.0.0.1";
 	Socket socket;
 	DataInputStream din;
