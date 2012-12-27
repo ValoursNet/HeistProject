@@ -25,9 +25,15 @@ public class Render {
 	public float offsetY = 0;
 	
 	Projectiles projObj;
+	
+	Color[] colours;
 
 	long lastTimeInMillis = System.currentTimeMillis();
 
+	public Render(){
+		createColours();
+	}
+	
 	public void setMap(Map levelOne) {
 		this.levelOne = levelOne;
 	}
@@ -41,7 +47,27 @@ public class Render {
 		this.cop = cop;
 		this.wall = wall;
 	}
-
+	
+	private void createColours(){
+		/*
+		 COLORS
+		 Color(143, 147, 120);
+		 Color(133, 133, 133);
+		 Color(204, 204, 204);
+		 Color(60, 60, 60);
+		 Color(80, 209, 56);
+		 Color(220, 46, 46);
+		*/
+		
+		colours = new Color[6];
+		colours[0] = new  Color(143, 147, 120);
+		colours[1] = new  Color(133, 133, 133);
+		colours[2] = new  Color(204, 204, 204);
+		colours[3] = new  Color(60, 60, 60);
+		colours[4] = new  Color(80, 209, 56);
+		colours[5] = new  Color(220, 46, 46);;
+	}
+	
 	public void update(GameContainer gc, StateBasedGame sbg, Graphics g,
 			float offsetX, float offsetY, HashSet<Person> people)
 			throws SlickException {
@@ -51,21 +77,33 @@ public class Render {
 		this.offsetY = offsetY;
 		g.translate(offsetX, offsetY);
 		
+		//OLD COLORS
+		/*
 		Color cZero = new Color(33, 65, 104);
 		Color cOne = new Color(27, 47, 72);
 		Color cTwo = new Color(27, 107, 72);
+		 */
+		
+		//g.setColor(colours[0]);
+		//g.fillRect(0, 0, 1024, 768);
 
-		g.setColor(cTwo);
-		g.fillRect(0, 0, 1024, 768);
-
-		g.setColor(cZero);
+		g.setColor(colours[0]);
 		drawMap(levelOne.getMap(), g, 0);
 
-		g.setColor(cOne);
+		g.setColor(colours[1]);
 		drawMap(levelOne.getMap(), g, 1);
 
-		g.setColor(cTwo);
+		g.setColor(colours[2]);
 		drawMap(levelOne.getMap(), g, 2);
+		
+		g.setColor(colours[3]);
+		drawMap(levelOne.getMap(), g, 3);
+		
+		g.setColor(colours[4]);
+		drawMap(levelOne.getMap(), g, 4);
+		
+		g.setColor(colours[5]);
+		drawMap(levelOne.getMap(), g, 5);
 
 		/*if (!Player.isDead) {
 			g.drawImage(player, (int) Player.Xpos - 39, (int) Player.Ypos - 72);
@@ -80,7 +118,8 @@ public class Render {
 			cop.setRotation(policeUnit.currentRotation);
 		}*/
 		
-		long timeInMillis = System.currentTimeMillis();
+		//CURENTLY UNUSED
+		//long timeInMillis = System.currentTimeMillis();
 		
 		for (Person person : people) {
 			if (!person.isDead) {
