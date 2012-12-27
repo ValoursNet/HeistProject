@@ -17,6 +17,18 @@ public class Person {
 	double currentSpeed = 0.4;
 	public Float currentRotation = (float) 0;
 	
+	public double friction = 0.8;
+	
+	public int health = 100;
+	
+	public double width = 40;
+	public double height = 40;
+	
+	public double offsetX = 0;
+	public double offsetY = 0;
+	
+	public boolean directControl = false;
+	
 	long lastTimeInMillis = System.currentTimeMillis();
 	
 	int dirNum = 0;
@@ -27,6 +39,8 @@ public class Person {
 	
 	public String name = generateName();
 	
+	public boolean isDead = false;
+	
 	public void update() {
 		
 		//checkDirection();
@@ -36,6 +50,16 @@ public class Person {
 			updatePosition(levelOne.getMap());
 			currentRotation = (float) (currentRotation + 0.1);
 		}
+		
+		if(directControl){
+			offsetX = 1024/2 -Xpos;
+			offsetY = 768/2 -Ypos;
+		}
+		
+		if(health <= 0){
+			isDead = true;
+		}
+		
 	}
 	
 	//ugly code for testing names
@@ -113,9 +137,15 @@ public class Person {
 			if(mapArray[0].length <= iP.y || iP.y < 0){
 				break;
 			}
+			
 			//Check for collision with solid tile
 			if(mapArray[iP.y][iP.x] == 1){
 				break;
+			}
+			
+			//Check for collision with exit tile
+			if(mapArray[iP.y][iP.x] == 2){
+				collideExit();
 			}
 			
 			endX   = testX;
@@ -151,6 +181,11 @@ public class Person {
 				break;
 			}
 			
+			//Check for collision with exit tile
+			if(mapArray[iP.y][iP.x] == 2){
+				collideExit();
+			}
+			
 			endY = testY;
 		}
 		
@@ -158,13 +193,28 @@ public class Person {
 		Ypos = endY;
 	}
 	
+	private void collideExit() {
+		// TODO Auto-generated method stub
+		isDead = true;
+	}
+
+	private void calculateFriction(){
+		//System.out.println("xForce: " + xForce);
+		xForce = xForce * friction;
+		yForce = yForce * friction;
+		//if(xForce < 0.001 && xForce > -0.001)xForce=0;
+		//if(yForce < 0.001 && yForce > -0.001)yForce=0;
+	}
+	
 	protected void updatePosition(int[][] mapArray){
 		
 		ySpeed = 0;
 		xSpeed = 0;
 		
+		xSpeed = xSpeed + xForce;
 		ySpeed = ySpeed + yForce;
-		ySpeed = ySpeed + xSpeed;
+		
+		calculateFriction();
 		
 		if(movingDown)ySpeed = ySpeed + currentSpeed;
 		if(movingUp)ySpeed = ySpeed - currentSpeed;

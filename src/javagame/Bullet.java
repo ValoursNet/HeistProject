@@ -2,18 +2,23 @@ package javagame;
 
 import java.awt.Point;
 
+import person.Person;
+
 public class Bullet {
 	
 	Map levelOne;
+	Person[] people;
 	
 	public double Xpos = 100;
 	public double Ypos = 300;
 	double currentSpeed = 2;
 	public float currentRotation = (float) 0;
 	
+	public Boolean stopped = false;
+	
 	long lastTimeInMillis = System.currentTimeMillis();
 	
-	public Bullet (Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation){
+	public Bullet (Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation, Person[] people){
 		this.levelOne = levelOne;
 		
 		this.Xpos = Xpos;
@@ -21,10 +26,14 @@ public class Bullet {
 		this.currentSpeed = currentSpeed;
 		this.currentRotation = currentRotation;
 		
+		this.people = people;
+		
 	}
 	
 	void update(){
+		if(!stopped){
 		updatePosition(levelOne.mapCollisions);
+		}
 	}
 	
 	private void updatePosition(int[][] mapArray) {
@@ -61,10 +70,31 @@ public class Bullet {
 			if(mapArray[iP.y][iP.x] == 1){
 				break;
 			}
+			
+			for(int n=0; n < people.length; n++){
+				//System.out.println("objName: " + people[0].name);
+				if(bulletWithin(endX,endY,people[0].Xpos,people[0].Ypos,people[0].width,people[0].height)){
+					System.out.println("objName: " + people[0].name);
+					people[0].xForce = people[0].xForce + (Math.cos(currentRotad) * 1);
+					people[0].yForce = people[0].yForce + (Math.sin(currentRotad) * 1);
+					people[0].health =  people[0].health - 10;
+					stopped = true;
+					break;
+				}
+			}
 		}
 		
 		Xpos = endX;
 		Ypos = endY;
+	}
+
+	private boolean bulletWithin(double iPx, double iPy, double xpos, double ypos, double width, double height) {
+		if(iPx>=xpos-19 && iPy>=ypos-22){
+			if(iPx<=xpos-19+width && iPy<=ypos-22+height){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/*

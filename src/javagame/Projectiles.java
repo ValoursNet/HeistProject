@@ -1,5 +1,7 @@
 package javagame;
 
+import person.Person;
+
 public class Projectiles {
 	
 	Bullet[] bulletCollection = new Bullet[50];
@@ -15,8 +17,8 @@ public class Projectiles {
 		}
 	}
 	
-	public void createProjectile(Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation){
-		bulletCollection[bulletCount] = new Bullet(levelOne, Xpos, Ypos, currentSpeed, currentRotation);
+	public void createProjectile(Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation, Person[] people){
+		bulletCollection[bulletCount] = new Bullet(levelOne, Xpos, Ypos, currentSpeed, currentRotation, people);
 		bulletCount++;
 	}
 	
