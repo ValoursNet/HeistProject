@@ -9,8 +9,10 @@ public class Gun {
 	Projectiles projectiles;
 	
 	int magasineSize = 0;
+
 	public int bulletCount  = 100;
 	double fireRate = 0.1;
+
 	boolean firing   = false;
 	long lastTimeInMillis = System.currentTimeMillis();
 	
@@ -27,11 +29,10 @@ public class Gun {
 		long timeInMillis = System.currentTimeMillis();
 		if (bulletCount > 0 && (fireRate * (timeInMillis - lastTimeInMillis) >= 1)) {
 			firing = true;
-			bulletCount--;
+			//bulletCount--;
 			projectiles.createProjectile(holder.Xpos, holder.Ypos, 2,
 					holder.currentRotation, holder);
 			lastTimeInMillis = timeInMillis;
-		System.out.println("Slick is gay.");
 		} 
 		
 	}

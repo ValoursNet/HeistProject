@@ -87,7 +87,15 @@ public class Render {
 		//g.setColor(colours[0]);
 		//g.fillRect(0, 0, 1024, 768);
 
+		if((System.currentTimeMillis()-lastTimeInMillis)*1000 < 60){
+			System.out.println(projObj.bulletCollection.size());
+		}
+		
+		g.setColor(cTwo);
+		g.fillRect(0, 0, 1024, 768);
+
 		g.setColor(colours[0]);
+		
 		drawMap(levelOne.getMap(), g, 0);
 
 		g.setColor(colours[1]);
