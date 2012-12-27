@@ -55,6 +55,10 @@ public class Render {
 		Color cOne = new Color(27, 47, 72);
 		Color cTwo = new Color(27, 107, 72);
 
+		if((System.currentTimeMillis()-lastTimeInMillis)*1000 < 60){
+			System.out.println(projObj.bulletCollection.size());
+		}
+		
 		g.setColor(cTwo);
 		g.fillRect(0, 0, 1024, 768);
 

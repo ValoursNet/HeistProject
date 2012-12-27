@@ -10,8 +10,10 @@ public class Bullet {
 	Map levelOne;
 	public double Xpos = 100;
 	public double Ypos = 300;
-	double currentSpeed = 2;
+	public double currentSpeed = 2;
 	public float currentRotation = (float) 0;
+	public double damage = 0;
+	public double knockback = 0;
 	
 	public Boolean stopped = false;
 	
@@ -81,7 +83,7 @@ public class Bullet {
 			for (Person person : Play.people) {
 				if (!person.equals(shooter)) {
 					if(bulletWithin(endX,endY,person.Xpos,person.Ypos,person.width,person.height)){
-						System.out.println("objName: " + person.name);
+						//System.out.println("objName: " + person.name);
 						person.xForce = person.xForce + (Math.cos(currentRotad) * 1);
 						person.yForce = person.yForce + (Math.sin(currentRotad) * 1);
 						person.health =  person.health - 10;

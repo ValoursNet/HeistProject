@@ -29,7 +29,7 @@ public class Map {
 
 		mapCollisions[8][8] = 2;
 
-		printMapCollisions();
+		//printMapCollisions();
 
 		System.out.println("path: " + path);
 		createDirectory();

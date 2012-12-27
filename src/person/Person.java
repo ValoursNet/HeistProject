@@ -12,9 +12,9 @@ public class Person {
 	
 	Map levelOne;
 	Gun gun = null;
-	
 	public int type = 0;
 	public Image image;
+	public int id;
 	public double Xpos = 100;
 	public double Ypos = 300;
 	public double ySpeed = 0;
