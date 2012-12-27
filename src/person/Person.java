@@ -21,7 +21,7 @@ public class Person {
 	public double xSpeed = 0;
 	public double yForce = 0;
 	public double xForce = 0;
-	double currentSpeed = 0.4;
+	double currentSpeed = 0.6;
 	public Float currentRotation = (float) 0;
 	
 	public double friction = 0.8;
@@ -155,7 +155,7 @@ public class Person {
 			}
 			
 			//Check for collision with exit tile
-			if(mapArray[iP.y][iP.x] == 2){
+			if(mapArray[iP.y][iP.x] == 5){
 				collideExit();
 			}
 			
@@ -193,7 +193,7 @@ public class Person {
 			}
 			
 			//Check for collision with exit tile
-			if(mapArray[iP.y][iP.x] == 2){
+			if(mapArray[iP.y][iP.x] == 5){
 				collideExit();
 			}
 			
