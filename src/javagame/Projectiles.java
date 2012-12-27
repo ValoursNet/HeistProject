@@ -1,33 +1,32 @@
 package javagame;
 
+import java.util.HashSet;
+
 import person.Person;
 
 public class Projectiles {
 	
-	Bullet[] bulletCollection = new Bullet[50];
-	int bulletCount = 0;
+	HashSet<Bullet> bulletCollection = new HashSet<Bullet>();
 	
 	public Projectiles(){
 		
 	}
 	
 	public void update(){
-		for (int i =0; i < bulletCount; i++) {
-			bulletCollection[i].update();
+		for (Bullet bullet : bulletCollection) {
+			bullet.update();
 		}
 	}
 	
 	public void createProjectile(Map levelOne, double Xpos, double Ypos, double currentSpeed, float currentRotation, Person[] people){
-		bulletCollection[bulletCount] = new Bullet(levelOne, Xpos, Ypos, currentSpeed, currentRotation, people);
-		bulletCount++;
+		bulletCollection.add(new Bullet(levelOne, Xpos, Ypos, currentSpeed, currentRotation, people));
 	}
 	
-	public void removeProjectile(int bulletIndex){
-		bulletCollection[bulletIndex] = null;
-		bulletCount--;
+	public void removeProjectile(Bullet bullet){
+		bulletCollection.remove(bullet);
 	}
 	
-	public Bullet[] getBulletCollection(){
+	public HashSet<Bullet> getBulletCollection(){
 		return bulletCollection;
 	}
 	
