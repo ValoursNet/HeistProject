@@ -9,16 +9,18 @@ public class Cop extends Person {
 		System.out.println("COP ERE");
 	}
 	
-	@Override
+	//@Override
 	//Overriding for checkDirection. For testing.
+	/*
 	public void update() {
 		
-		checkDirection();
+	//	checkDirection();
 		
 		if(levelOne != null){
-			collisionCheck();
+			updatePosition(levelOne.getMap());
 			currentRotation = (float) (currentRotation + 0.1);
 		}
 	}
+	*/
 	
 }
