@@ -19,6 +19,9 @@ public class Play extends BasicGameState{
 	Cop policeUnit = new Cop(levelOne);
 	Criminal Player = new Criminal(levelOne);
 	
+	float offsetX = 0;
+	float offsetY = 0;
+	
 	Projectiles projObj = new Projectiles();
 	
 	boolean drawDebug = false;
@@ -46,12 +49,14 @@ public class Play extends BasicGameState{
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException {
-		renderObj.update(gc, sbg, g, Player, policeUnit);
+		offsetX = (float) Player.offsetX;
+		offsetY = (float) Player.offsetY;
+		renderObj.update(gc, sbg, g, offsetX, offsetY, Player, policeUnit);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException {
-		inputObj.inputHandler(Player, gc);
+		inputObj.inputHandler(Player, gc, offsetX, offsetY);
 		policeUnit.update();
 		Player.update();
 	}

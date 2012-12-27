@@ -8,7 +8,7 @@ import person.Criminal;
 public class UserInput {
 	
 	//Input - Should be moved to own class.
-	void inputHandler(Criminal Player, GameContainer gc){
+	void inputHandler(Criminal Player, GameContainer gc, float offsetX, float offsetY){
 		Input input = gc.getInput();
 		
 		if(input.isKeyDown(Input.KEY_W)){
@@ -42,8 +42,8 @@ public class UserInput {
 			Player.isShooting = false;
 		}
 		
-		float xDistance = (float) (xPos - (Player.Xpos));
-		float yDistance = (float) (yPos - (Player.Ypos));
+		float xDistance = (float) (xPos - offsetX - (Player.Xpos));
+		float yDistance = (float) (yPos - offsetY - (Player.Ypos));
 		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
 		Player.currentRotation = (float) angleToTurn+90;
 	}

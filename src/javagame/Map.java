@@ -10,8 +10,8 @@ import java.io.Writer;
 
 public class Map {
 	
-	int mapWidth = 8;
-	int mapHeight = 8;
+	int mapWidth = 20;
+	int mapHeight = 20;
 	public int tileSize = 60;
 	int[][] mapCollisions;
 	
@@ -25,6 +25,8 @@ public class Map {
 		mapCollisions[0][2] = 1;
 		
 		mapCollisions[2][2] = 1;
+		
+		mapCollisions[8][8] = 2;
 		
 		printMapCollisions();
 		
