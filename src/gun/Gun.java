@@ -9,7 +9,7 @@ public class Gun {
 	Projectiles projectiles;
 	
 	int magasineSize = 0;
-	int bulletCount  = 100;
+	public int bulletCount  = 100;
 	double fireRate = 0.1;
 	boolean firing   = false;
 	long lastTimeInMillis = System.currentTimeMillis();

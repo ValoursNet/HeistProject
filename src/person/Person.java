@@ -36,6 +36,10 @@ public class Person {
 	
 	public boolean directControl = false;
 	
+	public double[][] path = new double[3][3];
+	
+	public int currentPathCount = 0;
+	
 	long lastTimeInMillis = System.currentTimeMillis();
 	
 	int dirNum = 0;
@@ -64,7 +68,7 @@ public class Person {
 		}
 		
 		if(health <= 0){
-			isDead = true;
+			//isDead = true;
 		}
 		
 		if(isShooting && !gun.equals(null)) {
@@ -87,6 +91,49 @@ public class Person {
 		builder.append(e);
 		
 		return builder.toString();
+	}
+	
+	public void setPath(double[][] path){
+		this.path = path;
+	}
+	
+	protected void followPath() {
+		/*
+		Xpos = 100;
+		Ypos = 300;
+		yForce = 0;
+		xForce = 0;
+		currentRotation = (float) 0;
+		*/
+		
+		//path[currentPathCount];
+		
+		int currentTargetX = (int) path[currentPathCount][0];
+		int currentTargetY = (int) path[currentPathCount][1];
+		double currentTargetT = path[currentPathCount][2];
+		
+		
+		float xDistance = (float) (Xpos - (currentTargetX));
+		float yDistance = (float) (Ypos - (currentTargetY));
+		
+		if(xDistance < 10 && xDistance > -10 && yDistance > -10 && yDistance < 10)nextPathCount();
+		
+		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+		
+		currentRotation = (float) angleToTurn - 90;
+		
+		currentSpeed = 0.6;
+		xForce = (float) (currentSpeed * Math.cos(currentRotation));
+		yForce = (float) (currentSpeed * Math.sin(currentRotation));
+	}
+	
+	protected void nextPathCount() {
+		System.out.println("currentPathCount: " + currentPathCount + "   path.length: " + path.length);
+		if(currentPathCount+1 < path.length){
+			currentPathCount = currentPathCount+1;
+		} else {
+			currentPathCount = 0;
+		}
 	}
 	
 	//TODO delete
@@ -145,7 +192,7 @@ public class Person {
 			if(mapArray[0].length <= iP.x || iP.x < 0){
 				break;
 			}
-			if(mapArray[0].length <= iP.y || iP.y < 0){
+			if(mapArray.length <= iP.y || iP.y < 0){
 				break;
 			}
 			
@@ -184,7 +231,7 @@ public class Person {
 			if(mapArray[0].length <= iP.x || iP.x < 0){
 				break;
 			}
-			if(mapArray[0].length <= iP.y || iP.y < 0){
+			if(mapArray.length <= iP.y || iP.y < 0){
 				break;
 			}
 			//Check for collision with solid tile
