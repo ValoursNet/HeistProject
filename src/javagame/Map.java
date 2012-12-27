@@ -33,7 +33,7 @@ public class Map {
 		System.out.println("path: " + path);
 		createDirectory();
 		writefile();
-		
+		//test
 	}
 	
 	private void writefile(){
