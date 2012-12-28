@@ -11,7 +11,7 @@ import gun.Gun;
 public class Person {
 	
 	Map levelOne;
-	Gun gun = null;
+	public Gun gun = null;
 	public int type = 0;
 	public Image image;
 	public int id;
@@ -52,6 +52,13 @@ public class Person {
 	
 	public boolean isDead = false;
 	
+	   
+    public int leftX;
+    public int leftY;
+    public int rightX;
+    public int rightY;
+	
+	
 	public void update() {
 		
 		//checkDirection();
@@ -68,7 +75,7 @@ public class Person {
 		}
 		
 		if(health <= 0){
-			//isDead = true;
+			isDead = true;
 		}
 		
 		if(isShooting && !gun.equals(null)) {
@@ -95,6 +102,8 @@ public class Person {
 	
 	public void setPath(double[][] path){
 		this.path = path;
+		
+		//System.out.println("path set: " + path[0][1]);
 	}
 	
 	protected void followPath() {
@@ -112,11 +121,19 @@ public class Person {
 		int currentTargetY = (int) path[currentPathCount][1];
 		double currentTargetT = path[currentPathCount][2];
 		
+		//System.out.println("xpos: " + Xpos);
 		
 		float xDistance = (float) (Xpos - (currentTargetX));
 		float yDistance = (float) (Ypos - (currentTargetY));
 		
-		if(xDistance < 10 && xDistance > -10 && yDistance > -10 && yDistance < 10)nextPathCount();
+		if(xDistance < 10 && xDistance > -10 && yDistance > -10 && yDistance < 10){
+			nextPathCount();
+			Xpos = currentTargetX;
+			Ypos = currentTargetY;
+		} else {
+			//System.out.println(name + "'s  -  xDistance: " + xDistance + "'   yDistance: " + yDistance);
+		}
+		
 		
 		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
 		
@@ -128,7 +145,7 @@ public class Person {
 	}
 	
 	protected void nextPathCount() {
-		System.out.println("currentPathCount: " + currentPathCount + "   path.length: " + path.length);
+		//System.out.println(name + "'s  -  currentPathCount: " + currentPathCount);
 		if(currentPathCount+1 < path.length){
 			currentPathCount = currentPathCount+1;
 		} else {

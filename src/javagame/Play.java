@@ -32,7 +32,7 @@ public class Play extends BasicGameState {
 
 	public Image player;
 	public Image wall;
-	public Image cop;
+	public static Image cop;
 
 	public static Projectiles projectiles = new Projectiles();
 
@@ -41,7 +41,7 @@ public class Play extends BasicGameState {
 
 	Map levelOne = new Map();
 	Cop policeUnit;
-	Criminal Player;
+	public static Criminal playerUnit;
 
 	Server server;
 
@@ -59,8 +59,8 @@ public class Play extends BasicGameState {
 	}
 
 	public Play() throws SlickException {
-		player = new Image("res/PlayerAKDrawn.png");
-		cop = new Image("res/PlayerAKDrawn.png");
+		player = new Image("res/RobberM4.png");
+		cop = new Image("res/RobberM4.png");
 	}
 
 	@Override
@@ -71,8 +71,8 @@ public class Play extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		// player = new Image("res/PlayerAKDrawn.png");
-		// cop = new Image("res/PlayerAKDrawn.png");
+		player = new Image("res/RobberM4.png");
+		 cop = new Image("res/RobberM4.png");
 
 		projectiles.setMap(levelOne);
 
@@ -106,32 +106,41 @@ public class Play extends BasicGameState {
 		}
 
 		policeUnit = new Cop(levelOne, projectiles);
-		Player = new Criminal(levelOne, projectiles);
+		playerUnit = new Criminal(levelOne, projectiles);
 
 		renderObj.setImages(player, wall, cop);
 		renderObj.setMap(levelOne);
 		renderObj.setProjectiles(projectiles);
 
-		people.add(policeUnit);
-		people.add(Player);
+		//people.add(policeUnit);
+		people.add(playerUnit);
 
-		System.out.println("name:" + Player.name);
+		System.out.println("name:" + playerUnit.name);
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
-		offsetX = (float) Player.offsetX;
-		offsetY = (float) Player.offsetY;
+		offsetX = (float) playerUnit.offsetX;
+		offsetY = (float) playerUnit.offsetY;
 		renderObj.update(gc, sbg, g, offsetX, offsetY, people);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
-		inputObj.inputHandler(Player, gc, offsetX, offsetY);
-		policeUnit.update();
-		Player.update();
+		inputObj.inputHandler(playerUnit, gc, offsetX, offsetY);
+		
+		//crashes if certain person is removed?
+		for (Person p : people) {
+			//p.update();
+			if(!p.isDead){
+				//people.remove(p);
+				p.update();
+			}
+		}
+		//policeUnit.update();
+		//Player.update();
 		update = true;
 	}
 

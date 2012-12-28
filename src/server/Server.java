@@ -51,7 +51,7 @@ public class Server {
 
 	void sendToAll(String message) {
 		// System.out.println("Recieved: "+message);
-		System.out.println("Sending message.");
+		// System.out.println("Sending message.");
 		synchronized (outputStreams) {
 			for (Enumeration<DataOutputStream> e = getOutputStreams(); e
 					.hasMoreElements();) {

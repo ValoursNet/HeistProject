@@ -12,6 +12,10 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.SlickException;
+
+import person.Cop;
+
 public class Map {
 
 	int mapWidth = 20;
@@ -22,10 +26,10 @@ public class Map {
 	String path = Map.class.getProtectionDomain().getCodeSource().getLocation()
 			.getPath();
 	String mapsDirectory = "mapsDirectory";
-	
+
 	String openMapArrayTag = "<newMap>";
 	String closeMapArrayTag = "</newMap>";
-	
+
 	String openPatrolArrayTag = "<patrolPath>";
 	String closePatrolArrayTag = "</patrolPath>";
 
@@ -39,183 +43,198 @@ public class Map {
 
 		mapCollisions[8][8] = 2;
 
-		//printMapCollisions();
+		// printMapCollisions();
 
 		System.out.println("path: " + path);
 		createDirectory();
-		writefile();
-		//readTextFile(path + mapsDirectory + "/map1.txt");
+		// writefile();
+		readTextFile(path + mapsDirectory + "/map1.txt");
 	}
 
-	 private void readTextFile(String aFileName) {
-		 try (BufferedReader br = new BufferedReader(new FileReader(aFileName)))
-			{
-			 System.out.println("File read");
-				String sCurrentLine;
-				
-				boolean readPatrol = false;
-				List<String> readPatrolLines = new ArrayList<String>();
-		        String readPatrolTemp = null;
-				
-				boolean readMap = false;
-				List<String> readMapLines = new ArrayList<String>();
-		        String readMapTemp = null;
-				
-				while ((sCurrentLine = br.readLine()) != null) {
-					if(readMap){
-						readMapTemp = sCurrentLine;
-						readMapLines.add(readMapTemp);
-					}
-					if(sCurrentLine.equals(openMapArrayTag)){
-						System.out.println("newMap:" + sCurrentLine);
-						readMap = true;
-					}
-					if(sCurrentLine.equals(closeMapArrayTag)){
-						System.out.println("/newMap:" + sCurrentLine);
-						readMap = false;
-						readMapLines.remove(readMapTemp);
-					}
-					
-					
-					if(readPatrol){
-						readPatrolTemp = sCurrentLine;
-						readPatrolLines.add(readPatrolTemp);
-					}
-					if(sCurrentLine.equals(openPatrolArrayTag)){
-						System.out.println("newPatrol:" + sCurrentLine);
-						readPatrol = true;
-					}
-					if(sCurrentLine.equals(closePatrolArrayTag)){
-						System.out.println("/newPatrol:" + sCurrentLine);
-						readPatrol = false;
-						readPatrolLines.remove(readPatrolTemp);
-					}
-					//System.out.println(sCurrentLine);
+	private void readTextFile(String aFileName) {
+		try (BufferedReader br = new BufferedReader(new FileReader(aFileName))) {
+			System.out.println("File read");
+			String sCurrentLine;
+
+			boolean readPatrol = false;
+			List<String> readPatrolLines = new ArrayList<String>();
+			String readPatrolTemp = null;
+
+			boolean readMap = false;
+			List<String> readMapLines = new ArrayList<String>();
+			String readMapTemp = null;
+
+			while ((sCurrentLine = br.readLine()) != null) {
+				if (readMap) {
+					readMapTemp = sCurrentLine;
+					readMapLines.add(readMapTemp);
 				}
-				
-				useReadMap(readMapLines);
-				
-				useReadPatrol(readPatrolLines);
-				
-			} catch (IOException e) {
-				System.out.println("File could not be read");
-				e.printStackTrace();
-			} 
-	  }
-	 
-	 //Overwrites MapCollisions with ArrayList that was read in.
-	 private void useReadMap(List<String> readMapLines){
+				if (sCurrentLine.equals(openMapArrayTag)) {
+					System.out.println("newMap:" + sCurrentLine);
+					readMap = true;
+				}
+				if (sCurrentLine.equals(closeMapArrayTag)) {
+					System.out.println("/newMap:" + sCurrentLine);
+					readMap = false;
+					readMapLines.remove(readMapTemp);
+				}
+
+				if (readPatrol) {
+					readPatrolTemp = sCurrentLine;
+					readPatrolLines.add(readPatrolTemp);
+				}
+				if (sCurrentLine.equals(openPatrolArrayTag)) {
+					System.out.println("newPatrol:" + sCurrentLine);
+					readPatrol = true;
+				}
+				if (sCurrentLine.equals(closePatrolArrayTag)) {
+					System.out.println("/newPatrol:" + sCurrentLine);
+					readPatrol = false;
+					readPatrolLines.remove(readPatrolTemp);
+				}
+				// System.out.println(sCurrentLine);
+			}
+
+			useReadMap(readMapLines);
+
+			useReadPatrol(readPatrolLines);
+
+		} catch (IOException e) {
+			System.out.println("File could not be read");
+			e.printStackTrace();
+		}
+	}
+
+	// Overwrites MapCollisions with ArrayList that was read in.
+	private void useReadMap(List<String> readMapLines) {
 		mapWidth = readMapLines.get(0).length();
 		mapHeight = readMapLines.size();
 		int board[][] = new int[mapHeight][mapWidth];
-		
+
 		int ln = 0;
-		for (String s : readMapLines){
-			//System.out.println("s:" + s);
+		for (String s : readMapLines) {
+			// System.out.println("s:" + s);
 			String[] strArray = s.split(",");
-			strArray[strArray.length - 1] = strArray[strArray.length - 1].replace(";","");
-			
+			strArray[strArray.length - 1] = strArray[strArray.length - 1]
+					.replace(";", "");
+
 			int[] intArray = new int[strArray.length];
-			for(int i = 0; i < strArray.length; i++) {
-			    intArray[i] = Integer.parseInt(strArray[i]);
+			for (int i = 0; i < strArray.length; i++) {
+				intArray[i] = Integer.parseInt(strArray[i]);
 			}
 			board[ln] = intArray;
 			ln++;
 		}
-		//overwrite old map array with new
+		// overwrite old map array with new
 		mapCollisions = board;
-	 }
-	 
-	 @SuppressWarnings("unused")
-	private void useReadPatrol(List<String> readPatrolLines){
+	}
+
+	@SuppressWarnings("unused")
+	private void useReadPatrol(List<String> readPatrolLines) {
+
 		
-		double[][] path;// = new double[3][3];
+		// double[][] path;// = new double[3][3];
 		/*
-		path[0] = new double[]{100,900,0};
-		path[1] = new double[]{100,100,0};
-		path[2] = new double[]{100,900,0};
-		*/
-		
-		for (String s : readPatrolLines){
+		 * path[0] = new double[]{100,900,0}; path[1] = new double[]{100,100,0};
+		 * path[2] = new double[]{100,900,0};
+		 */
+		//int index = 0;
+		for (String s : readPatrolLines) {
 			
-			//String[] strArray = s.split(",");
-			
-			//s.replaceAll("[]","");
 			String tempS = (String) s.subSequence(2, s.length());
-			
+
 			String[] strArray = tempS.split("\\(");
 			
+			double[][] path = new double[strArray.length][3];
 			
-			for(int i=0; i<strArray.length; i++){
-				//int i = 4;
-				
-				strArray[i] = strArray[i].substring(0, strArray[i].length() - 2);
-				//strArray[i].replace("\\)","");
-				
-				System.out.println("s:" + strArray[i]);
-				
+			for (int i = 0; i < strArray.length; i++) {
+				strArray[i] = strArray[i]
+						.substring(0, strArray[i].length() - 2);
+
+				String[] tempStrArray = strArray[i].split(",");
+
+				path[i][0] = Double.parseDouble(tempStrArray[0])*tileSize + tileSize/2;
+				path[i][1] = Double.parseDouble(tempStrArray[1])*tileSize + tileSize/2;
+
+				if (tempStrArray.length > 2) {
+					path[i][2] = Double.parseDouble(tempStrArray[2]);
+				} else {
+					path[i][2] = 0;
+				}
 				
 				/*
-				for(int j = 0; j< strArray.length; i++)
-				{
-					path[j] = Double.parseDouble(strArray[j]);
+				for (Double d : path[i]) {
+					d = d*tileSize;
 				}
 				*/
-			}
-			
-			//String[] strArray = s.split("(");
-			
-			//strArray[strArray.length-1] = strArray[strArray.length-1].substring(0, strArray[strArray.length-1].length() - 1);
-			//System.out.println(strArray);
-			
-		}
-		 	/*
-		 	Point rP = new Point(rX, rY);
-		 
-			int ln = 0;
-			for (String s : readPatrolLines){
-				//System.out.println("s:" + s);
-				String[] strArray = s.split(",");
-				strArray[strArray.length - 1] = strArray[strArray.length - 1].replace(";","");
-				
-				int[] intArray = new int[strArray.length];
-				for(int i = 0; i < strArray.length; i++) {
-				    intArray[i] = Integer.parseInt(strArray[i]);
-				}
-				board[ln] = intArray;
-				ln++;
-			}
-			*/
-		 }
-	
-	@SuppressWarnings("unused")
-	private void writefile(){
+				//System.out.println("path[index]: " + path[index][0]);
 
-	    try{
-	        Writer output = null;
-	        File file = new File(path + mapsDirectory + "/map1.txt");
-	        output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream( file.getPath() ),"UTF-8"));
-	        
-	        output.write(openMapArrayTag);
-	        ((BufferedWriter) output).newLine();
-	        for (int i =0; i < mapCollisions.length; i++) {
+			}
+
+			addCop(path);
+			//index = index + 1;
+		}
+
+	}
+
+	private void addCop(double[][] path) {
+		System.out.println("cop added in map");
+		Cop policeUnit = null;
+		
+		Projectiles proj = Play.projectiles;
+		//Projectiles preds = new Projectiles();
+		
+		
+		//System.out.println("path[index]: " + path[0][0]);
+		
+		try {
+			policeUnit = new Cop(this, proj);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		if (path != null) {
+			//System.out.println("non null path");
+			policeUnit.setPath(path);
+			policeUnit.Xpos = path[0][0];
+			policeUnit.Ypos = path[0][1];
+		}
+
+		Play.people.add(policeUnit);
+		
+	}
+
+	@SuppressWarnings("unused")
+	private void writefile() {
+
+		try {
+			Writer output = null;
+			File file = new File(path + mapsDirectory + "/map1.txt");
+			output = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(file.getPath()), "UTF-8"));
+
+			output.write(openMapArrayTag);
+			((BufferedWriter) output).newLine();
+			for (int i = 0; i < mapCollisions.length; i++) {
 				for (int j = 0; j < mapCollisions[i].length; j++) {
 					output.write("" + mapCollisions[i][j]);
-					if(mapCollisions[i].length != j+1){
+					if (mapCollisions[i].length != j + 1) {
 						output.write(",");
 					}
 				}
 				output.write(";");
 				((BufferedWriter) output).newLine();
 			}
-	        output.write(closeMapArrayTag);
+			output.write(closeMapArrayTag);
 
-	        output.close();
-	        System.out.println("File has been written");
+			output.close();
+			System.out.println("File has been written");
 
-	    }catch(Exception e){
-	        System.out.println("Could not create file");
-	    }
+		} catch (Exception e) {
+			System.out.println("Could not create file");
+		}
 	}
 
 	private void createDirectory() {

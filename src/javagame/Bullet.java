@@ -59,13 +59,16 @@ public class Bullet {
 			
 			//Check if out of bounds
 			if(mapArray.length <= iP.y || iP.y < 0){
+				stopped = true;
 				break;
 			}
 			if(mapArray[0].length <= iP.x || iP.x < 0){
+				stopped = true;
 				break;
 			}
 			//Check for collision with solid tile
 			if(mapArray[iP.y][iP.x] == 1){
+				stopped = true;
 				break;
 			}
 			
@@ -84,8 +87,10 @@ public class Bullet {
 				if (!person.equals(shooter)) {
 					if(bulletWithin(endX,endY,person.Xpos,person.Ypos,person.width,person.height)){
 						//System.out.println("objName: " + person.name);
-						person.xForce = person.xForce + (Math.cos(currentRotad) * 1);
-						person.yForce = person.yForce + (Math.sin(currentRotad) * 1);
+						//person.xForce = person.xForce + (Math.cos(currentRotad) * 1);
+						//person.yForce = person.yForce + (Math.sin(currentRotad) * 1);
+						person.xForce = (Math.cos(currentRotad) * 1);
+						person.yForce = (Math.sin(currentRotad) * 1);
 						person.health =  person.health - 10;
 						stopped = true;
 						break;

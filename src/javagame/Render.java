@@ -1,6 +1,7 @@
 package javagame;
 
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.HashSet;
 
 import org.newdawn.slick.Color;
@@ -8,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 
 import person.Person;
@@ -132,9 +134,29 @@ public class Render {
 		for (Person person : people) {
 			if (!person.isDead) {
 				/* Draw the person. */
-				g.drawImage(person.image, (int) person.Xpos - 39, (int) person.Ypos - 72);
-				person.image.setCenterOfRotation(39, 72);
+				g.drawImage(person.image, (int) person.Xpos - 27, (int) person.Ypos - 57);
+				person.image.setCenterOfRotation(27, 57);
 				person.image.setRotation(person.currentRotation);
+				
+				g.setColor(Color.blue);
+				g.drawString(person.name,(float) person.Xpos-10,(float) person.Ypos-60);
+				g.setColor(Color.red);
+				g.drawLine((float) person.Xpos-20,(float) person.Ypos-70, (float) person.Xpos-20 +(person.health/2),(float) person.Ypos-70);
+				
+				//very temp reload "symbol"
+				if(person.gun.bulletCount <= 0){
+					g.drawLine((float) person.Xpos-5,(float) person.Ypos-5, (float) person.Xpos+5,(float) person.Ypos+5);
+					g.drawLine((float) person.Xpos+5,(float) person.Ypos-5, (float) person.Xpos-5,(float) person.Ypos+5);
+				}
+				
+				if (drawDebug) {
+					if(person.type == 2){
+						g.drawLine((float) person.Xpos,(float) person.Ypos, (float) person.leftX,(float) person.leftY);
+						g.drawLine((float) person.Xpos,(float) person.Ypos, (float) person.rightX,(float) person.rightY);
+						g.drawLine((float) person.leftX,(float) person.leftY, (float) person.rightX,(float) person.rightY);
+					  
+					}
+				}
 				/* Render hit boxes if in debug mode. */
 				if (drawDebug) {
 					g.setColor(Color.red);
@@ -166,10 +188,10 @@ public class Render {
 		}*/
 
 		for (Bullet bullet : projObj.bulletCollection) {
-			g.setColor(Color.red);
+			g.setColor(Color.blue);
+			//g.setColor(new  Color(142, 142, 71));
 			if (!bullet.stopped) {
-				g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 4,
-						(float) 4);
+				g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 2, (float) 2);
 			}
 		}
 		projObj.update();

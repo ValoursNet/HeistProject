@@ -56,6 +56,7 @@ class ClientThread extends Thread {
 		while(true) {
 			try {
 				String message = din.readUTF();
+				System.out.println("message: " + message);
 				JsonParser parser = new JsonParser();
 				JsonElement element = parser.parse(message);
 				JSON.parseJson(element, Play.projectiles);
