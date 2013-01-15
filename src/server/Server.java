@@ -16,8 +16,10 @@ public class Server {
 	Projectiles projectiles;
 
 	public Server(int port, Projectiles projectiles) throws IOException {
-		listen(port);
+		//Set projectiles before running listen(its an endless loop...)
 		this.projectiles = projectiles;
+		
+		listen(port);		
 	}
 
 	private void listen(int port) throws IOException {
@@ -51,7 +53,7 @@ public class Server {
 
 	void sendToAll(String message) {
 		// System.out.println("Recieved: "+message);
-		// System.out.println("Sending message.");
+		System.out.println("Sending message.");
 		synchronized (outputStreams) {
 			for (Enumeration<DataOutputStream> e = getOutputStreams(); e
 					.hasMoreElements();) {
