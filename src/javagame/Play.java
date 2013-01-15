@@ -71,11 +71,33 @@ public class Play extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		
+		
+		
 		player = new Image("res/RobberM4.png");
 		 cop = new Image("res/RobberM4.png");
 
 		projectiles.setMap(levelOne);
 
+		policeUnit = new Cop(levelOne, projectiles);
+		playerUnit = new Criminal(levelOne, projectiles);
+
+		renderObj.setImages(player, wall, cop);
+		renderObj.setMap(levelOne);
+		renderObj.setProjectiles(projectiles);
+
+		//people.add(policeUnit);
+		people.add(playerUnit);
+
+		System.out.println("name:" + playerUnit.name);
+	}
+	
+	public void setupMultiplayer(){
+		
+		
+		
+		System.out.println("GOGOGOG > HOSTING:" + host);
+		
 		if (host) {
 			Runnable r = new Runnable() {
 				@Override
@@ -104,18 +126,6 @@ public class Play extends BasicGameState {
 				System.exit(0);
 			}
 		}
-
-		policeUnit = new Cop(levelOne, projectiles);
-		playerUnit = new Criminal(levelOne, projectiles);
-
-		renderObj.setImages(player, wall, cop);
-		renderObj.setMap(levelOne);
-		renderObj.setProjectiles(projectiles);
-
-		//people.add(policeUnit);
-		people.add(playerUnit);
-
-		System.out.println("name:" + playerUnit.name);
 	}
 
 	@Override
@@ -129,6 +139,7 @@ public class Play extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
+		
 		inputObj.inputHandler(playerUnit, gc, offsetX, offsetY);
 		
 		//crashes if certain person is removed?
