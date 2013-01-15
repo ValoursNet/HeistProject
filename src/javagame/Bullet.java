@@ -13,7 +13,7 @@ public class Bullet {
 	public double currentSpeed = 2;
 	public float currentRotation = (float) 0;
 	public double damage = 0;
-	public double knockback = 0;
+	public double knockback = 1;
 	
 	public Boolean stopped = false;
 	
@@ -89,9 +89,9 @@ public class Bullet {
 						//System.out.println("objName: " + person.name);
 						//person.xForce = person.xForce + (Math.cos(currentRotad) * 1);
 						//person.yForce = person.yForce + (Math.sin(currentRotad) * 1);
-						person.xForce = (Math.cos(currentRotad) * 1);
-						person.yForce = (Math.sin(currentRotad) * 1);
-						person.health =  person.health - 10;
+						person.xForce = (Math.cos(currentRotad) * knockback);
+						person.yForce = (Math.sin(currentRotad) * knockback);
+						person.health =  (int) (person.health - damage);
 						stopped = true;
 						break;
 					}
