@@ -19,6 +19,7 @@ public class Multiplayer {
 			JsonArray array = new JsonArray();
 			for (Bullet bullet : bullets) {
 				JsonObject obj = new JsonObject();
+				obj.add("TYPE", new JsonPrimitive(1));
 				obj.add("XPOS", new JsonPrimitive(bullet.Xpos));
 				obj.add("YPOS", new JsonPrimitive(bullet.Ypos));
 				obj.add("CURRENTSPEED", new JsonPrimitive(bullet.currentSpeed));

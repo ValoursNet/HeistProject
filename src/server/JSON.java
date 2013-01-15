@@ -13,11 +13,11 @@ public class JSON {
 		for (JsonElement json : element.getAsJsonArray()) {
 			JsonObject obj = json.getAsJsonObject();
 			
-			parseBullet(obj, projectiles);
+			//parseBullet(obj, projectiles);
 			
 			//Null error as we are not sending or recieving type atm.
 			//Send type later.
-			/*
+			
 			int type = obj.get("TYPE").getAsInt();
 			switch (type) {
 			case 1:
@@ -29,7 +29,7 @@ public class JSON {
 			default:
 				System.out.println("Unkown object.");
 			}
-			*/
+			
 		}
 	}
 
