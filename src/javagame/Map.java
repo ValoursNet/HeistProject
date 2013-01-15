@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -51,8 +52,20 @@ public class Map {
 		readTextFile(path + mapsDirectory + "/map1.txt");
 	}
 
-	private void readTextFile(String aFileName) {
-		try (BufferedReader br = new BufferedReader(new FileReader(aFileName))) {
+	private void readTextFile(String aFileName){
+		
+		FileReader fr = null;
+		try {
+			fr = new FileReader(aFileName);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(fr != null){
+			BufferedReader br = new BufferedReader(fr);
+		
+		   //try(br) {
+		
 			System.out.println("File read");
 			String sCurrentLine;
 
@@ -64,45 +77,51 @@ public class Map {
 			List<String> readMapLines = new ArrayList<String>();
 			String readMapTemp = null;
 
-			while ((sCurrentLine = br.readLine()) != null) {
-				if (readMap) {
-					readMapTemp = sCurrentLine;
-					readMapLines.add(readMapTemp);
-				}
-				if (sCurrentLine.equals(openMapArrayTag)) {
-					System.out.println("newMap:" + sCurrentLine);
-					readMap = true;
-				}
-				if (sCurrentLine.equals(closeMapArrayTag)) {
-					System.out.println("/newMap:" + sCurrentLine);
-					readMap = false;
-					readMapLines.remove(readMapTemp);
-				}
+			try {
+				while ((sCurrentLine = br.readLine()) != null) {
+					if (readMap) {
+						readMapTemp = sCurrentLine;
+						readMapLines.add(readMapTemp);
+					}
+					if (sCurrentLine.equals(openMapArrayTag)) {
+						System.out.println("newMap:" + sCurrentLine);
+						readMap = true;
+					}
+					if (sCurrentLine.equals(closeMapArrayTag)) {
+						System.out.println("/newMap:" + sCurrentLine);
+						readMap = false;
+						readMapLines.remove(readMapTemp);
+					}
 
-				if (readPatrol) {
-					readPatrolTemp = sCurrentLine;
-					readPatrolLines.add(readPatrolTemp);
+					if (readPatrol) {
+						readPatrolTemp = sCurrentLine;
+						readPatrolLines.add(readPatrolTemp);
+					}
+					if (sCurrentLine.equals(openPatrolArrayTag)) {
+						System.out.println("newPatrol:" + sCurrentLine);
+						readPatrol = true;
+					}
+					if (sCurrentLine.equals(closePatrolArrayTag)) {
+						System.out.println("/newPatrol:" + sCurrentLine);
+						readPatrol = false;
+						readPatrolLines.remove(readPatrolTemp);
+					}
+					// System.out.println(sCurrentLine);
 				}
-				if (sCurrentLine.equals(openPatrolArrayTag)) {
-					System.out.println("newPatrol:" + sCurrentLine);
-					readPatrol = true;
-				}
-				if (sCurrentLine.equals(closePatrolArrayTag)) {
-					System.out.println("/newPatrol:" + sCurrentLine);
-					readPatrol = false;
-					readPatrolLines.remove(readPatrolTemp);
-				}
-				// System.out.println(sCurrentLine);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 			useReadMap(readMapLines);
 
 			useReadPatrol(readPatrolLines);
-
-		} catch (IOException e) {
+		} else {
+		//} catch (IOException e) {
 			System.out.println("File could not be read");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
+		
 	}
 
 	// Overwrites MapCollisions with ArrayList that was read in.

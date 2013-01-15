@@ -188,10 +188,10 @@ public class Render {
 		}*/
 
 		for (Bullet bullet : projObj.bulletCollection) {
-			g.setColor(Color.blue);
+			g.setColor(Color.red);
 			//g.setColor(new  Color(142, 142, 71));
 			if (!bullet.stopped) {
-				g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 2, (float) 2);
+				g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 4, (float) 4);
 			}
 		}
 		projObj.update();
