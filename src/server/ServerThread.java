@@ -40,13 +40,16 @@ public class ServerThread extends Thread
 			while (true) {
 			// ... read the next message ...
 			String message = din.readUTF();
+			
+			System.out.println("server msg read: " + message);
+		
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(message);
 			JSON.parseJson(element, projectiles);
 			// ... tell the world ...
 			//System.out.println("Sending message");
 			// ... and have the server send it to all clients
-			//server.sendToAll( message );
+			server.sendToAll( message );
 			}
 		} catch( EOFException ie ) {
 			// This doesn't need an error message
