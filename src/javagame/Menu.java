@@ -35,7 +35,9 @@ public class Menu extends BasicGameState{
 		g.fillRect(750,500,100,50); // x,y,width,height
 		
 	}
-
+	
+	//Supressing static on host.
+	@SuppressWarnings("static-access")
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input input = gc.getInput();

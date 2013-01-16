@@ -20,6 +20,8 @@ import server.Client;
 import server.Multiplayer;
 import server.Server;
 
+//Suppressing unused multiplayer
+@SuppressWarnings("unused")
 public class Play extends BasicGameState {
 
 	public static boolean host = true;

@@ -119,6 +119,8 @@ public class Person {
 		
 		int currentTargetX = (int) path[currentPathCount][0];
 		int currentTargetY = (int) path[currentPathCount][1];
+		//TODO, add time to path
+		@SuppressWarnings("unused")
 		double currentTargetT = path[currentPathCount][2];
 		
 		//System.out.println("xpos: " + Xpos);

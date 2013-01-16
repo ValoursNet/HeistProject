@@ -40,7 +40,9 @@ public class JSON {
 		float currentRotation = obj.get("CURRENTROTATION").getAsFloat();
 		projectiles.createDummyProjectile(xpos, ypos, currentSpeed, currentRotation);
 	}
-
+	
+	//Suppressing function that is not used.
+	@SuppressWarnings("unused")
 	private static void parsePerson(JsonObject obj) {
 		int id = obj.get("ID").getAsInt();
 		int playerType = obj.get("PLAYERTYPE").getAsInt();

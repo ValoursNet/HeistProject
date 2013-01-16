@@ -148,7 +148,6 @@ public class Map {
 		mapCollisions = board;
 	}
 
-	@SuppressWarnings("unused")
 	private void useReadPatrol(List<String> readPatrolLines) {
 
 		

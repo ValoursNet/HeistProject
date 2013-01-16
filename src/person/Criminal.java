@@ -7,7 +7,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
 
 import javagame.Map;
-import javagame.Play;
 import javagame.Projectiles;
 
 public class Criminal extends Person {
