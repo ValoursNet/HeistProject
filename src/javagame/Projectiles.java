@@ -11,8 +11,10 @@ public class Projectiles {
 	Map level;
 
 	public void update() {
-		for (Bullet bullet : bulletCollection) {
-			bullet.update();
+		synchronized (bulletCollection) {  
+			for (Bullet bullet : bulletCollection) {
+				bullet.update();
+			}
 		}
 	}
 
@@ -23,14 +25,18 @@ public class Projectiles {
 	public void createProjectile(double Xpos, double Ypos,
 			double currentSpeed, float currentRotation, Person person) {
 		Bullet bullet = new Bullet(level, Xpos, Ypos, currentSpeed,currentRotation, person);
-		bulletCollection.add(bullet);
+		synchronized (bulletCollection) {  
+			bulletCollection.add(bullet);
+		}
 		Multiplayer.bullets.add(bullet);
 	}
 	public void createDummyProjectile(double Xpos, double Ypos, double currentSpeed, float currentRotation) {
 		Bullet bullet = new Bullet(level, Xpos, Ypos, currentSpeed,currentRotation, null);
 		bullet.damage = 0;
 		bullet.knockback = 0;
-		bulletCollection.add(bullet);
+		synchronized (bulletCollection) {  
+			bulletCollection.add(bullet);
+		}
 	}
 
 	public void removeProjectile(Bullet bullet) {

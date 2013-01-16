@@ -186,15 +186,17 @@ public class Render {
 			Player.isShooting = false;
 			lastTimeInMillis = timeInMillis;
 		}*/
-
-		for (Bullet bullet : projObj.bulletCollection) {
-			g.setColor(Color.red);
-			//g.setColor(new  Color(142, 142, 71));
-			if (!bullet.stopped) {
-				g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 4, (float) 4);
+		
+		synchronized (projObj.bulletCollection) {  
+			for (Bullet bullet : projObj.bulletCollection) {
+				g.setColor(Color.red);
+				//g.setColor(new  Color(142, 142, 71));
+				if (!bullet.stopped) {
+					g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 4, (float) 4);
+				}
 			}
+			projObj.update();
 		}
-		projObj.update();
 	}
 
 	// Should be based on paramater map, not class defined levelOne
