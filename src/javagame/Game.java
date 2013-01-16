@@ -1,5 +1,6 @@
 package javagame;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
@@ -11,6 +12,7 @@ public class Game extends StateBasedGame{
 	
 	public Game(String gamename) {
 		super(gamename);
+		
 		this.addState(new Menu(menu));
 		this.addState(new Play(play));
 	}
@@ -25,17 +27,20 @@ public class Game extends StateBasedGame{
 	public static void main(String[] args) {
 		AppGameContainer appgc;
 		try{
+			
+			IconLoader iconLoader = new IconLoader();
+			Display.setIcon( iconLoader.load() );
+			
 			appgc = new AppGameContainer(new Game(gamename));
 			//appgc.setDisplayMode(640, 480, false);
 			appgc.setDisplayMode(1024, 768, false);
 			appgc.start();
-			//appgc.setIcons( new String[] {"32x32.tga", "24x24.tga", "16x16.tga"} );
+			
 			
 		}catch(SlickException e){
 			e.printStackTrace();
 		}
 	}
 
-	
 
 }
