@@ -39,7 +39,7 @@ public class ServerThread extends Thread
 			// ... read the next message ...
 			String message = din.readUTF();
 			
-			System.out.println("server msg read: " + message);
+			//System.out.println("server msg read: " + message);
 		
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(message);

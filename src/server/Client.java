@@ -3,7 +3,6 @@ package server;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -56,7 +55,7 @@ class ClientThread extends Thread {
 		while(true) {
 			try {
 				String message = din.readUTF();
-				System.out.println("message: " + message);
+				//System.out.println("message: " + message);
 				JsonParser parser = new JsonParser();
 				JsonElement element = parser.parse(message);
 				JSON.parseJson(element, Play.projectiles);
