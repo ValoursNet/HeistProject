@@ -10,7 +10,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import person.Cop;
@@ -22,7 +21,7 @@ import server.Server;
 
 //Suppressing unused multiplayer
 //@SuppressWarnings("unused")
-public class Play extends BasicGameState {
+public class Play {
 
 	public static boolean host = true;
 	String ip = "127.0.0.1";
@@ -65,12 +64,10 @@ public class Play extends BasicGameState {
 		cop = new Image("res/RobberM4.png");
 	}
 
-	@Override
 	public int getID() {
 		return 1;
 	}
 
-	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		
@@ -131,7 +128,6 @@ public class Play extends BasicGameState {
 		}
 	}
 
-	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		offsetX = (float) playerUnit.offsetX;
@@ -139,7 +135,6 @@ public class Play extends BasicGameState {
 		renderObj.update(gc, sbg, g, offsetX, offsetY, people);
 	}
 
-	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
 		

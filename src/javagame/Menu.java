@@ -49,9 +49,9 @@ public class Menu extends BasicGameState{
 			if(input.isMouseButtonDown(0)){
 				sbg.enterState(1);
 				System.out.println("sbg: "  );
-				Play asd = (Play) sbg.getState(1);
-				asd.host = true;
-				asd.setupMultiplayer();
+				DummyPlay asd = (DummyPlay) sbg.getState(1);
+				asd.play.host = true;
+				asd.play.setupMultiplayer();
 			}
 		} else {
 			colorA = Color.white;
@@ -62,9 +62,9 @@ public class Menu extends BasicGameState{
 			if(input.isMouseButtonDown(0)){
 				sbg.enterState(1);
 				System.out.println("sbg: "  );
-				Play asd = (Play) sbg.getState(1);
-				asd.host = false;
-				asd.setupMultiplayer();
+				DummyPlay asd = (DummyPlay) sbg.getState(1);
+				asd.play.host = false;
+				asd.play.setupMultiplayer();
 			}
 		} else {
 			colorB = Color.white;
