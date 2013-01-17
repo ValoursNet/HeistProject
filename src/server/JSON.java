@@ -11,7 +11,7 @@ import javagame.Projectiles;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class JSON {
 
 	public static void parseJson(JsonElement element, Projectiles projectiles) {
@@ -65,21 +65,27 @@ public class JSON {
 		}
 		
 		if(newPerson){
+			
 			Criminal nPerson = null;
 			try {
-				nPerson = new Criminal(Play.levelOne, projectiles);
-			
+				Map levelOne = Play.people.iterator().next().levelOne;
+				nPerson = new Criminal(levelOne, projectiles);
+				
 				nPerson.id = id;
 				nPerson.Xpos = xpos;
 				nPerson.Ypos = ypos;
 				nPerson.currentRotation = currentRotation;
-				Play.people.add(nPerson);
+				//nPerson.multiplayerPerson = true;
+				synchronized(Play.people){
+					Play.people.add(nPerson);
+				}
 				
 				System.out.println("added New Person");
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 	}
 

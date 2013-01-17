@@ -16,6 +16,7 @@ import java.util.List;
 import org.newdawn.slick.SlickException;
 
 import person.Cop;
+import javagame.Play;
 
 public class Map {
 

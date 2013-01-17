@@ -129,49 +129,50 @@ public class Render {
 		//CURENTLY UNUSED
 		//long timeInMillis = System.currentTimeMillis();
 		
-		for (Person person : people) {
-			if (!person.isDead) {
-				/* Draw the person. */
-				g.drawImage(person.image, (int) person.Xpos - 27, (int) person.Ypos - 57);
-				person.image.setCenterOfRotation(27, 57);
-				person.image.setRotation(person.currentRotation);
-				
-				g.setColor(Color.blue);
-				g.drawString(person.name,(float) person.Xpos-10,(float) person.Ypos-60);
-				g.setColor(Color.red);
-				g.drawLine((float) person.Xpos-20,(float) person.Ypos-70, (float) person.Xpos-20 +(person.health/2),(float) person.Ypos-70);
-				
-				//very temp reload "symbol"
-				if(person.gun.bulletCount <= 0){
-					g.drawLine((float) person.Xpos-5,(float) person.Ypos-5, (float) person.Xpos+5,(float) person.Ypos+5);
-					g.drawLine((float) person.Xpos+5,(float) person.Ypos-5, (float) person.Xpos-5,(float) person.Ypos+5);
-				}
-				
-				if (drawDebug) {
-					if(person.type == 2){
-						g.drawLine((float) person.Xpos,(float) person.Ypos, (float) person.leftX,(float) person.leftY);
-						g.drawLine((float) person.Xpos,(float) person.Ypos, (float) person.rightX,(float) person.rightY);
-						g.drawLine((float) person.leftX,(float) person.leftY, (float) person.rightX,(float) person.rightY);
-					  
-					}
-				}
-				/* Render hit boxes if in debug mode. */
-				if (drawDebug) {
+		synchronized(people){
+			for (Person person : people) {
+				if (!person.isDead) {
+					/* Draw the person. */
+					g.drawImage(person.image, (int) person.Xpos - 27, (int) person.Ypos - 57);
+					person.image.setCenterOfRotation(27, 57);
+					person.image.setRotation(person.currentRotation);
+					
+					g.setColor(Color.blue);
+					g.drawString(person.name,(float) person.Xpos-10,(float) person.Ypos-60);
 					g.setColor(Color.red);
-					g.fillRect((float) person.Xpos - 19, (float) person.Ypos - 22,
-							(float) 40, (float) 40);
-				}	
-				/* Render lines of sight. */
-				if (drawDebug) {
-					drawSightline(person, g);
-					for (int i = 0; i < 10; i++) {
-						drawSightlineCollision(person, g, levelOne.getMap(),
-								person.currentRotation - 20 + (i * 4));
+					g.drawLine((float) person.Xpos-20,(float) person.Ypos-70, (float) person.Xpos-20 +(person.health/2),(float) person.Ypos-70);
+					
+					//very temp reload "symbol"
+					if(person.gun.bulletCount <= 0){
+						g.drawLine((float) person.Xpos-5,(float) person.Ypos-5, (float) person.Xpos+5,(float) person.Ypos+5);
+						g.drawLine((float) person.Xpos+5,(float) person.Ypos-5, (float) person.Xpos-5,(float) person.Ypos+5);
+					}
+					
+					if (drawDebug) {
+						if(person.type == 2){
+							g.drawLine((float) person.Xpos,(float) person.Ypos, (float) person.leftX,(float) person.leftY);
+							g.drawLine((float) person.Xpos,(float) person.Ypos, (float) person.rightX,(float) person.rightY);
+							g.drawLine((float) person.leftX,(float) person.leftY, (float) person.rightX,(float) person.rightY);
+						  
+						}
+					}
+					/* Render hit boxes if in debug mode. */
+					if (drawDebug) {
+						g.setColor(Color.red);
+						g.fillRect((float) person.Xpos - 19, (float) person.Ypos - 22,
+								(float) 40, (float) 40);
+					}	
+					/* Render lines of sight. */
+					if (drawDebug) {
+						drawSightline(person, g);
+						for (int i = 0; i < 10; i++) {
+							drawSightlineCollision(person, g, levelOne.getMap(),
+									person.currentRotation - 20 + (i * 4));
+						}
 					}
 				}
 			}
 		}
-
 
 		// drawSightlineCollision(Player,
 		// g,levelOne.getMap(),Player.currentRotation);

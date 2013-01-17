@@ -41,7 +41,7 @@ public class Play extends BasicGameState {
 	Render renderObj = new Render();
 	UserInput inputObj = new UserInput();
 
-	public static Map levelOne = new Map();
+	Map levelOne = new Map();
 	Cop policeUnit;
 	public static Criminal playerUnit;
 

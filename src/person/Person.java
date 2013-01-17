@@ -13,7 +13,7 @@ import gun.Gun;
 @SuppressWarnings("unused")
 public class Person {
 	
-	Map levelOne;
+	public Map levelOne;
 	public Gun gun = null;
 	public int type = 0;
 	public Image image;
@@ -55,6 +55,7 @@ public class Person {
 	
 	public boolean isDead = false;
 	
+	public boolean multiplayerPerson = false;
 	   
     public int leftX;
     public int leftY;
@@ -313,8 +314,12 @@ public class Person {
 		updateX(mapArray,xSpeed,updateXspeed);
 		updateY(mapArray,ySpeed,updateYspeed);
 		
-		//Works, but essentially just spaming it. Not cool.
-		Multiplayer.people.add(this);
+		if(!multiplayerPerson){
+			synchronized(Multiplayer.people){
+				//Works, but essentially just spaming it. Not cool.
+				Multiplayer.people.add(this);
+			}
+		}
 	}
 
 	
