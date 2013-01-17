@@ -1,12 +1,17 @@
 package server;
 
+import org.newdawn.slick.SlickException;
+
+import person.Criminal;
 import person.Person;
+import javagame.Map;
 import javagame.Play;
 import javagame.Projectiles;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+@SuppressWarnings("unused")
 public class JSON {
 
 	public static void parseJson(JsonElement element, Projectiles projectiles) {
@@ -24,7 +29,7 @@ public class JSON {
 				parseBullet(obj, projectiles);
 				break;
 			case 2:
-				parsePerson(obj);
+				parsePerson(obj, projectiles);
 				break;
 			default:
 				System.out.println("Unkown object.");
@@ -42,18 +47,38 @@ public class JSON {
 	}
 	
 	//Suppressing function that is not used.
-	@SuppressWarnings("unused")
-	private static void parsePerson(JsonObject obj) {
+	//@SuppressWarnings("unused")
+	private static void parsePerson(JsonObject obj, Projectiles projectiles) {
 		int id = obj.get("ID").getAsInt();
-		int playerType = obj.get("PLAYERTYPE").getAsInt();
+		//int playerType = obj.get("PLAYERTYPE").getAsInt();
 		double xpos = obj.get("XPOS").getAsDouble();
 		double ypos = obj.get("YPOS").getAsDouble();
 		float currentRotation = obj.get("CURRENTROTATION").getAsFloat();
+		boolean newPerson = true;
 		for (Person person : Play.people) {
 			if (person.id == id) {
+				newPerson = false;
 				person.Xpos = xpos;
 				person.Ypos = ypos;
 				person.currentRotation = currentRotation;
+			}
+		}
+		
+		if(newPerson){
+			Criminal nPerson = null;
+			try {
+				nPerson = new Criminal(Play.levelOne, projectiles);
+			
+				nPerson.id = id;
+				nPerson.Xpos = xpos;
+				nPerson.Ypos = ypos;
+				nPerson.currentRotation = currentRotation;
+				Play.people.add(nPerson);
+				
+				System.out.println("added New Person");
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

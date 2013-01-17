@@ -21,7 +21,7 @@ import server.Multiplayer;
 import server.Server;
 
 //Suppressing unused multiplayer
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class Play extends BasicGameState {
 
 	public static boolean host = true;
@@ -41,7 +41,7 @@ public class Play extends BasicGameState {
 	Render renderObj = new Render();
 	UserInput inputObj = new UserInput();
 
-	Map levelOne = new Map();
+	public static Map levelOne = new Map();
 	Cop policeUnit;
 	public static Criminal playerUnit;
 
@@ -90,6 +90,7 @@ public class Play extends BasicGameState {
 
 		//people.add(policeUnit);
 		people.add(playerUnit);
+		Multiplayer.people.add(playerUnit);
 
 		System.out.println("name:" + playerUnit.name);
 	}

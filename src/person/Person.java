@@ -5,16 +5,19 @@ import java.util.Random;
 
 import org.newdawn.slick.Image;
 
+import server.Multiplayer;
+
 import javagame.Map;
 import gun.Gun;
 
+@SuppressWarnings("unused")
 public class Person {
 	
 	Map levelOne;
 	public Gun gun = null;
 	public int type = 0;
 	public Image image;
-	public int id;
+	public int id = (int) Math.round(Math.random()*1000);
 	public double Xpos = 100;
 	public double Ypos = 300;
 	public double ySpeed = 0;
@@ -120,7 +123,6 @@ public class Person {
 		int currentTargetX = (int) path[currentPathCount][0];
 		int currentTargetY = (int) path[currentPathCount][1];
 		//TODO, add time to path
-		@SuppressWarnings("unused")
 		double currentTargetT = path[currentPathCount][2];
 		
 		//System.out.println("xpos: " + Xpos);
@@ -310,6 +312,9 @@ public class Person {
 		
 		updateX(mapArray,xSpeed,updateXspeed);
 		updateY(mapArray,ySpeed,updateYspeed);
+		
+		//Works, but essentially just spaming it. Not cool.
+		Multiplayer.people.add(this);
 	}
 
 	
