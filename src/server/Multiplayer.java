@@ -27,6 +27,7 @@ public class Multiplayer {
 				obj.add("YPOS", new JsonPrimitive(bullet.Ypos));
 				obj.add("CURRENTSPEED", new JsonPrimitive(bullet.currentSpeed));
 				obj.add("CURRENTROTATION", new JsonPrimitive(bullet.currentRotation));
+				obj.add("HOLDERID", new JsonPrimitive(bullet.shooter.id));
 				JsonElement element = obj.getAsJsonObject();
 				array.add(element);
 			}
@@ -42,15 +43,19 @@ public class Multiplayer {
 		if (people.size() > 0) {
 			JsonArray array = new JsonArray();
 			for (Person person : people) {
-				JsonObject obj = new JsonObject();
-				obj.add("TYPE", new JsonPrimitive(2));
-				obj.add("ID", new JsonPrimitive(person.id));
-				obj.add("XPOS", new JsonPrimitive(person.Xpos));
-				obj.add("YPOS", new JsonPrimitive(person.Ypos));
-				//obj.add("CURRENTSPEED", new JsonPrimitive(bullet.currentSpeed));
-				obj.add("CURRENTROTATION", new JsonPrimitive(person.currentRotation));
-				JsonElement element = obj.getAsJsonObject();
-				array.add(element);
+				if(person.directControl){
+					JsonObject obj = new JsonObject();
+					obj.add("TYPE", new JsonPrimitive(2));
+					obj.add("ID", new JsonPrimitive(person.id));
+					person.packetId = person.packetId + 1;
+					obj.add("PID", new JsonPrimitive(person.packetId));
+					obj.add("XPOS", new JsonPrimitive(person.Xpos));
+					obj.add("YPOS", new JsonPrimitive(person.Ypos));
+					//obj.add("CURRENTSPEED", new JsonPrimitive(bullet.currentSpeed));
+					obj.add("CURRENTROTATION", new JsonPrimitive(person.currentRotation));
+					JsonElement element = obj.getAsJsonObject();
+					array.add(element);
+				}
 			}
 			if (Play.host) {
 				server.sendToAll(array.toString());

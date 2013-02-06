@@ -43,7 +43,8 @@ public class JSON {
 		double ypos = obj.get("YPOS").getAsDouble();
 		double currentSpeed = obj.get("CURRENTSPEED").getAsDouble();
 		float currentRotation = obj.get("CURRENTROTATION").getAsFloat();
-		projectiles.createDummyProjectile(xpos, ypos, currentSpeed, currentRotation);
+		int holderID = obj.get("HOLDERID").getAsInt();
+		projectiles.createDummyProjectile(xpos, ypos, currentSpeed, currentRotation, holderID);
 	}
 	
 	//Suppressing function that is not used.
@@ -51,16 +52,24 @@ public class JSON {
 	private static void parsePerson(JsonObject obj, Projectiles projectiles) {
 		int id = obj.get("ID").getAsInt();
 		//int playerType = obj.get("PLAYERTYPE").getAsInt();
+		int packetId = obj.get("PID").getAsInt();
 		double xpos = obj.get("XPOS").getAsDouble();
 		double ypos = obj.get("YPOS").getAsDouble();
 		float currentRotation = obj.get("CURRENTROTATION").getAsFloat();
 		boolean newPerson = true;
 		for (Person person : Play.people) {
 			if (person.id == id) {
-				newPerson = false;
-				person.Xpos = xpos;
-				person.Ypos = ypos;
-				person.currentRotation = currentRotation;
+					newPerson = false;
+				if(!person.directControl){
+					if(packetId>person.packetId){
+						person.packetId = packetId;
+						person.Xpos = xpos;
+						person.Ypos = ypos;
+						person.currentRotation = currentRotation;
+					} else {
+						System.out.println("old packet: " + packetId + " > person.packetId:" + person.packetId);
+					}
+				}
 			}
 		}
 		
@@ -68,7 +77,6 @@ public class JSON {
 			Criminal nPerson = null;
 			try {
 				nPerson = new Criminal(Play.levelOne, projectiles);
-			
 				nPerson.id = id;
 				nPerson.Xpos = xpos;
 				nPerson.Ypos = ypos;

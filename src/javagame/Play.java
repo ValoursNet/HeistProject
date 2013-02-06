@@ -40,14 +40,16 @@ public class Play extends BasicGameState {
 
 	Render renderObj = new Render();
 	UserInput inputObj = new UserInput();
-
-	public static Map levelOne = new Map();
+	
+	public static HashSet<Person> people = new HashSet<Person>();
+	
+	public static Map levelOne = new Map(projectiles);
 	Cop policeUnit;
 	public static Criminal playerUnit;
 
 	Server server;
 
-	public static HashSet<Person> people = new HashSet<Person>();
+	
 
 	float offsetX = 0;
 	float offsetY = 0;
@@ -90,6 +92,7 @@ public class Play extends BasicGameState {
 
 		//people.add(policeUnit);
 		people.add(playerUnit);
+		playerUnit.directControl = true;
 		Multiplayer.people.add(playerUnit);
 
 		System.out.println("name:" + playerUnit.name);

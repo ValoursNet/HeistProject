@@ -36,7 +36,7 @@ public class Cop extends Person {
 		super.update();
 		//checkDirection();
 		
-		followPath();
+		basicAI();
 		if(shootOnSight())isShooting=true;
 		else isShooting=false;
 		//isShooting = true;
@@ -65,6 +65,8 @@ public class Cop extends Person {
 
 	    if(p.contains(target.Xpos,target.Ypos)){
 	    	seen = true;
+	    	hasTarget = true;
+	    	myTarget = target;
 	    }
 	    //System.out.print(c);
 		return seen;

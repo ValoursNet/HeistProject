@@ -28,12 +28,14 @@ public class Game extends StateBasedGame{
 		AppGameContainer appgc;
 		try{
 			
-			IconLoader iconLoader = new IconLoader();
-			Display.setIcon( iconLoader.load() );
+			//IconLoader iconLoader = new IconLoader();
+			//Display.setIcon( iconLoader.load() );
 			
 			appgc = new AppGameContainer(new Game(gamename));
 			//appgc.setDisplayMode(640, 480, false);
 			appgc.setDisplayMode(1024, 768, false);
+			appgc.setAlwaysRender(true);
+			appgc.setVSync(true);
 			appgc.start();
 			
 			

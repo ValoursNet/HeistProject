@@ -42,7 +42,7 @@ public class Gun {
 			bulletCount--;
 			
 			shotAngle = spread*Math.random() + holder.currentRotation - spread/2;
-			projectiles.createProjectile(holder.Xpos, holder.Ypos, 0.2, (float) shotAngle, holder);
+			projectiles.createProjectile(holder.Xpos, holder.Ypos, 2, (float) shotAngle, holder);
 			
 			lastTimeInMillis = timeInMillis;
 		} else if (bulletCount == 1) {

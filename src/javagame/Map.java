@@ -52,6 +52,38 @@ public class Map {
 		readTextFile(path + mapsDirectory + "/map1.txt");
 	}
 
+	public Map(Projectiles projectiles) {
+		mapCollisions = createMap();
+		//createDirectory();
+		// writefile();
+		readTextFile(path + mapsDirectory + "/map1.txt");
+		addExampleCop(projectiles);
+	}
+
+	private void addExampleCop(Projectiles projectiles){
+		double[][] path = new double[2][3];
+		
+		path[0][0] = 5*(tileSize + tileSize/2);
+		path[0][1] = 2*(tileSize + tileSize/2);
+		path[0][2] = 0;
+		
+		path[1][0] = 15*(tileSize + tileSize/2);
+		path[1][1] = 2*(tileSize + tileSize/2);
+		path[1][2] = 0;
+		
+		/*
+		path[2][0] = 2*(tileSize + tileSize/2);
+		path[2][1] = 5*(tileSize + tileSize/2);
+		path[2][2] = 0;
+		
+		path[3][0] = 5*(tileSize + tileSize/2);
+		path[3][1] = 5*(tileSize + tileSize/2);
+		path[3][2] = 0;
+		 */
+		
+		addCop(path,projectiles);
+	}
+	
 	private void readTextFile(String aFileName){
 		
 		FileReader fr = null;
@@ -189,17 +221,17 @@ public class Map {
 
 			}
 
-			addCop(path);
+			addCop(path, null);
 			//index = index + 1;
 		}
 
 	}
 
-	private void addCop(double[][] path) {
+	private void addCop(double[][] path, Projectiles projectiles) {
 		System.out.println("cop added in map");
 		Cop policeUnit = null;
 		
-		Projectiles proj = Play.projectiles;
+		Projectiles proj = projectiles;
 		//Projectiles preds = new Projectiles();
 		
 		

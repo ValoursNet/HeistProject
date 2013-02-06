@@ -6,13 +6,14 @@ import javagame.Play;
 
 public class Bullet {
 	
-	Person shooter;
+	public Person shooter;
+	public int holderID;
 	Map levelOne;
 	public double Xpos = 100;
 	public double Ypos = 300;
 	public double currentSpeed = 2;
 	public float currentRotation = (float) 0;
-	public double damage = 0;
+	public double damage = 10;
 	public double knockback = 1;
 	
 	public Boolean stopped = false;
@@ -26,11 +27,22 @@ public class Bullet {
 		this.currentRotation = currentRotation;
 		this.levelOne = level;
 		this.shooter = shooter;
+		this.holderID = shooter.id;
+	}
+	
+	public Bullet (Map level, double Xpos, double Ypos, double currentSpeed, float currentRotation, int holderID){		
+		this.Xpos = Xpos;
+		this.Ypos = Ypos;
+		this.currentSpeed = currentSpeed;
+		this.currentRotation = currentRotation;
+		this.levelOne = level;
+		this.shooter = null;
+		this.holderID = holderID;
 	}
 	
 	void update(){
 		if(!stopped){
-		updatePosition(levelOne.mapCollisions);
+			updatePosition(levelOne.mapCollisions);
 		}
 	}
 	
@@ -84,18 +96,20 @@ public class Bullet {
 				}
 			} */
 			for (Person person : Play.people) {
-				if (!person.equals(shooter)) {
+				//if (!person.equals(shooter)) {
 					if(bulletWithin(endX,endY,person.Xpos,person.Ypos,person.width,person.height)){
 						//System.out.println("objName: " + person.name);
 						//person.xForce = person.xForce + (Math.cos(currentRotad) * 1);
 						//person.yForce = person.yForce + (Math.sin(currentRotad) * 1);
-						person.xForce = (Math.cos(currentRotad) * knockback);
-						person.yForce = (Math.sin(currentRotad) * knockback);
-						person.health =  (int) (person.health - damage);
-						stopped = true;
-						break;
+						if(holderID != person.id){
+							person.xForce = (Math.cos(currentRotad) * knockback);
+							person.yForce = (Math.sin(currentRotad) * knockback);
+							person.health =  (int) (person.health - damage);
+							stopped = true;
+							break;
+						}
 					}
-				}
+				//}
 			}
 		}
 		

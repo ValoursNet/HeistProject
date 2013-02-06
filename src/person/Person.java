@@ -17,7 +17,11 @@ public class Person {
 	public Gun gun = null;
 	public int type = 0;
 	public Image image;
+	//TODO get IDs from server
 	public int id = (int) Math.round(Math.random()*1000);
+	
+	public int packetId = 0;
+	
 	public double Xpos = 100;
 	public double Ypos = 300;
 	public double ySpeed = 0;
@@ -61,6 +65,8 @@ public class Person {
     public int rightX;
     public int rightY;
 	
+    public boolean hasTarget = true;
+    public Person myTarget;
 	
 	public void update() {
 		
@@ -109,6 +115,42 @@ public class Person {
 		//System.out.println("path set: " + path[0][1]);
 	}
 	
+	protected void basicAI(){
+		if(!hasTarget){
+			followPath();
+		} else {
+			if(myTarget != null && !myTarget.isDead){
+				followTarget();
+			} else {
+				hasTarget = false;
+			}
+		}
+	}
+	
+	protected void followTarget(){
+		
+		System.out.println("following target");
+		
+		int currentTargetX = (int) myTarget.Xpos;
+		int currentTargetY = (int) myTarget.Ypos;
+
+		float xDistance = (float) (Xpos - (currentTargetX));
+		float yDistance = (float) (Ypos - (currentTargetY));
+		
+		if(xDistance < 10 && xDistance > -10 && yDistance > -10 && yDistance < 10){
+			Xpos = currentTargetX;
+			Ypos = currentTargetY;
+		}
+		
+		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+		
+		currentRotation = (float) angleToTurn - 90;
+		
+		currentSpeed = 0.6;
+		xForce = (float) (currentSpeed * Math.cos(currentRotation));
+		yForce = (float) (currentSpeed * Math.sin(currentRotation));
+	}
+	
 	protected void followPath() {
 		/*
 		Xpos = 100;
@@ -130,12 +172,13 @@ public class Person {
 		float xDistance = (float) (Xpos - (currentTargetX));
 		float yDistance = (float) (Ypos - (currentTargetY));
 		
-		if(xDistance < 10 && xDistance > -10 && yDistance > -10 && yDistance < 10){
+		if(xDistance < 40 && xDistance > -40 && yDistance > -40 && yDistance < 40){
 			nextPathCount();
 			Xpos = currentTargetX;
 			Ypos = currentTargetY;
 		} else {
-			//System.out.println(name + "'s  -  xDistance: " + xDistance + "'   yDistance: " + yDistance);
+			System.out.println(name + "'s  -  xDistance: " + xDistance + "'   yDistance: " + yDistance);
+			System.out.println(name + "'s  -  Ypos: " + Ypos + "'   currentTargetY: " + currentTargetY);
 		}
 		
 		
@@ -143,7 +186,7 @@ public class Person {
 		
 		currentRotation = (float) angleToTurn - 90;
 		
-		currentSpeed = 0.6;
+		currentSpeed = 0.4;
 		xForce = (float) (currentSpeed * Math.cos(currentRotation));
 		yForce = (float) (currentSpeed * Math.sin(currentRotation));
 	}

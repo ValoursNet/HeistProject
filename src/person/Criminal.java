@@ -25,7 +25,7 @@ public class Criminal extends Person {
 		}
 		LoadingList.setDeferredLoading(false);
 
-		directControl = true;
+		//directControl = true;
 		gun = new Gun(this, projectiles);
 		System.out.println("CRIMINAL ERE");
 	}
