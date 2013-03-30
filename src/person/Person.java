@@ -5,10 +5,11 @@ import java.util.Random;
 
 import org.newdawn.slick.Image;
 
+import Inventory.Gun;
+
 import server.Multiplayer;
 
 import javagame.Map;
-import gun.Gun;
 
 @SuppressWarnings("unused")
 public class Person {

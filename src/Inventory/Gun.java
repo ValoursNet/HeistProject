@@ -40,6 +40,10 @@ public class Gun extends InventoryObject {
 		this.mag = mag;
 	}
 	
+	public boolean isEmptyMag() {
+		return (mag != null && mag.isEmpty());
+	}
+	
 	public Magasine removeMag() {
 		Magasine magasine = this.mag;
 		this.mag = null;

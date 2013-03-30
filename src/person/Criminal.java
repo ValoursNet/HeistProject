@@ -1,10 +1,11 @@
 package person;
 
-import gun.Gun;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
+
+import Inventory.Gun;
+import Inventory.Magasine;
 
 import javagame.Map;
 import javagame.Projectiles;
@@ -26,7 +27,10 @@ public class Criminal extends Person {
 		LoadingList.setDeferredLoading(false);
 
 		//directControl = true;
-		gun = new Gun(this, projectiles);
+		gun = new Gun("Name", "Description", null, null, 1, 700, 7, 3500);
+		Magasine mag = new Magasine("Magasine", "Description", null, 1, 40, 40);
+		gun.loadMag(mag);
+		gun.setHolder(this);
 		System.out.println("CRIMINAL ERE");
 	}
 

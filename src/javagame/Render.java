@@ -142,7 +142,7 @@ public class Render {
 				g.drawLine((float) person.Xpos-20,(float) person.Ypos-70, (float) person.Xpos-20 +(person.health/2),(float) person.Ypos-70);
 				
 				//very temp reload "symbol"
-				if(person.gun.bulletCount <= 0){
+				if(person.gun != null && person.gun.isLoaded() && person.gun.isEmptyMag()){
 					g.drawLine((float) person.Xpos-5,(float) person.Ypos-5, (float) person.Xpos+5,(float) person.Ypos+5);
 					g.drawLine((float) person.Xpos+5,(float) person.Ypos-5, (float) person.Xpos-5,(float) person.Ypos+5);
 				}

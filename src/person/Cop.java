@@ -27,7 +27,7 @@ public class Cop extends Person {
 	        catch (SlickException e) {}
 	        LoadingList.setDeferredLoading(false);
 		
-		gun = new Gun(this, projectiles);
+		//gun = new Gun(this, projectiles);
 		System.out.println("COP ERE");
 	}
 	
