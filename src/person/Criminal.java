@@ -4,6 +4,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
 
+import Inventory.Backpack;
 import Inventory.Gun;
 import Inventory.Magasine;
 
@@ -18,6 +19,11 @@ public class Criminal extends Person {
 		type = 1;
 		// Play play = new Play();
 		// image = play.player.copy();
+		backpack = new Backpack("Alice", "Alice Pack Ting", null, new Image("res/BackPackGrid.png"), 0, 10);
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
 
 		LoadingList.setDeferredLoading(true);
 		try {

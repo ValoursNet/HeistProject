@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.newdawn.slick.Image;
 
+import Inventory.Backpack;
 import Inventory.Gun;
 
 import server.Multiplayer;
@@ -54,12 +55,16 @@ public class Person {
 	int dirCount = 0;
 	
 	public boolean movingUp,movingDown,movingLeft,movingRight = false;	
+	
+	public boolean inventoryOpen = false;
+	
 	public boolean isShooting = false;
 	
 	public String name = generateName();
 	
 	public boolean isDead = false;
 	
+	public Backpack backpack;
 	   
     public int leftX;
     public int leftY;

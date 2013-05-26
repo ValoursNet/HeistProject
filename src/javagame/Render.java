@@ -10,6 +10,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import Inventory.InventoryObject;
+
 import person.Person;
 
 public class Render {
@@ -155,6 +157,26 @@ public class Render {
 					  
 					}
 				}
+				
+				if (person.inventoryOpen) {
+					if(person.backpack != null){
+						double backpackPositionX = person.Xpos - person.backpack.getInGameImage().getWidth()/2;
+						double backpackPositionY = person.Ypos - person.backpack.getInGameImage().getHeight()/2;;
+						
+						g.drawImage(person.backpack.getInGameImage(), (int)backpackPositionX,  (int)backpackPositionY);
+						g.setColor(new Color(133, 133, 133, 133) );
+						g.fillRect((float)backpackPositionX,(float) backpackPositionY, (float)person.backpack.getInGameImage().getWidth(), (float)person.backpack.getInGameImage().getHeight());
+						
+						int currentSlotNum = 0;
+						for (InventoryObject item : person.backpack.items) {
+							g.drawImage(item.inventoryImage, (int) backpackPositionX + 5 + currentSlotNum*50, (int) backpackPositionY + 5);
+							currentSlotNum = currentSlotNum + item.size;
+						}
+						//items
+						//g.drawImage(person.backpack.getInGameImage(), 27,  57);
+					}
+				}
+				
 				/* Render hit boxes if in debug mode. */
 				if (drawDebug) {
 					g.setColor(Color.red);

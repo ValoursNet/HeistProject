@@ -32,6 +32,12 @@ public class UserInput {
 			Player.movingRight = false;
 		}
 		
+		if(input.isKeyDown(Input.KEY_E)){
+			Player.inventoryOpen = true;
+		} else {
+			Player.inventoryOpen = false;
+		}
+		
 		int xPos = input.getMouseX();
 		int yPos = input.getMouseY();
 		
