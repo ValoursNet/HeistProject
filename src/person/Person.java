@@ -183,8 +183,8 @@ public class Person {
 			Xpos = currentTargetX;
 			Ypos = currentTargetY;
 		} else {
-			System.out.println(name + "'s  -  xDistance: " + xDistance + "'   yDistance: " + yDistance);
-			System.out.println(name + "'s  -  Ypos: " + Ypos + "'   currentTargetY: " + currentTargetY);
+			//System.out.println(name + "'s  -  xDistance: " + xDistance + "'   yDistance: " + yDistance);
+			//System.out.println(name + "'s  -  Ypos: " + Ypos + "'   currentTargetY: " + currentTargetY);
 		}
 		
 		

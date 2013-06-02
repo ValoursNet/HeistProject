@@ -162,18 +162,56 @@ public class Render {
 					if(person.backpack != null){
 						double backpackPositionX = person.Xpos - person.backpack.getInGameImage().getWidth()/2;
 						double backpackPositionY = person.Ypos - person.backpack.getInGameImage().getHeight()/2;;
+						person.backpack.backpackPositionX = (int) (backpackPositionX + offsetX);
+						person.backpack.backpackPositionY = (int) (backpackPositionY + offsetY);
 						
 						g.drawImage(person.backpack.getInGameImage(), (int)backpackPositionX,  (int)backpackPositionY);
 						g.setColor(new Color(133, 133, 133, 133) );
 						g.fillRect((float)backpackPositionX,(float) backpackPositionY, (float)person.backpack.getInGameImage().getWidth(), (float)person.backpack.getInGameImage().getHeight());
 						
+						
+						 for (int row = 0; row < person.backpack.itemLayout[0].length; row ++){
+					            for (int col = 0; col < person.backpack.itemLayout.length; col++){
+					            	InventoryObject item = person.backpack.itemLayout[col][row];
+					            	if(item != null && item.inventoryImage != null){
+					            		g.drawImage(item.inventoryImage, (int) backpackPositionX + 5 + col*50, (int) backpackPositionY + 5 + row*50);
+					            		if(!item.overlayText().equals("")){
+											g.setColor(Color.white);
+											g.drawString(item.overlayText(), (int) backpackPositionX + 30 + col*50,(int) backpackPositionY + 35 + row*50);
+										}
+					            		
+					            		if(!item.name.equals("")){
+						            		 g.setColor(Color.black);
+											 g.fillRect((int) backpackPositionX  + col*50, (int) backpackPositionY + 5 + row*50, 90, 20);
+											 g.setColor(Color.white);
+											 g.drawString(item.name, (int) backpackPositionX + 2 + col*50,(int) (int) backpackPositionY + 5 + row*50);
+					            		}
+					            	}
+					            }
+						 }
+						 
+						 
+						 g.setColor(new Color(220, 220, 220, 133) );
+						 int hightlightCol = (int) (person.backpack.backpackMouseX*50 +  backpackPositionX + 2);
+						 int hightlightRow = (int) (person.backpack.backpackMouseY*50 +  backpackPositionY + 2);
+						 if( hightlightCol >= 0 && hightlightRow >= 0 && person.backpack.currentHighligtedItem){
+							 g.fillRect(hightlightCol, hightlightRow, 50, 50);
+						 }
+						 
+						 
+						/*
 						int currentSlotNum = 0;
 						for (InventoryObject item : person.backpack.items) {
 							g.drawImage(item.inventoryImage, (int) backpackPositionX + 5 + currentSlotNum*50, (int) backpackPositionY + 5);
+							
+							if(!item.overlayText().equals("")){
+								g.setColor(Color.white);
+								g.drawString(item.overlayText(), (int) backpackPositionX + 30 + currentSlotNum*50,(int) backpackPositionY + 35);
+							}
+							
 							currentSlotNum = currentSlotNum + item.size;
 						}
-						//items
-						//g.drawImage(person.backpack.getInGameImage(), 27,  57);
+						*/
 					}
 				}
 				

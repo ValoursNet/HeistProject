@@ -40,12 +40,18 @@ public class UserInput {
 		
 		int xPos = input.getMouseX();
 		int yPos = input.getMouseY();
-		
 		boolean mouseClick = input.isMouseButtonDown(0);
+		
 		if(mouseClick){
-			Player.isShooting = true;
+			if(!Player.inventoryOpen){
+				Player.isShooting = true;
+			}
 		} else {
 			Player.isShooting = false;
+		}
+		
+		if(Player.inventoryOpen){
+			Player.backpack.handleMouseInput(xPos, yPos, mouseClick);
 		}
 		
 		float xDistance = (float) (xPos - offsetX - (Player.Xpos));

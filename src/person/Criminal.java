@@ -19,11 +19,11 @@ public class Criminal extends Person {
 		type = 1;
 		// Play play = new Play();
 		// image = play.player.copy();
-		backpack = new Backpack("Alice", "Alice Pack Ting", null, new Image("res/BackPackGrid.png"), 0, 10);
-		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
-		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
-		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
-		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30));
+		backpack = new Backpack("Alice", "Alice Pack Ting", null, new Image("res/BackPackGrid.png"), 0, 10, 5, 8);
+		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 10, 30), 0, 0);
+		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30), 1, 0);
+		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 26, 30), 2, 0);
+		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 13, 30), 0, 1);
 
 		LoadingList.setDeferredLoading(true);
 		try {
