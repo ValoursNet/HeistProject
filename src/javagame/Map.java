@@ -13,7 +13,12 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.loading.LoadingList;
+
+import Inventory.GroundObjects;
+import Inventory.Magasine;
 
 import person.Cop;
 
@@ -23,6 +28,8 @@ public class Map {
 	int mapHeight = 20;
 	public int tileSize = 40;
 	int[][] mapCollisions;
+	
+	public GroundObjects groundObjects = new GroundObjects();
 
 	String path = Map.class.getProtectionDomain().getCodeSource().getLocation()
 			.getPath();
@@ -34,6 +41,7 @@ public class Map {
 	String openPatrolArrayTag = "<patrolPath>";
 	String closePatrolArrayTag = "</patrolPath>";
 
+	//UNUSED CURRENTLY. SEE BELOw
 	public Map() {
 		mapCollisions = createMap();
 
@@ -46,10 +54,24 @@ public class Map {
 
 		// printMapCollisions();
 
+		addItemsToGround();
+		
 		System.out.println("path: " + path);
 		createDirectory();
 		// writefile();
 		readTextFile(path + mapsDirectory + "/map1.txt");
+	}
+	
+	private void addItemsToGround(){
+		LoadingList.setDeferredLoading(true);
+		try {
+			groundObjects.addToGround(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 10, 30), 290, 300);
+			System.out.println("Added ground objs");
+		} catch (SlickException e) {
+			System.out.println("Failed to add ground objs");
+			e.printStackTrace();
+		}
+		LoadingList.setDeferredLoading(false);
 	}
 
 	public Map(Projectiles projectiles) {
@@ -57,6 +79,7 @@ public class Map {
 		//createDirectory();
 		// writefile();
 		readTextFile(path + mapsDirectory + "/map1.txt");
+		addItemsToGround();
 		addExampleCop(projectiles);
 	}
 

@@ -13,6 +13,12 @@ public class Magasine extends InventoryObject {
 		this.maxBullets = maxBullets;
 	}
 	
+	public Magasine(String name, String description, Image inventoryImage, Image groundImage, int size, int currBullets, int maxBullets) {
+		super(name, description, inventoryImage, groundImage, size);
+		this.currBullets = currBullets;
+		this.maxBullets = maxBullets;
+	}
+	
 	public String overlayText(){
 		return Integer.toString(currBullets);
 	}

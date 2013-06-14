@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 
 import Inventory.Backpack;
 import Inventory.Gun;
+import Inventory.InventoryObject;
 
 import server.Multiplayer;
 
@@ -64,7 +65,9 @@ public class Person {
 	
 	public boolean isDead = false;
 	
+	//Inventory containers also need adding to: handleInventoryMouseInput();
 	public Backpack backpack;
+	public Backpack holster;
 	   
     public int leftX;
     public int leftY;
@@ -93,10 +96,23 @@ public class Person {
 			isDead = true;
 		}
 		
-		if(isShooting && !gun.equals(null)) {
+		if(isShooting && gun != null && !gun.equals(null)) {
 			gun.fire();
 		}
 		
+	}
+	
+	public void handleInventoryMouseInput(int xPos, int yPos, boolean mouseClick){
+		this.backpack.handleMouseInput(xPos, yPos, mouseClick);
+		this.holster.handleMouseInput(xPos, yPos, mouseClick);
+	}
+	
+	public boolean transferInventoryItem(InventoryObject item, int xPos, int yPos){
+		if(!this.backpack.handleItemTransfer(item, xPos, yPos)){
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	//ugly code for testing names

@@ -63,8 +63,8 @@ public class Play extends BasicGameState {
 	}
 
 	public Play() throws SlickException {
-		player = new Image("res/RobberM4.png");
-		cop = new Image("res/RobberM4.png");
+		player = new Image("res/RobberGlock");
+		cop = new Image("res/RobberGlock.png");
 	}
 
 	@Override
@@ -78,8 +78,8 @@ public class Play extends BasicGameState {
 		
 		
 		
-		player = new Image("res/RobberM4.png");
-		 cop = new Image("res/RobberM4.png");
+		player = new Image("res/RobberGlock.png");
+		 cop = new Image("res/RobberGlock.png");
 
 		projectiles.setMap(levelOne);
 

@@ -51,7 +51,7 @@ public class UserInput {
 		}
 		
 		if(Player.inventoryOpen){
-			Player.backpack.handleMouseInput(xPos, yPos, mouseClick);
+			Player.handleInventoryMouseInput(xPos, yPos, mouseClick);
 		}
 		
 		float xDistance = (float) (xPos - offsetX - (Player.Xpos));

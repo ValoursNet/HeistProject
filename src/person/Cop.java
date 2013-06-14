@@ -23,7 +23,7 @@ public class Cop extends Person {
 		//image =  new Image("res/RobberM4.png");
 		
 		 LoadingList.setDeferredLoading(true);
-	        try { image = new Image("res/RobberM4.png"); }
+	        try { image = new Image("res/RobberGlock.png"); }
 	        catch (SlickException e) {}
 	        LoadingList.setDeferredLoading(false);
 		

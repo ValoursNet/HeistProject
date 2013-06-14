@@ -19,15 +19,19 @@ public class Criminal extends Person {
 		type = 1;
 		// Play play = new Play();
 		// image = play.player.copy();
-		backpack = new Backpack("Alice", "Alice Pack Ting", null, new Image("res/BackPackGrid.png"), 0, 10, 5, 8);
-		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 10, 30), 0, 0);
-		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 30, 30), 1, 0);
-		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 26, 30), 2, 0);
-		backpack.forceToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), 1, 13, 30), 0, 1);
+		backpack = new Backpack("Alice", "Alice Pack Ting", null, new Image("res/BackPackGrid.png"), 0, 40, 5, 8, glevelOne.groundObjects, this);
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 10, 30), 0, 0);
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 30, 30), 1, 0);
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 26, 30), 2, 0);
+		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 13, 30), 0, 1);
 
+		holster = new Backpack("Holster", "Holster", null, new Image("res/HolsterGrid.png"), 0, 2, 1, 2, glevelOne.groundObjects, this);
+		holster.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 10, 30), 0, 1);
+		
+		
 		LoadingList.setDeferredLoading(true);
 		try {
-			image = new Image("res/RobberM4.png");
+			image = new Image("res/RobberGlock.png");
 		} catch (SlickException e) {
 		}
 		LoadingList.setDeferredLoading(false);
