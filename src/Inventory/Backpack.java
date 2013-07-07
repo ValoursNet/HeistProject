@@ -64,15 +64,23 @@ public class Backpack extends InventoryObject {
 		backpackMouseDown = mouseClick;
 		
 		if(mouseClick && !processedClick){
-			backpackMouseX = Math.round((xPos - backpackPositionX)/50);
-			backpackMouseY = Math.round((yPos - backpackPositionY)/50);
+			backpackMouseX = (int) Math.floor((xPos - backpackPositionX)/50);
+			backpackMouseY = (int) Math.floor((yPos - backpackPositionY)/50);
+			
+			//System.out.println("bpkMs: " + (xPos - backpackPositionX)/50 + " backpackMouseX:" + backpackMouseX);
 			
 			//outside backpack
 			if(backpackMouseX >= itemLayout.length || backpackMouseX < 0 || backpackMouseY >= itemLayout[0].length || backpackMouseY < 0){
-				if(currentHighligtedItem){
+				if(currentHighligtedItem && itemLayout[targetItemX][targetItemY] != null){
+					System.out.println("transferInventoryItem: " + itemLayout[targetItemX][targetItemY].name);
 					if(!owner.transferInventoryItem(itemLayout[targetItemX][targetItemY], xPos, yPos)){
+						System.out.println("dropFromBackpack");
 						dropFromBackpack(itemLayout[targetItemX][targetItemY], targetItemX, targetItemY);
 						currentHighligtedItem = false;
+					} else {
+						removeFromBackpack(itemLayout[targetItemX][targetItemY], targetItemX, targetItemY);
+						currentHighligtedItem = false;
+						processedClick = true;
 					}
 				}
 				return;
@@ -98,7 +106,9 @@ public class Backpack extends InventoryObject {
 			if(targetHighligtedItem && currentHighligtedItem){
 				InventoryObject targetItem = removeFromBackpack(itemLayout[targetItemX][targetItemY], targetItemX, targetItemY);
 				addToBackpack(removeFromBackpack(itemLayout[highlightedItemX][highlightedItemY], highlightedItemX, highlightedItemY), targetItemX, targetItemY);
-				addToBackpack(targetItem ,highlightedItemX, highlightedItemY);
+				if(targetItem != null){
+					addToBackpack(targetItem ,highlightedItemX, highlightedItemY);
+				}
 				currentHighligtedItem = false;
 				targetHighligtedItem = false;
 			}
@@ -110,7 +120,7 @@ public class Backpack extends InventoryObject {
 			}
 			hoverMouseX = Math.round((xPos - backpackPositionX)/50);
 			hoverMouseY = Math.round((yPos - backpackPositionY)/50);
-			System.out.println(hightlightCount);
+			//System.out.println(hightlightCount);
 		}
 		
 		
@@ -145,6 +155,7 @@ public class Backpack extends InventoryObject {
 	public boolean addToBackpack(InventoryObject io, int layoutX, int layoutY) {
 		if(io != null){
 			if (currSize + io.size > maxSize) {
+				System.out.println(name + " addToBackpack false1 currSize:" + currSize + " io.size:" + io.size + " maxSize:" + maxSize);
 				return false;
 			} else if(layoutX < itemLayout.length && layoutY < itemLayout[0].length) {
 				System.out.println("layoutX: " + layoutX + "layoutY: " + layoutY);
@@ -153,14 +164,18 @@ public class Backpack extends InventoryObject {
 					itemLayout[layoutX][layoutY] = io;
 					items.add(io);
 					currSize += io.size;
+					System.out.println(name + " addToBackpack true");
 					return true;
 				}else{
+					System.out.println(name + " addToBackpack false2");
 					return false;
 				}
 			} else {
+				System.out.println(name + " addToBackpack false3");
 				return false;
 			}
 		} else {
+			System.out.println(name + " addToBackpack false4");
 			return false;
 		}
 	}
@@ -181,12 +196,15 @@ public class Backpack extends InventoryObject {
 		
 		//outside backpack
 		if(backpackMouseX >= itemLayout.length || backpackMouseX < 0 || backpackMouseY >= itemLayout[0].length || backpackMouseY < 0){
+			System.out.println(name + " handleItemTransfer false1");
 			return false;
 		}
 		
 		if(addToBackpack(item ,backpackMouseX, backpackMouseY)){
+			processedClick = true;
 			return true;
 		} else {
+			System.out.println(name + " handleItemTransfer false2");
 			return false;
 		}
 

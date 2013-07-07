@@ -108,9 +108,15 @@ public class Person {
 	}
 	
 	public boolean transferInventoryItem(InventoryObject item, int xPos, int yPos){
-		if(!this.backpack.handleItemTransfer(item, xPos, yPos)){
+		
+		System.out.println("transferInventoryItem");
+		
+		if(this.backpack.handleItemTransfer(item, xPos, yPos)){
+			return true;
+		} else if(this.holster.handleItemTransfer(item, xPos, yPos)){
 			return true;
 		} else {
+			System.out.println("transferInventoryItem false");
 			return false;
 		}
 	}
@@ -151,7 +157,7 @@ public class Person {
 	
 	protected void followTarget(){
 		
-		System.out.println("following target");
+		//System.out.println("following target");
 		
 		int currentTargetX = (int) myTarget.Xpos;
 		int currentTargetY = (int) myTarget.Ypos;

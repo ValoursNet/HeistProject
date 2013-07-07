@@ -102,6 +102,7 @@ public class Render {
 			 int hightlightCol = (int) (invContainer.backpackMouseX*50 +  backpackPositionX + 2);
 			 int hightlightRow = (int) (invContainer.backpackMouseY*50 +  backpackPositionY + 2);
 			 if( hightlightCol >= 0 && hightlightRow >= 0 && invContainer.currentHighligtedItem){
+				 System.out.println(invContainer.name);
 				 g.fillRect(hightlightCol, hightlightRow, 50, 50);
 			 }
 			 

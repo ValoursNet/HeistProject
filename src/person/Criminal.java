@@ -25,7 +25,7 @@ public class Criminal extends Person {
 		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 26, 30), 2, 0);
 		backpack.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 13, 30), 0, 1);
 
-		holster = new Backpack("Holster", "Holster", null, new Image("res/HolsterGrid.png"), 0, 2, 1, 2, glevelOne.groundObjects, this);
+		holster = new Backpack("Holster", "Holster", null, new Image("res/HolsterGrid.png"), 0, 4, 1, 2, glevelOne.groundObjects, this);
 		holster.addToBackpack(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 10, 30), 0, 1);
 		
 		
