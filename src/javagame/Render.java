@@ -3,15 +3,18 @@ package javagame;
 import java.awt.Point;
 import java.util.HashSet;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
 
 import Inventory.Backpack;
 import Inventory.InventoryObject;
+import Inventory.Vicinity;
 
 import person.Person;
 
@@ -23,6 +26,8 @@ public class Render {
 	Image player;
 	Image wall;
 	Image cop;
+	Image glockShoot;
+	Image glockAimed;
 
 	public float offsetX = 0;
 	public float offsetY = 0;
@@ -32,6 +37,9 @@ public class Render {
 	Color[] colours;
 
 	long lastTimeInMillis = System.currentTimeMillis();
+	
+	SpriteSheet sheet;
+	Animation glockShootAnim;
 
 	public Render(){
 		createColours();
@@ -45,10 +53,32 @@ public class Render {
 		this.projObj = projObj;
 	}
 
-	public void setImages(Image player, Image wall, Image cop) {
+	public void setImages(Image player, Image wall, Image cop, Image glockShoot, Image glockAimed) {
 		this.player = player;
 		this.cop = cop;
 		this.wall = wall;
+		this.glockShoot = glockShoot;
+		this.glockAimed = glockAimed;
+		
+		System.out.println("glockShoot: " + glockShoot);
+		
+		createAnimation();
+	} 
+	
+	public void createAnimation(){
+		sheet = new SpriteSheet(glockShoot,54,87);
+		glockShootAnim = new Animation();
+		glockShootAnim.setAutoUpdate(true);
+		
+		
+		//int tX = 0;
+		//int tY = 0;
+		for(int col=0;col<3;col++){
+			//tX = tX + 36;
+			//glockShoot.addFrame(frame, duration)
+			glockShootAnim.addFrame(sheet.getSprite(col,0), (1000/24));
+			//System.out.println("Tx: "+tX+", Ty: "+tY);
+		}
 	}
 	
 	private void createColours(){
@@ -71,27 +101,115 @@ public class Render {
 		colours[5] = new  Color(220, 46, 46);;
 	}
 	
-	private void drawInventoryContainer(Backpack invContainer, Person person, Graphics g, int invContainerX, int invContainerY){
+	/*
+	private void showGroundObjects(Person person, Graphics g, int invContainerX, int invContainerY){
+		double backpackPositionX = person.Xpos + invContainerX;
+		double backpackPositionY = person.Ypos + invContainerY;
+		
+		synchronized (levelOne.groundObjects.items) {  
+			for (InventoryObject groundObject : levelOne.groundObjects.items) {
+				Double distance = Math.sqrt((groundObject.groundPositionX-person.Xpos)*(groundObject.groundPositionX-person.Xpos) + (groundObject.groundPositionY-person.Ypos)*(groundObject.groundPositionY-person.Ypos));
+				System.out.println("distance: "+ distance);
+				
+				if(distance <= 60){
+					g.drawImage(groundObject.inventoryImage, (int)backpackPositionX,  (int)backpackPositionY);
+				}
+				
+			}
+		}
+		//System.out.println("person.Xpos: "+ person.Xpos + "person.Ypos: "+ person.Ypos);
+	}
+	*/
+	
+	private void drawVicinityContainer(Vicinity invContainer, Person person, Graphics g, int invContainerX, int invContainerY){
 		if(invContainer != null){
 			double backpackPositionX = person.Xpos + invContainerX - invContainer.getInGameImage().getWidth()/2;
-			double backpackPositionY = person.Ypos + invContainerY - invContainer.getInGameImage().getHeight()/2;;
-			invContainer.backpackPositionX = (int) (backpackPositionX + offsetX);
+			double backpackPositionY = person.Ypos + invContainerY - invContainer.getInGameImage().getHeight()/2;
+			double itemOffsetX = 130;
+			invContainer.backpackPositionX = (int) (backpackPositionX + itemOffsetX + offsetX);
 			invContainer.backpackPositionY = (int) (backpackPositionY + offsetY);
 			
-			g.drawImage(invContainer.getInGameImage(), (int)backpackPositionX,  (int)backpackPositionY);
-			g.setColor(new Color(133, 133, 133, 133) );
-			g.fillRect((float)backpackPositionX,(float) backpackPositionY, (float)invContainer.getInGameImage().getWidth(), (float)invContainer.getInGameImage().getHeight());
 			
+			g.setColor(new Color(133, 133, 133, 200) );
+			g.fillRect((float)backpackPositionX,(float) backpackPositionY, (float)invContainer.getInGameImage().getWidth(), (float)invContainer.getInGameImage().getHeight());
+			g.setColor(new Color(255, 255, 255, 255) );
+			g.drawString("VICINITY", (int)backpackPositionX, (int)backpackPositionY-20);
+			g.drawImage(invContainer.getInGameImage(), (int)backpackPositionX,  (int)backpackPositionY);
 			
 			 for (int row = 0; row < invContainer.itemLayout[0].length; row ++){
 		            for (int col = 0; col < invContainer.itemLayout.length; col++){
 		            	InventoryObject item = invContainer.itemLayout[col][row];
 		            	if(item != null && item.inventoryImage != null){
-		            		g.drawImage(item.inventoryImage, (int) backpackPositionX + 5 + col*50, (int) backpackPositionY + 5 + row*50);
+		            		g.drawImage(item.inventoryImage, (float) ((int) backpackPositionX + itemOffsetX + 5 + col*50), (int) backpackPositionY + 5 + row*50);
 		            		
 		            		if(!item.overlayText().equals("")){
 								g.setColor(Color.white);
-								g.drawString(item.overlayText(), (int) backpackPositionX + 30 + col*50,(int) backpackPositionY + 35 + row*50);
+								g.drawString(item.overlayText(), (float) ((int) backpackPositionX + itemOffsetX + 30 + col*50),(int) backpackPositionY + 35 + row*50);
+							}
+		            	}
+		            }
+			 }
+			 
+			 ///System.out.println("invContainer.currentHighligtedItem:" + invContainer.currentHighligtedItem);
+			
+			 g.setColor(new Color(220, 220, 220, 133) );
+			 int hightlightCol = (int) (invContainer.highlightedItemX*50 +  backpackPositionX + itemOffsetX + 2);
+			 int hightlightRow = (int) (invContainer.highlightedItemY*50 +  backpackPositionY + 2);
+			 if( hightlightCol >= 0 && hightlightRow >= 0 && invContainer.currentHighligtedItem){
+				// System.out.println(invContainer.name);
+				 g.fillRect(hightlightCol, hightlightRow, 50, 50);
+			 }
+			 
+			
+			
+			 
+			 //Hover information
+			 for (int row = 0; row < invContainer.itemLayout[0].length; row ++){
+		            for (int col = 0; col < invContainer.itemLayout.length; col++){
+		            	InventoryObject item = invContainer.itemLayout[col][row];
+		            	if(item != null && item.inventoryImage != null){
+		            		if(!item.name.equals("") && col == invContainer.hoverMouseX && row == invContainer.hoverMouseY){
+			            		 g.setColor(Color.black);
+								 g.fillRect((float) ((int) backpackPositionX + itemOffsetX  + col*50), (int) backpackPositionY + 5 + row*50, 90, 20);
+								 g.setColor(Color.white);
+								 g.drawString(item.name, (float) ((int) backpackPositionX + itemOffsetX + 2 + col*50),(int) (int) backpackPositionY + 5 + row*50);
+		            		}
+		            		
+		            		if(!item.description.equals("") && invContainer.hightlightCount > 50 && col == invContainer.hoverMouseX && row == invContainer.hoverMouseY){
+			            		 g.setColor(Color.black);
+								 g.fillRect((float) ((int) backpackPositionX + itemOffsetX  + col*50), (int) backpackPositionY + 25 + row*50, 120, 20);
+								 g.setColor(Color.white);
+								 g.drawString(item.description, (float) ((int) backpackPositionX +itemOffsetX + 2 + col*50),(int) (int) backpackPositionY + 25 + row*50);
+		            		}
+		            	}
+		            }
+			 }
+			 
+		}
+	}
+	
+	private void drawInventoryContainer(Backpack invContainer, Person person, Graphics g, int invContainerX, int invContainerY, int itemOffsetX, int itemOffsetY){
+		if(invContainer != null){
+			double backpackPositionX = person.Xpos + invContainerX - invContainer.getInGameImage().getWidth()/2;
+			double backpackPositionY = person.Ypos + invContainerY - invContainer.getInGameImage().getHeight()/2;;
+			invContainer.backpackPositionX = (int) (backpackPositionX + itemOffsetX + offsetX);
+			invContainer.backpackPositionY = (int) (backpackPositionY + itemOffsetY + offsetY);
+			
+			g.setColor(new Color(133, 133, 133, 200) );
+			g.fillRect((float)backpackPositionX,(float) backpackPositionY, (float)invContainer.getInGameImage().getWidth(), (float)invContainer.getInGameImage().getHeight());
+			g.setColor(new Color(255, 255, 255, 255) );
+			g.drawString(invContainer.name.toUpperCase(), (int)backpackPositionX, (int)backpackPositionY-20);
+			g.drawImage(invContainer.getInGameImage(), (int)backpackPositionX,  (int)backpackPositionY);
+			
+			 for (int row = 0; row < invContainer.itemLayout[0].length; row ++){
+		            for (int col = 0; col < invContainer.itemLayout.length; col++){
+		            	InventoryObject item = invContainer.itemLayout[col][row];
+		            	if(item != null && item.inventoryImage != null){
+		            		g.drawImage(item.inventoryImage, (int) backpackPositionX + itemOffsetX + 5 + col*50, (int) backpackPositionY + itemOffsetY + 5 + row*50);
+		            		
+		            		if(!item.overlayText().equals("")){
+								g.setColor(Color.white);
+								g.drawString(item.overlayText(), (int) backpackPositionX + itemOffsetX + 30 + col*50,(int) backpackPositionY + itemOffsetY + 35 + row*50);
 							}
 		            	}
 		            }
@@ -99,10 +217,10 @@ public class Render {
 			 
 			 
 			 g.setColor(new Color(220, 220, 220, 133) );
-			 int hightlightCol = (int) (invContainer.backpackMouseX*50 +  backpackPositionX + 2);
-			 int hightlightRow = (int) (invContainer.backpackMouseY*50 +  backpackPositionY + 2);
+			 int hightlightCol = (int) (invContainer.highlightedItemX*50 +  backpackPositionX + itemOffsetX + 2);
+			 int hightlightRow = (int) (invContainer.highlightedItemY*50 +  backpackPositionY + itemOffsetY + 2);
 			 if( hightlightCol >= 0 && hightlightRow >= 0 && invContainer.currentHighligtedItem){
-				 System.out.println(invContainer.name);
+				// System.out.println(invContainer.name);
 				 g.fillRect(hightlightCol, hightlightRow, 50, 50);
 			 }
 			 
@@ -113,16 +231,16 @@ public class Render {
 		            	if(item != null && item.inventoryImage != null){
 		            		if(!item.name.equals("") && col == invContainer.hoverMouseX && row == invContainer.hoverMouseY){
 			            		 g.setColor(Color.black);
-								 g.fillRect((int) backpackPositionX  + col*50, (int) backpackPositionY + 5 + row*50, 90, 20);
+								 g.fillRect((int) backpackPositionX + itemOffsetX  + col*50, (int) backpackPositionY + itemOffsetY + 5 + row*50, 90, 20);
 								 g.setColor(Color.white);
-								 g.drawString(item.name, (int) backpackPositionX + 2 + col*50,(int) (int) backpackPositionY + 5 + row*50);
+								 g.drawString(item.name, (int) backpackPositionX + itemOffsetX + 2 + col*50,(int) (int) backpackPositionY + itemOffsetY + 5 + row*50);
 		            		}
 		            		
 		            		if(!item.description.equals("") && invContainer.hightlightCount > 50 && col == invContainer.hoverMouseX && row == invContainer.hoverMouseY){
 			            		 g.setColor(Color.black);
-								 g.fillRect((int) backpackPositionX  + col*50, (int) backpackPositionY + 25 + row*50, 120, 20);
+								 g.fillRect((int) backpackPositionX + itemOffsetX + col*50, (int) backpackPositionY + itemOffsetY + 25 + row*50, 120, 20);
 								 g.setColor(Color.white);
-								 g.drawString(item.description, (int) backpackPositionX + 2 + col*50,(int) (int) backpackPositionY + 25 + row*50);
+								 g.drawString(item.description, (int) backpackPositionX + itemOffsetX + 2 + col*50,(int) (int) backpackPositionY + itemOffsetY + 25 + row*50);
 		            		}
 		            	}
 		            }
@@ -201,9 +319,47 @@ public class Render {
 		for (Person person : people) {
 			if (!person.isDead) {
 				/* Draw the person. */
-				g.drawImage(person.image, (int) person.Xpos - 27, (int) person.Ypos - 15);
-				person.image.setCenterOfRotation(27, 47);
-				person.image.setRotation(person.currentRotation);
+				//g.drawImage(person.image, (int) person.Xpos - 27, (int) person.Ypos - 45);
+				
+				//if(glockShoot != null){
+				double personX = person.Xpos;
+				double personY = person.Ypos;
+				
+					//g.drawImage(glockAimed, (int) personX - 3, (int) personY - 46);
+					//g.drawImage(person.image, (int) personX - 3, (int) personY - 13);
+			//	}
+				//glockShoot
+				
+				//g.drawImage(glockShootAnim.getCurrentFrame(), (int) person.Xpos - 27, (int) person.Ypos - 70);
+				
+				
+				g.pushTransform();
+				g.rotate((int) personX, (int) personY, person.currentRotation);
+				g.drawImage(glockAimed, (int) personX - 3, (int) personY - 46);
+				//g.drawImage(person.image, (int) personX - 27, (int) personY - 13);
+				//g.drawAnimation(glockShootAnim, (int) personX - 27, (int) personY - 70);
+				g.popTransform();
+				
+				g.pushTransform();
+				g.rotate((int) personX, (int) personY, person.bodyRotation);
+				//g.drawImage(glockAimed, (int) personX - 3, (int) personY - 46);
+				g.drawImage(person.image, (int) personX - 27, (int) personY - 13);
+				//g.drawAnimation(glockShootAnim, (int) personX - 27, (int) personY - 70);
+				g.popTransform();
+				
+				
+				//g.drawAnimation(glockShootAnim, (int) person.Xpos - 27, (int) person.Ypos - 45);
+				//glockShootAnim.getCurrentFrame().setCenterOfRotation(27, 47);
+				//glockShootAnim.getCurrentFrame().setRotation(person.currentRotation);
+				//glockShoot.
+				//glockShoot.draw((int) person.Xpos - 27, (int) person.Ypos - 45);
+				
+				//glockShoot.getCurrentFrame().setCenterOfRotation(27, 72);
+				//glockShoot.getCurrentFrame().setRotation(person.currentRotation);
+				//glockAimed.setCenterOfRotation(3, 46);
+				//glockAimed.setRotation(person.currentRotation);
+				//person.image.setCenterOfRotation(27, 13);
+				//person.image.setRotation(person.currentRotation);
 				
 				g.setColor(Color.blue);
 				g.drawString(person.name,(float) person.Xpos-10,(float) person.Ypos-60);
@@ -226,8 +382,12 @@ public class Render {
 				}
 				
 				if (person.inventoryOpen) {
-					drawInventoryContainer(person.backpack, person, g, 300, 0);
-					drawInventoryContainer(person.holster, person, g, 100, 150);
+					drawInventoryContainer(person.backpack, person, g, 300, 0, 0, 0);
+					drawInventoryContainer(person.holster, person, g, 100, 150, 0, 0);
+					drawInventoryContainer(person.weaponSlot, person, g, -300, 150, 190, 13);
+					
+					drawVicinityContainer(person.vicinity, person, g, 0, -300);
+					//showGroundObjects(person, g, -300, -300);
 				}
 				
 				/* Render hit boxes if in debug mode. */
@@ -237,13 +397,16 @@ public class Render {
 							(float) 40, (float) 40);
 				}	
 				/* Render lines of sight. */
-				if (drawDebug) {
-					drawSightline(person, g);
-					for (int i = 0; i < 10; i++) {
+				//if (drawDebug) {
+					/*
+					for (int i = 0; i < 30; i++) {
 						drawSightlineCollision(person, g, levelOne.getMap(),
-								person.currentRotation - 20 + (i * 4));
+								person.currentRotation - 60 + (i * 4));
 					}
-				}
+					*/
+					//drawSightline(person, g, person.currentRotation, Color.blue);
+					//drawSightline(person, g, person.aimedRotation, Color.green);
+				//}
 			}
 		}
 
@@ -285,15 +448,15 @@ public class Render {
 	}
 
 	// Should probably be combined with drawSightlineCollision
-	void drawSightline(Person Player, Graphics g) {
+	void drawSightline(Person Player, Graphics g, double rotateAngle, Color gColor) {
 		int lineLength = 500;
-		double playerRotad = (Player.currentRotation - 90) * Math.PI / 180;
+		double playerRotad = (rotateAngle - 90) * Math.PI / 180;
 		float startX = (float) Player.Xpos;
 		float startY = (float) Player.Ypos;
 		float endX = (float) (startX + lineLength * Math.cos(playerRotad));
 		float endY = (float) (startY + lineLength * Math.sin(playerRotad));
 
-		g.setColor(Color.blue);
+		g.setColor(gColor);
 		g.drawLine(startX, startY, endX, endY);
 	}
 

@@ -38,11 +38,17 @@ public class UserInput {
 			Player.inventoryOpen = false;
 		}
 		
+		if(input.isKeyDown(Input.KEY_R)){
+			if(Player.getBestMagasine() != null){
+				Player.gun.loadMag(Player.getBestMagasine());
+			}
+		}
+		
 		int xPos = input.getMouseX();
 		int yPos = input.getMouseY();
 		boolean mouseClick = input.isMouseButtonDown(0);
 		
-		if(mouseClick){
+		if(mouseClick){ 
 			if(!Player.inventoryOpen){
 				Player.isShooting = true;
 			}
@@ -54,9 +60,11 @@ public class UserInput {
 			Player.handleInventoryMouseInput(xPos, yPos, mouseClick);
 		}
 		
-		float xDistance = (float) (xPos - offsetX - (Player.Xpos));
-		float yDistance = (float) (yPos - offsetY - (Player.Ypos));
-		double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
-		Player.currentRotation = (float) angleToTurn+90;
+		if(!Player.inventoryOpen){
+			float xDistance = (float) (xPos - offsetX - (Player.Xpos));
+			float yDistance = (float) (yPos - offsetY - (Player.Ypos));
+			double angleToTurn = Math.toDegrees(Math.atan2(yDistance, xDistance));
+			Player.aimedRotation = (float) angleToTurn+90;
+		}
 	}
 }

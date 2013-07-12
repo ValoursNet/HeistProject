@@ -2,12 +2,13 @@ package Inventory;
 
 import java.util.HashSet;
 
+import javagame.Bullet;
+
 import org.newdawn.slick.Image;
 
-import person.Criminal;
 import person.Person;
 
-public class Backpack extends InventoryObject {
+public class Vicinity extends InventoryObject {
 
 	private Image inGameImage;
 	public HashSet<InventoryObject> items;
@@ -26,14 +27,12 @@ public class Backpack extends InventoryObject {
 	public int highlightedItemX;
 	public int highlightedItemY;
 	
-	public boolean targetHighligtedItem = false;;
-	public int targetItemX;
-	public int targetItemY;
+	//public boolean targetHighligtedItem = false;;
+	//public int targetItemX;
+	//public int targetItemY;
 	
 	public GroundObjects groundObjects;
 	public Person owner;
-	
-	public boolean isBackpack = true;
 	
 	boolean processedClick = false;
 	
@@ -41,7 +40,9 @@ public class Backpack extends InventoryObject {
 	
 	int currSize, maxSize;
 	
-	public Backpack(String name, String description, Image inventoryImage, Image inGameImage, int size, int maxSize, int layoutWidth, int layoutHeight, GroundObjects groundObjects, Person owner) {
+	int nextAvailableSlot = 0;
+	
+	public Vicinity(String name, String description, Image inventoryImage, Image inGameImage, int size, int maxSize, int layoutWidth, int layoutHeight, GroundObjects groundObjects, Person owner) {
 		super(name, description, inventoryImage, size);
 		this.setInGameImage(inGameImage);
 		this.groundObjects = groundObjects;
@@ -77,6 +78,8 @@ public class Backpack extends InventoryObject {
 					System.out.println("transferInventoryItem: " + itemLayout[highlightedItemX][highlightedItemY].name);
 					if(!owner.transferInventoryItem(itemLayout[highlightedItemX][highlightedItemY], xPos, yPos)){
 						System.out.println("oldDropFromBackpack");
+						
+						/*
 						if(!owner.swapInventoryItem(itemLayout[highlightedItemX][highlightedItemY], xPos, yPos, highlightedItemX, highlightedItemY, this)){
 							System.out.println("newDropFromBackpack");
 							if(!owner.testDropInventoryItem(itemLayout[highlightedItemX][highlightedItemY], xPos, yPos)){
@@ -87,13 +90,19 @@ public class Backpack extends InventoryObject {
 							//testDropInventoryItem
 							//test drop
 						}
+						*/
+						
 						//dropFromBackpack(itemLayout[highlightedItemX][highlightedItemY], highlightedItemX, highlightedItemY);
 						currentHighligtedItem = false;
 					} else {
 						removeFromBackpack(itemLayout[highlightedItemX][highlightedItemY], highlightedItemX, highlightedItemY);
+						//removeItem(itemLayout[highlightedItemX][highlightedItemY]);
 						currentHighligtedItem = false;
 						processedClick = true;
 					}
+				} else {
+					System.out.println("currentHighligtedItem = false;: ");
+					currentHighligtedItem = false;
 				}
 				return;
 			}
@@ -106,7 +115,9 @@ public class Backpack extends InventoryObject {
 					System.out.println("currentHighligtedItem: " + itemLayout[backpackMouseX][backpackMouseY].name);
 				}
 				
-			} else {
+			} 
+			/*
+			else {
 				//System.out.println("highlightedItemX: " + highlightedItemX + "highlightedItemY: " + highlightedItemY);
 				//System.out.println("targetItemX: " + backpackMouseX + "targetItemY: " + backpackMouseY);
 				if(highlightedItemX != backpackMouseX || highlightedItemY != backpackMouseY){
@@ -125,6 +136,7 @@ public class Backpack extends InventoryObject {
 				currentHighligtedItem = false;
 				targetHighligtedItem = false;
 			}
+			*/
 		} else {
 			if(hoverMouseX == Math.round((xPos - backpackPositionX)/50) && hoverMouseY == Math.round((yPos - backpackPositionY)/50)){
 				hightlightCount++;
@@ -145,31 +157,44 @@ public class Backpack extends InventoryObject {
 		}
 	}
 	
+	
 	public InventoryObject removeFromBackpack(InventoryObject io, int layoutX, int layoutY) {
+		
+		//removeItem(io);
+		
+		if(groundObjects.items.contains(io)){
+			System.out.println("removeFromGround");
+			groundObjects.removeFromGround(io);
+		}
+		
+		if(items.contains(io)){
+			nextAvailableSlot = nextAvailableSlot - io.layoutWidth;
+			items.remove(io);
+			updateItemLayout();
+		} 
+		
+		
 		if(itemLayout[layoutX][layoutY] == null){
 			return null;
 		}else{
 			itemLayout[layoutX][layoutY] = null;
 			currSize -= io.size;
-			if(items.contains(io)){
-				items.remove(io);
-			}
 			return io;
 		}
 	}
 	
+	
+	/*
 	public void dropFromBackpack(InventoryObject io, int layoutX, int layoutY) {
 		if(itemLayout[layoutX][layoutY] == null){
 			return;
 		}else{
 			itemLayout[layoutX][layoutY] = null;
 			currSize -= io.size;
-			if(items.contains(io)){
-				items.remove(io);
-			}
 			groundObjects.addToGround(io, (int)owner.Xpos, (int)owner.Ypos);
 		}
 	}
+	*/
 	
 	public boolean addToBackpack(InventoryObject io, int layoutX, int layoutY) {
 		if(io != null){
@@ -199,7 +224,8 @@ public class Backpack extends InventoryObject {
 		}
 	}
 
-	public boolean swapToBackpack(InventoryObject io, int layoutX, int layoutY, int previousItemX, int previousItemY, Backpack previousContainer){
+	/*
+	public boolean swapToBackpack(InventoryObject io, int layoutX, int layoutY, int previousItemX, int previousItemY, Vicinity previousContainer){
 		boolean attempt = addToBackpack(io, layoutX, layoutY);
 		if(attempt){
 			return true;
@@ -224,7 +250,8 @@ public class Backpack extends InventoryObject {
 			return false;
 		}
 	}
-
+	 */
+	
 	public void setInGameImage(Image inGameImage) {
 		this.inGameImage = inGameImage;
 	}
@@ -244,6 +271,8 @@ public class Backpack extends InventoryObject {
 			return false;
 		}
 		
+		
+		
 		if(addToBackpack(item ,backpackMouseX, backpackMouseY)){
 			processedClick = true;
 			return true;
@@ -254,6 +283,54 @@ public class Backpack extends InventoryObject {
 
 	}
 	
+	public InventoryObject removeItem(InventoryObject io) {
+		
+		//System.out.println("trying to remove");
+		
+		if(items.contains(io)){
+			System.out.println("actually removing item");
+			nextAvailableSlot = nextAvailableSlot - io.layoutWidth;
+			items.remove(io);
+			updateItemLayout();
+			return io;
+		} else {
+			return null;
+		}
+	}
+	
+	public void updateItemLayout(){
+		int itemSlotCounter = 0;
+		
+		for(int i=0; i<itemLayout.length; i++){
+			itemLayout[i][0] = null;
+		}
+		
+		synchronized (items) {  
+			for (InventoryObject io : items) {
+				itemLayout[itemSlotCounter][0] = io;
+				itemSlotCounter = itemSlotCounter + io.layoutWidth;
+			}
+		}
+	}
+
+	public void addItem(InventoryObject io) {
+		//public boolean addToBackpack(InventoryObject io, int layoutX, int layoutY) {
+		if(io != null){
+			if(!items.contains(io)){
+				if(itemLayout[nextAvailableSlot][0] == null){
+					itemLayout[nextAvailableSlot][0] = io;
+					nextAvailableSlot = nextAvailableSlot + io.layoutWidth;
+					items.add(io);
+					currSize += io.size;
+					System.out.println(name + " addItem true");
+				}else{
+					System.out.println(name + " SOMETHING WENT HORRIBLY WRONG !!!!!!!");
+				}
+			}
+		}
+	}
+	
+	/*
 	//return false when outside backpack
 	public boolean testDropItem(InventoryObject item, int xPos, int yPos) {
 		backpackMouseX = Math.round((xPos - backpackPositionX)/50);
@@ -266,10 +343,10 @@ public class Backpack extends InventoryObject {
 		}
 
 		return true;
-
 	}
-	
-	public boolean handleItemSwap(InventoryObject item, int xPos, int yPos, int previousItemX, int previousItemY, Backpack previousContainer) {
+	*/
+	/*
+	public boolean handleItemSwap(InventoryObject item, int xPos, int yPos, int previousItemX, int previousItemY, Vicinity previousContainer) {
 		backpackMouseX = Math.round((xPos - backpackPositionX)/50);
 		backpackMouseY = Math.round((yPos - backpackPositionY)/50);
 		
@@ -288,4 +365,5 @@ public class Backpack extends InventoryObject {
 		}
 
 	}
+	*/
 }

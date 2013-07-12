@@ -1,0 +1,84 @@
+{
+	"Type": "Gun",
+    "Name": "M4",
+    "Description": "Bang bang shooty",
+	"Primary": True,
+    "RateOfFire": 30,
+    "MagazineType": "Stanag",
+    "Accuracy": 100,
+    "ReloadTime": 100,
+    "ShotSound": "shooty.wav",
+    "ReloadSound": "shooty.wav",
+	"DropSound": "droppy.wav",
+    "Cost": 50,
+    "Size": 8,
+    "Width": 4,
+    "Height": 2,
+    "InventoryImage": "wep/M4InventoryImage.png",
+    "GroundImage": "wep/M4GroundImage.png",
+    "Animations": {
+        "Idle": {
+            "Image": "M4Idle.png",
+            "FramDuration": 100,
+            "Width": 28,
+            "Height": 70,
+            "RotationX": 22,
+            "RotationY": 33,
+			"NumberOfFrames": 3
+        },
+        "Shot": {
+            "Image": "M4Idle.png",
+            "FramDuration": 100,
+            "Width": 28,
+            "Height": 70,
+            "RotationX": 22,
+            "RotationY": 33,
+			"NumberOfFrames": 3
+        },
+        "Reload": {
+            "Image": "M4Idle.png",
+            "FramDuration": 100,
+            "Width": 28,
+            "Height": 70,
+            "RotationX": 22,
+            "RotationY": 33,
+			"NumberOfFrames": 3
+        },
+        "AimIn": {
+            "Image": "M4Idle.png",
+            "FramDuration": 100,
+            "Width": 28,
+            "Height": 70,
+            "RotationX": 22,
+            "RotationY": 33,
+			"NumberOfFrames": 3
+        },
+        "AimOut": {
+            "Image": "M4Idle.png",
+            "FramDuration": 100,
+            "Width": 28,
+            "Height": 70,
+            "RotationX": 22,
+            "RotationY": 33,
+			"NumberOfFrames": 3
+        },
+        "Aim": {
+            "Image": "M4Idle.png",
+            "FramDuration": 100,
+            "Width": 28,
+            "Height": 70,
+            "RotationX": 22,
+            "RotationY": 33,
+			"NumberOfFrames": 3
+        },
+        "Empty": {
+            "Image": "M4Idle.png",
+            "FramDuration": 100,
+            "Width": 28,
+            "Height": 70,
+            "RotationX": 22,
+            "RotationY": 33,
+			"NumberOfFrames": 3
+        }
+    }
+}

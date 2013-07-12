@@ -34,6 +34,8 @@ public class Play extends BasicGameState {
 
 	public Image player;
 	public Image wall;
+	public Image glockShoot;
+	public Image glockAimed;
 	public static Image cop;
 
 	public static Projectiles projectiles = new Projectiles();
@@ -63,8 +65,10 @@ public class Play extends BasicGameState {
 	}
 
 	public Play() throws SlickException {
-		player = new Image("res/RobberGlock");
+		glockAimed = new Image("res/GlockAimed.png");
+		//player = new Image("res/RobberBody.png");
 		cop = new Image("res/RobberGlock.png");
+		glockShoot = new Image("res/RobberGlockShoot.png");
 	}
 
 	@Override
@@ -77,16 +81,17 @@ public class Play extends BasicGameState {
 			throws SlickException {
 		
 		
-		
-		player = new Image("res/RobberGlock.png");
-		 cop = new Image("res/RobberGlock.png");
+		glockAimed = new Image("res/GlockAimed.png");
+		player = new Image("res/RobberBody.png");
+		 cop = new Image("res/RobberBody.png");
+		 glockShoot = new Image("res/RobberGlockShoot.png");
 
 		projectiles.setMap(levelOne);
 
 		policeUnit = new Cop(levelOne, projectiles);
 		playerUnit = new Criminal(levelOne, projectiles);
 
-		renderObj.setImages(player, wall, cop);
+		renderObj.setImages(player, wall, cop, glockShoot, glockAimed);
 		renderObj.setMap(levelOne);
 		renderObj.setProjectiles(projectiles);
 

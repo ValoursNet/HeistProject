@@ -65,7 +65,7 @@ public class Map {
 	private void addItemsToGround(){
 		LoadingList.setDeferredLoading(true);
 		try {
-			groundObjects.addToGround(new Magasine("M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 10, 30), 290, 300);
+			groundObjects.addToGround(new Magasine("Stanag", "M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 10, 30), 290, 300);
 			System.out.println("Added ground objs");
 		} catch (SlickException e) {
 			System.out.println("Failed to add ground objs");

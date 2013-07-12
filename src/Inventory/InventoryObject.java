@@ -10,9 +10,12 @@ public class InventoryObject {
 	public int size;
 	public String objectType;
 	
+	public int layoutWidth = 1;
+	
 	public int groundPositionX = 0;
 	public int groundPositionY = 0;
 	public boolean onGround = false;
+	public boolean inVicinity = false;
 	
 	public InventoryObject(String name, String description, Image image, int size) {
 		this.name = name;

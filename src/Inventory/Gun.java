@@ -19,9 +19,8 @@ public class Gun extends InventoryObject {
 	long timeReloading;
 	Person holder;
 	
-	public Gun(String name, String description, Image inventoryImage, Image inGameImage, 
-			   int size, double fireRate, double spread, double reloadTime) {
-		super(name, description, inventoryImage, size);
+	public Gun(String name, String description, Image inventoryImage, Image inGameImage, int size, double fireRate, double spread, double reloadTime) {
+		super(name, description, inventoryImage,inGameImage, size);
 		this.inGameImage = inGameImage;
 		mag = null;
 		this.fireRate = fireRate;
@@ -55,6 +54,7 @@ public class Gun extends InventoryObject {
 	}
 	
 	public boolean fire() {
+		//System.out.println("mag.isEmpty()" +mag.isEmpty());
 		if (mag != null && holder != null && !mag.isEmpty()) {
 			long timeInMillis = System.currentTimeMillis();
 			if (fireRate * (timeInMillis - lastTime) >= 1) {

@@ -26,17 +26,21 @@ public class InventoryParser {
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(text);
 			JsonObject obj = element.getAsJsonObject();
-			String type = obj.get("type").getAsString();
-			if (type.equals("gun")) {
-				String name = obj.get("name").getAsString();
-				String description = obj.get("description").getAsString();
-				int size = obj.get("size").getAsInt();
-				String inventoryPath = obj.get("inventoryImage").getAsString();
-				String inGamePath = obj.get("inGameImage").getAsString();
+			String type = obj.get("Type").getAsString();
+			if (type.equals("Gun")) {
+				String name = obj.get("Name").getAsString();
+				String description = obj.get("Description").getAsString();
+				int size = obj.get("Size").getAsInt();
+				String inventoryPath = obj.get("InventoryImage").getAsString();
+				String inGamePath = obj.get("GroundImage").getAsString();
 				Image inventoryImage = new Image(inventoryPath);
 				Image inGameImage = new Image(inGamePath);
-				//Gun gun = new Gun(name, description, inventoryImage, inGameImage, size);
-				//return gun;
+				int fireRate = obj.get("RateOfFire").getAsInt();
+				int spread = obj.get("Accuracy").getAsInt();
+				int reloadTime = obj.get("ReloadTime").getAsInt();
+				Gun gun = new Gun(name, description, inventoryImage, inGameImage, size, fireRate, spread, reloadTime);
+				//(name, description, inventoryImage, inGameImage, size, fireRate, spread, reloadTime) {
+				return gun;
 			}
 			br.close();
 		} catch (FileNotFoundException e) {

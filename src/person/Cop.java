@@ -2,8 +2,6 @@ package person;
 
 import java.awt.Polygon;
 
-import gun.Gun;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;

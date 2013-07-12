@@ -1,16 +1,21 @@
 package person;
 
 import java.awt.Point;
+import java.util.HashSet;
 import java.util.Random;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import Inventory.Backpack;
 import Inventory.Gun;
 import Inventory.InventoryObject;
+import Inventory.Magasine;
+import Inventory.Vicinity;
 
 import server.Multiplayer;
 
+import javagame.Bullet;
 import javagame.Map;
 
 @SuppressWarnings("unused")
@@ -33,6 +38,8 @@ public class Person {
 	public double xForce = 0;
 	double currentSpeed = 0.6;
 	public Float currentRotation = (float) 0;
+	public Float bodyRotation = (float) 0;
+	public Float aimedRotation = (float) 0;
 	
 	public double friction = 0.8;
 	
@@ -65,9 +72,12 @@ public class Person {
 	
 	public boolean isDead = false;
 	
+	
 	//Inventory containers also need adding to: handleInventoryMouseInput();
+	public Vicinity vicinity;
 	public Backpack backpack;
 	public Backpack holster;
+	public Backpack weaponSlot;
 	   
     public int leftX;
     public int leftY;
@@ -84,7 +94,62 @@ public class Person {
 		if(levelOne != null){
 			//collisionCheck();
 			updatePosition(levelOne.getMap());
-			currentRotation = (float) (currentRotation + 0.1);
+			
+			double gunTurnSpeed = 0.5;
+			double bodyTurnSpeed = 0.2;
+			
+			
+			//GUN ROTATION
+			if((currentRotation - aimedRotation)<-180){
+				//currentRotation = currentRotation + 360;
+				System.out.println("bam 1");
+			}
+			
+			if((currentRotation - aimedRotation)>180){
+				//currentRotation = currentRotation - 360;
+				System.out.println("bam 2");
+			}
+			
+			if(currentRotation+gunTurnSpeed < aimedRotation){
+				currentRotation = (float) (currentRotation + gunTurnSpeed);
+			} else if(currentRotation-gunTurnSpeed > aimedRotation){
+				currentRotation = (float) (currentRotation - gunTurnSpeed);
+			} else {
+				currentRotation = (float) (aimedRotation);
+			}
+			
+			
+			//BODY ROTATION
+			if((bodyRotation - aimedRotation)<-180){
+				//bodyRotation = bodyRotation + 360;
+			}
+			
+			if((bodyRotation - aimedRotation)>180){
+				//bodyRotation = bodyRotation - 360;
+			}
+			
+			if(bodyRotation+bodyTurnSpeed < aimedRotation){
+				bodyRotation = (float) (bodyRotation + bodyTurnSpeed);
+			} else if(bodyRotation-bodyTurnSpeed > aimedRotation){
+				bodyRotation = (float) (bodyRotation - bodyTurnSpeed);
+			} else {
+				bodyRotation = (float) (aimedRotation);
+			}
+			
+			
+			if(!isDead){
+				System.out.println("");
+				System.out.println("(currentRotation - aimedRotation):" + (currentRotation - aimedRotation));
+				System.out.println("(bodyRotation - currentRotation):" + (bodyRotation - currentRotation));
+			}
+			
+			if((bodyRotation - currentRotation)<-70){
+				currentRotation = bodyRotation + 70;
+			}
+			
+			if((bodyRotation - currentRotation)>70){
+				currentRotation = bodyRotation - 70;
+			}
 		}
 		
 		if(directControl){
@@ -100,11 +165,114 @@ public class Person {
 			gun.fire();
 		}
 		
+		if(vicinity != null){
+			updateVicinity();
+		}
+		
 	}
+	
+	public void updateVicinity(){
+		synchronized (levelOne.groundObjects.items) {  
+			for (InventoryObject groundObject : levelOne.groundObjects.items) {
+				Double distance = Math.sqrt((groundObject.groundPositionX-Xpos)*(groundObject.groundPositionX-Xpos) + (groundObject.groundPositionY-Ypos)*(groundObject.groundPositionY-Ypos));
+				//System.out.println("distance: "+ distance);
+				
+				if(distance <= 60){
+					vicinity.addItem(groundObject);
+					//g.drawImage(groundObject.inventoryImage, (int)backpackPositionX,  (int)backpackPositionY);
+				} else {
+					//System.out.println("groundObject: " + groundObject.name);
+					vicinity.removeItem(groundObject);
+				}
+				
+			}
+		}
+			//System.out.println("person.Xpos: "+ person.Xpos + "person.Ypos: "+ person.Ypos);
+		
+	}
+	
+	public Magasine getBestMagasine(){
+		HashSet<Magasine> returnCollection = new HashSet<Magasine>();
+		
+		Magasine bestMag = null;
+		
+		//returnCollection.addAll(getAllMagasines(backpack.items, "Stanag"));
+		returnCollection.addAll(getAllMagasines(weaponSlot.items, "Stanag"));
+		
+		int HighestAmmo = 0;
+		
+		synchronized (returnCollection) {  
+			for (Magasine item : returnCollection) {
+				if(item.currBullets > HighestAmmo){
+					HighestAmmo = item.currBullets;
+					//returnCollection.add(item);
+				}
+			}
+		}
+		
+		//System.out.println("returnCollection:" + returnCollection.size());
+		
+		synchronized (returnCollection) {  
+			for (Magasine item : returnCollection) {
+				if(item.currBullets < HighestAmmo){
+					//returnCollection.remove(item);
+				} else {
+					bestMag=item;
+				}
+			}
+		}
+		
+		//System.out.println("bestMag:" + bestMag.name);
+		
+		return bestMag;
+		
+	}
+	
+	public HashSet<Magasine> getAllMagasines(HashSet<InventoryObject> items, String MagType){
+		
+		HashSet<InventoryObject> itemCollection = new HashSet<InventoryObject>();
+		HashSet<Magasine> returnCollection = new HashSet<Magasine>();
+		
+		synchronized (items) {  
+			for (InventoryObject item : items) {
+				if(item.objectType.equals("Mag")){
+					returnCollection.add((Magasine) item);
+				} else {
+					System.out.println("objectType:" + item.objectType);
+				}
+			}
+		}
+		
+		//System.out.println("items:" + items.size());
+		//System.out.println("returnCollection:" + returnCollection.size());
+		
+		
+		synchronized (returnCollection) {  
+			for (Magasine mag : returnCollection) {
+				if(mag.magType == null){
+					returnCollection.remove(mag);
+				} else {
+					if(mag.magType.equals(MagType)){
+						//returnCollection.remove(mag);
+					} else {
+						returnCollection.remove(mag);
+					}
+				}
+				
+			}
+		}
+		
+	
+		return returnCollection;
+	}
+	
 	
 	public void handleInventoryMouseInput(int xPos, int yPos, boolean mouseClick){
 		this.backpack.handleMouseInput(xPos, yPos, mouseClick);
 		this.holster.handleMouseInput(xPos, yPos, mouseClick);
+		this.weaponSlot.handleMouseInput(xPos, yPos, mouseClick);
+		
+		this.vicinity.handleMouseInput(xPos, yPos, mouseClick);
 	}
 	
 	public boolean transferInventoryItem(InventoryObject item, int xPos, int yPos){
@@ -115,8 +283,45 @@ public class Person {
 			return true;
 		} else if(this.holster.handleItemTransfer(item, xPos, yPos)){
 			return true;
+		} else if(this.weaponSlot.handleItemTransfer(item, xPos, yPos)){
+			return true;
+		} else if(this.vicinity.handleItemTransfer(item, xPos, yPos)){
+			return true;
 		} else {
 			System.out.println("transferInventoryItem false");
+			return false;
+		}
+	}
+	
+	public boolean swapInventoryItem(InventoryObject item, int xPos, int yPos, int previousItemX, int previousItemY, Backpack previousContainer){
+		
+		System.out.println("swapInventoryItem");
+		
+		if(this.backpack.handleItemSwap(item, xPos, yPos, previousItemX, previousItemY, previousContainer)){
+			return true;
+		} else if(this.holster.handleItemSwap(item, xPos, yPos, previousItemX, previousItemY, previousContainer)){
+			return true;
+		} else if(this.weaponSlot.handleItemSwap(item, xPos, yPos, previousItemX, previousItemY, previousContainer)){
+			return true;
+		} else {
+			System.out.println("swapInventoryItem false");
+			return false;
+		}
+	}
+	
+	//false when needs dropping
+	public boolean testDropInventoryItem(InventoryObject item, int xPos, int yPos){
+		
+		System.out.println("testDropInventoryItem");
+		
+		if(this.backpack.testDropItem(item, xPos, yPos)){
+			return true;
+		} else if(this.holster.testDropItem(item, xPos, yPos)){
+			return true;
+		} else if(this.weaponSlot.testDropItem(item, xPos, yPos)){
+			return true;
+		} else {
+			System.out.println("testDropInventoryItem false");
 			return false;
 		}
 	}
@@ -366,11 +571,13 @@ public class Person {
 		
 		calculateFriction();
 		
-		if(movingDown)ySpeed = ySpeed + currentSpeed;
-		if(movingUp)ySpeed = ySpeed - currentSpeed;
-		
-		if(movingRight)xSpeed = xSpeed + currentSpeed;
-		if(movingLeft)xSpeed = xSpeed - currentSpeed;
+		if(!inventoryOpen){
+			if(movingDown)ySpeed = ySpeed + currentSpeed;
+			if(movingUp)ySpeed = ySpeed - currentSpeed;
+			
+			if(movingRight)xSpeed = xSpeed + currentSpeed;
+			if(movingLeft)xSpeed = xSpeed - currentSpeed;
+		}
 		
 		long timeInMillis = System.currentTimeMillis();
 		
