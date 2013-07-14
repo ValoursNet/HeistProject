@@ -1,0 +1,82 @@
+{
+	"Type" : "Gun",
+    "Name": "Glock 17",
+    "Description": "9mm semi-automatic handgun with a high-capacity magazine, and a capability for a high rate of fire.",
+    "RateOfFire": 800,
+    "MagazineType": "Glock17Mag",
+    "Accuracy": 5,
+    "ReloadTime": 1567,
+    "ShotSound": "wep/Glock17/GlockShot2.wav",
+    "ReloadSound": "shooty.wav",
+	"DropSound": "droppy.wav",
+    "Cost": 50,
+    "Width": 2,
+    "Height": 2,
+    "InventoryImage": "wep/Glock17/InvGlock17.png",
+    "GroundImage": "wep/Glock17/Glock17Ground.png",
+    "Animations": {
+        "Idled": {
+            "Image": "wep/Glock17/Glock17Idled.png",
+            "FramesPerSecond": 30,
+            "Width": 44,
+            "Height": 29,
+            "RotationX": 23,
+            "RotationY": 28,
+			"NumberOfFrames": 1
+        },
+        "Shot": {
+            "Image": "wep/Glock17/Glock17Shot.png",
+            "FramesPerSecond": 30,
+            "Width": 24,
+            "Height": 73,
+            "RotationX": 7,
+            "RotationY": 72,
+			"NumberOfFrames": 3
+        },
+        "Reload": {
+            "Image": "wep/Glock17/Glock17EmptyReload.png",
+            "FramesPerSecond": 30,
+            "Width": 51,
+            "Height": 49,
+            "RotationX": 26,
+            "RotationY": 47,
+			"NumberOfFrames": 47
+        },
+        "Aim": {
+            "Image": "wep/Glock17/Glock17Aim.png",
+            "FramesPerSecond": 30,
+            "Width": 43,
+            "Height": 50,
+            "RotationX": 23,
+            "RotationY": 49,
+			"NumberOfFrames": 5
+        },
+        "Idle": {
+            "Image": "wep/Glock17/Glock17Idle.png",
+            "FramesPerSecond": 30,
+            "Width": 43,
+            "Height": 50,
+            "RotationX": 23,
+            "RotationY": 49,
+			"NumberOfFrames": 5
+        },
+        "Aimed": {
+            "Image": "wep/Glock17/Glock17Aimed.png",
+            "FramesPerSecond": 30,
+            "Width": 12,
+            "Height": 50,
+            "RotationX": 1,
+            "RotationY": 49,
+			"NumberOfFrames": 1
+        },
+        "Empty": {
+            "Image": "wep/Glock17/Glock17Empty.png",
+            "FramesPerSecond": 30,
+            "Width": 21,
+            "Height": 49,
+            "RotationX": 10,
+            "RotationY": 47,
+			"NumberOfFrames": 1
+        }
+    }
+}

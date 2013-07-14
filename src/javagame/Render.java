@@ -175,12 +175,14 @@ public class Render {
 								 g.drawString(item.name, (float) ((int) backpackPositionX + itemOffsetX + 2 + col*50),(int) (int) backpackPositionY + 5 + row*50);
 		            		}
 		            		
+		            		/*
 		            		if(!item.description.equals("") && invContainer.hightlightCount > 50 && col == invContainer.hoverMouseX && row == invContainer.hoverMouseY){
 			            		 g.setColor(Color.black);
 								 g.fillRect((float) ((int) backpackPositionX + itemOffsetX  + col*50), (int) backpackPositionY + 25 + row*50, 120, 20);
 								 g.setColor(Color.white);
 								 g.drawString(item.description, (float) ((int) backpackPositionX +itemOffsetX + 2 + col*50),(int) (int) backpackPositionY + 25 + row*50);
 		            		}
+		            		*/
 		            	}
 		            }
 			 }
@@ -236,12 +238,14 @@ public class Render {
 								 g.drawString(item.name, (int) backpackPositionX + itemOffsetX + 2 + col*50,(int) (int) backpackPositionY + itemOffsetY + 5 + row*50);
 		            		}
 		            		
+		            		/*
 		            		if(!item.description.equals("") && invContainer.hightlightCount > 50 && col == invContainer.hoverMouseX && row == invContainer.hoverMouseY){
 			            		 g.setColor(Color.black);
 								 g.fillRect((int) backpackPositionX + itemOffsetX + col*50, (int) backpackPositionY + itemOffsetY + 25 + row*50, 120, 20);
 								 g.setColor(Color.white);
 								 g.drawString(item.description, (int) backpackPositionX + itemOffsetX + 2 + col*50,(int) (int) backpackPositionY + itemOffsetY + 25 + row*50);
 		            		}
+		            		*/
 		            	}
 		            }
 			 }
@@ -313,6 +317,8 @@ public class Render {
 		
 		for( InventoryObject item : levelOne.groundObjects.items){
 			g.drawImage(item.groundImage, item.groundPositionX,  item.groundPositionY);
+			item.groundImage.setCenterOfRotation(0, 0);
+			item.groundImage.setRotation(item.groundRotation);
 		}
 		
 		
@@ -327,7 +333,7 @@ public class Render {
 				
 					//g.drawImage(glockAimed, (int) personX - 3, (int) personY - 46);
 					//g.drawImage(person.image, (int) personX - 3, (int) personY - 13);
-			//	}
+				//	}
 				//glockShoot
 				
 				//g.drawImage(glockShootAnim.getCurrentFrame(), (int) person.Xpos - 27, (int) person.Ypos - 70);
@@ -335,9 +341,11 @@ public class Render {
 				
 				g.pushTransform();
 				g.rotate((int) personX, (int) personY, person.currentRotation);
-				g.drawImage(glockAimed, (int) personX - 3, (int) personY - 46);
+				//g.drawImage(person.gun.idled, (int) personX - 3, (int) personY - 46);
 				//g.drawImage(person.image, (int) personX - 27, (int) personY - 13);
-				//g.drawAnimation(glockShootAnim, (int) personX - 27, (int) personY - 70);
+				if(person.gun != null && person.gun.current != null){
+					g.drawAnimation(person.gun.current, (int) personX - person.gun.currentRotationX, (int) personY - person.gun.currentRotationY);
+				}
 				g.popTransform();
 				
 				g.pushTransform();
@@ -382,6 +390,11 @@ public class Render {
 				}
 				
 				if (person.inventoryOpen) {
+					
+					g.setColor(new Color(0, 0, 0, 200) );
+					g.fillRect((float)0,(float) 0, (float)2000, (float)2000);
+					
+					
 					drawInventoryContainer(person.backpack, person, g, 300, 0, 0, 0);
 					drawInventoryContainer(person.holster, person, g, 100, 150, 0, 0);
 					drawInventoryContainer(person.weaponSlot, person, g, -300, 150, 190, 13);
@@ -425,10 +438,14 @@ public class Render {
 		
 		synchronized (projObj.bulletCollection) {  
 			for (Bullet bullet : projObj.bulletCollection) {
-				g.setColor(Color.red);
+				Color bColor = new Color(255,253,149,230);
+				g.setColor(bColor);
 				//g.setColor(new  Color(142, 142, 71));
 				if (!bullet.stopped) {
-					g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 4, (float) 4);
+					g.pushTransform();
+					g.rotate((int) bullet.Xpos, (int) bullet.Ypos, bullet.currentRotation-90);
+					g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 30, (float) 1);
+					g.popTransform();
 				}
 			}
 			projObj.update();
@@ -437,6 +454,16 @@ public class Render {
 
 	// Should be based on paramater map, not class defined levelOne
 	void drawMap(int[][] mapArray, Graphics g, int drawNum) {
+		
+		try {
+			g.drawImage(new Image("res/Mapv1.png"), (int) 540, (int) 420);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//new Image("res/Mapv1.png")
+		//Mapv1.png
+		
 		int tSize = levelOne.tileSize;
 		for (int i = 0; i < mapArray.length; i++) {
 			for (int j = 0; j < mapArray[i].length; j++) {
@@ -445,6 +472,7 @@ public class Render {
 				}
 			}
 		}
+		
 	}
 
 	// Should probably be combined with drawSightlineCollision

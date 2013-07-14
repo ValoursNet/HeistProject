@@ -26,7 +26,7 @@ public class Map {
 
 	int mapWidth = 20;
 	int mapHeight = 20;
-	public int tileSize = 40;
+	public int tileSize = 60;
 	int[][] mapCollisions;
 	
 	public GroundObjects groundObjects = new GroundObjects();

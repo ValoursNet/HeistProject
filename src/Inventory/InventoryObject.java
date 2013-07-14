@@ -14,6 +14,7 @@ public class InventoryObject {
 	
 	public int groundPositionX = 0;
 	public int groundPositionY = 0;
+	public int groundRotation = (int) (Math.random()*360);
 	public boolean onGround = false;
 	public boolean inVicinity = false;
 	

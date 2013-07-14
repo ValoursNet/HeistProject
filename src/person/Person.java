@@ -95,39 +95,61 @@ public class Person {
 			//collisionCheck();
 			updatePosition(levelOne.getMap());
 			
-			double gunTurnSpeed = 0.5;
-			double bodyTurnSpeed = 0.2;
+			double gunTurnSpeed = 8;
+			double bodyTurnSpeed = 4;
 			
 			
 			//GUN ROTATION
-			if((currentRotation - aimedRotation)<-180){
-				//currentRotation = currentRotation + 360;
-				System.out.println("bam 1");
+			if((currentRotation - aimedRotation)<-180 || (bodyRotation - aimedRotation)<-180){
+				currentRotation = currentRotation + 360;
+				bodyRotation = bodyRotation + 360;
+				//System.out.println("bam 1");
 			}
 			
-			if((currentRotation - aimedRotation)>180){
-				//currentRotation = currentRotation - 360;
-				System.out.println("bam 2");
+			if((currentRotation - aimedRotation)>180 || (bodyRotation - aimedRotation)>180){
+				currentRotation = currentRotation - 360;
+				bodyRotation = bodyRotation - 360;
+				//System.out.println("bam 2");
 			}
+			
 			
 			if(currentRotation+gunTurnSpeed < aimedRotation){
-				currentRotation = (float) (currentRotation + gunTurnSpeed);
+				if(!((bodyRotation - currentRotation)<-70)){
+					currentRotation = (float) (currentRotation + gunTurnSpeed);
+				} else {
+					currentRotation = (float) (currentRotation + gunTurnSpeed);
+					bodyRotation = (float) (bodyRotation + gunTurnSpeed);
+					//currentRotation = (float) (bodyRotation + 70);
+				}
 			} else if(currentRotation-gunTurnSpeed > aimedRotation){
-				currentRotation = (float) (currentRotation - gunTurnSpeed);
+				if(!((bodyRotation - currentRotation)>70)){
+					currentRotation = (float) (currentRotation - gunTurnSpeed);
+				} else {
+					currentRotation = (float) (currentRotation - gunTurnSpeed);
+					bodyRotation = (float) (bodyRotation - gunTurnSpeed);
+					//currentRotation = (float) (bodyRotation - 70);
+				}
 			} else {
 				currentRotation = (float) (aimedRotation);
 			}
 			
 			
+			/*
 			//BODY ROTATION
 			if((bodyRotation - aimedRotation)<-180){
 				//bodyRotation = bodyRotation + 360;
+				//bodyRotation = bodyRotation + 360;
+				//currentRotation = currentRotation + 360;
+				System.out.println("");
+				System.out.println("(bodyRotation - aimedRotation):" + (bodyRotation - aimedRotation));
+				System.out.println("( aimedRotation):" + (aimedRotation));
 			}
 			
 			if((bodyRotation - aimedRotation)>180){
 				//bodyRotation = bodyRotation - 360;
+				//currentRotation = currentRotation - 360;
 			}
-			
+			*/
 			if(bodyRotation+bodyTurnSpeed < aimedRotation){
 				bodyRotation = (float) (bodyRotation + bodyTurnSpeed);
 			} else if(bodyRotation-bodyTurnSpeed > aimedRotation){
@@ -138,18 +160,11 @@ public class Person {
 			
 			
 			if(!isDead){
-				System.out.println("");
-				System.out.println("(currentRotation - aimedRotation):" + (currentRotation - aimedRotation));
-				System.out.println("(bodyRotation - currentRotation):" + (bodyRotation - currentRotation));
+				//System.out.println("");
+				//System.out.println("(currentRotation - aimedRotation):" + (currentRotation - aimedRotation));
+				//System.out.println("(bodyRotation - currentRotation):" + (bodyRotation - currentRotation));
 			}
 			
-			if((bodyRotation - currentRotation)<-70){
-				currentRotation = bodyRotation + 70;
-			}
-			
-			if((bodyRotation - currentRotation)>70){
-				currentRotation = bodyRotation - 70;
-			}
 		}
 		
 		if(directControl){
