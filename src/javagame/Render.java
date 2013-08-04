@@ -3,6 +3,9 @@ package javagame;
 import java.awt.Point;
 import java.util.HashSet;
 
+import map.Building;
+import map.Room;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -10,6 +13,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 import Inventory.Backpack;
@@ -21,6 +25,7 @@ import person.Person;
 public class Render {
 
 	Map levelOne;
+	Building buildingOne;
 	boolean drawDebug = false;
 
 	Image player;
@@ -28,6 +33,8 @@ public class Render {
 	Image cop;
 	Image glockShoot;
 	Image glockAimed;
+	Image G9mmCasing;
+	Image blood;
 
 	public float offsetX = 0;
 	public float offsetY = 0;
@@ -53,12 +60,14 @@ public class Render {
 		this.projObj = projObj;
 	}
 
-	public void setImages(Image player, Image wall, Image cop, Image glockShoot, Image glockAimed) {
+	public void setImages(Image player, Image wall, Image cop, Image glockShoot, Image glockAimed, Image G9mmCasing, Image blood) {
 		this.player = player;
 		this.cop = cop;
 		this.wall = wall;
 		this.glockShoot = glockShoot;
 		this.glockAimed = glockAimed;
+		this.G9mmCasing = G9mmCasing;
+		this.blood = blood;
 		
 		System.out.println("glockShoot: " + glockShoot);
 		
@@ -311,6 +320,34 @@ public class Render {
 			cop.setRotation(policeUnit.currentRotation);
 		}*/
 		
+		
+		synchronized (projObj.casingCollection) {  
+			for (Casing casing : projObj.casingCollection) {
+				//Color bColor = new Color(255,253,149,230);
+				//g.setColor(bColor);
+				//g.setColor(new  Color(142, 142, 71));
+				//if (!bullet.stopped) {
+					g.pushTransform();
+					g.rotate((int) casing.Xpos, (int) casing.Ypos, casing.randomRotation);
+					g.drawImage(G9mmCasing, (float) casing.Xpos, (float) casing.Ypos);
+					//g.fillRect((float) bullet.Xpos, (float) bullet.Ypos, (float) 30, (float) 1);
+					g.popTransform();
+				//}
+			}
+			projObj.update();
+		}
+		
+		synchronized (levelOne.effectCollection) {  
+			for (BloodSplat bloodSplat : levelOne.effectCollection.bloodCollection) {
+					g.pushTransform();
+					g.rotate((int) bloodSplat.Xpos, (int) bloodSplat.Ypos, bloodSplat.currentRotation);
+					g.drawImage(blood, (float) bloodSplat.Xpos, (float) bloodSplat.Ypos);
+					g.popTransform();
+				//}
+			}
+			projObj.update();
+		}
+		
 		//CURENTLY UNUSED
 		//long timeInMillis = System.currentTimeMillis();
 		//System.out.println("GroundObjs: " + levelOne.groundObjects.items.size());
@@ -320,7 +357,6 @@ public class Render {
 			item.groundImage.setCenterOfRotation(0, 0);
 			item.groundImage.setRotation(item.groundRotation);
 		}
-		
 		
 		for (Person person : people) {
 			if (!person.isDead) {
@@ -423,6 +459,9 @@ public class Render {
 			}
 		}
 
+		
+		
+		drawBuildingWalls(g, buildingOne);
 
 		// drawSightlineCollision(Player,
 		// g,levelOne.getMap(),Player.currentRotation);
@@ -450,6 +489,72 @@ public class Render {
 			}
 			projObj.update();
 		}
+		
+	
+	}
+	
+	private void drawBuildingWalls(Graphics g, Building buildingOne) {
+		synchronized (buildingOne.wallCollection) {
+			for (Rectangle wallRect : buildingOne.wallCollection) {
+				//System.out.println("asd");
+				g.fillRect(wallRect.getX(),wallRect.getY(),wallRect.getWidth(),wallRect.getHeight());
+			}
+		}
+		drawHorizontalWalls(g,buildingOne);
+		drawVerticalWalls(g,buildingOne);
+	}
+	
+	private void drawHorizontalWalls(Graphics g, Building buildingOne){
+		for (int i = 0; i < buildingOne.horizontalWallCollection.length; i++) {
+			int[] currentWallLine = buildingOne.horizontalWallCollection[i];
+			for (int j = 0; j < currentWallLine.length; j++) {
+				int currentWall = currentWallLine[j];
+				if(currentWall == 1){
+					g.drawImage(buildingOne.interriorWallImage, j*100, i*100);
+				}
+			}
+		}
+	}
+	
+	private void drawVerticalWalls(Graphics g, Building buildingOne){
+		Image rotatedWall = buildingOne.interriorWallImage.copy();
+		rotatedWall.setCenterOfRotation(0, 0);
+		rotatedWall.setRotation(90);
+		for (int i = 0; i < buildingOne.verticalWallCollection.length; i++) {
+			int[] currentWallLine = buildingOne.verticalWallCollection[i];
+			for (int j = 0; j < currentWallLine.length; j++) {
+				int currentWall = currentWallLine[j];
+				if(currentWall == 1){
+					g.drawImage(rotatedWall, i*100+13, j*100);
+				}
+			}
+		}
+	}
+	
+	private void drawRoom(Graphics g, Room roomOne) {
+		/*
+		g.fillRect(roomOne.positionX, roomOne.positionY, roomOne.width*roomOne.unitSize, roomOne.height*roomOne.unitSize);
+		
+		
+		
+		for (int i = 0; i < roomOne.width; i++) {
+			int wallPositionX = roomOne.positionX + i*roomOne.unitSize;
+			int wallPositionY = roomOne.positionY + roomOne.height*roomOne.unitSize;
+			g.drawImage(roomOne.interriorWallImage, wallPositionX, roomOne.positionY);
+			g.drawImage(roomOne.interriorWallImage, wallPositionX, wallPositionY);
+			
+		}
+		
+		Image rotatedWall = roomOne.interriorWallImage.copy();
+		rotatedWall.setCenterOfRotation(0, 0);
+		rotatedWall.setRotation(90);
+		for (int j = 0; j < roomOne.height; j++) {
+			int wallPositionX = roomOne.positionX + roomOne.width*roomOne.unitSize;
+			int wallPositionY = roomOne.positionY + j*roomOne.unitSize;
+			g.drawImage(rotatedWall, roomOne.positionX, wallPositionY);
+			g.drawImage(rotatedWall, wallPositionX, wallPositionY);
+		}
+		*/
 	}
 
 	// Should be based on paramater map, not class defined levelOne
@@ -519,5 +624,9 @@ public class Render {
 
 		g.setColor(Color.red);
 		g.drawLine(startX, startY, endX, endY);
+	}
+
+	public void setBuilding(Building buildingOne) {
+		this.buildingOne = buildingOne;
 	}
 }

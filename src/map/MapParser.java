@@ -1,21 +1,24 @@
-package Inventory;
+package map;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javagame.Bullet;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class InventoryParser {
+public class MapParser {
 	
 	@SuppressWarnings("resource")
-	public InventoryObject parseFile(String filePath) {
+	public Building parseFile(String filePath) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filePath));
 			String text = "";
@@ -27,7 +30,55 @@ public class InventoryParser {
 			JsonElement element = parser.parse(text);
 			JsonObject obj = element.getAsJsonObject();
 			String type = obj.get("Type").getAsString();
-			if (type.equals("Gun")) {
+			if (type.equals("Map")) {
+				System.out.println("new map found");
+				
+				Building building = null;				
+				
+				JsonArray buildingsCollection = obj.get("Buildings").getAsJsonArray();
+				
+				for (JsonElement obj1 : buildingsCollection) {
+					int buildingHeight = obj1.getAsJsonObject().get("Height").getAsInt();
+					int buildingWidth = obj1.getAsJsonObject().get("Width").getAsInt();
+					
+					building = new Building(buildingWidth,buildingHeight);
+					
+					
+					JsonArray roomCollection = obj1.getAsJsonObject().get("Rooms").getAsJsonArray();
+					for (JsonElement obj2 : roomCollection) {
+						
+						//int positionX = obj2.getAsJsonObject().get("Rooms").getAsJsonArray()[3].getAsInt();
+						int positionX = obj2.getAsJsonObject().get("Position").getAsJsonArray().get(0).getAsInt();
+						int positionY = obj2.getAsJsonObject().get("Position").getAsJsonArray().get(1).getAsInt();
+						
+						int width = obj2.getAsJsonObject().get("Width").getAsInt();
+						int height = obj2.getAsJsonObject().get("Height").getAsInt();
+						
+						Room newRoom = new Room(positionX,positionY,width,height);						
+						
+						JsonElement obj3 = obj2.getAsJsonObject().get("Doors");
+						if(obj3 != null){
+							JsonArray doorCollection = obj3.getAsJsonArray();
+							for (JsonElement obj4 : doorCollection) {
+								//int orientation, int xPos, int yPos
+								int orientation = obj4.getAsJsonObject().get("Orientation").getAsInt();
+								int doorPositionX = obj4.getAsJsonObject().get("Position").getAsJsonArray().get(0).getAsInt();
+								int doorPositionY = obj4.getAsJsonObject().get("Position").getAsJsonArray().get(1).getAsInt();
+								newRoom.addDoor(orientation, doorPositionX, doorPositionY);
+								System.out.println("door found");
+							}
+						}
+						
+						
+						building.addRoom(newRoom);
+						//int positionX, int positionY, int width, int height
+						//Room newRoom = new Room();
+						//building.addRoom(newRoom);
+						//building.add
+					}
+				}
+				
+				/*
 				String name = obj.get("Name").getAsString();
 				String description = obj.get("Description").getAsString();
 				int invWidth = obj.get("Width").getAsInt();
@@ -53,34 +104,16 @@ public class InventoryParser {
 				System.out.println("asdasfsagdsgdsf");
 				
 				return gun;
+				*/
+				return building;
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (SlickException e) {
-			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public void addAnimation(String animationType,Gun gGun, JsonObject animObj){
-		String idleImagePath = animObj.get("Image").getAsString();
-		Image idleImage = null;
-		try {
-			idleImage = new Image(idleImagePath);
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		int idleFramesPerSecond = animObj.get("FramesPerSecond").getAsInt();
-		int idleNumberOfFrames = animObj.get("NumberOfFrames").getAsInt();
-		int idleWidth = animObj.get("Width").getAsInt();
-		int idleHeight = animObj.get("Height").getAsInt();		
-		int idleRotationX = animObj.get("RotationX").getAsInt();
-		int idleRotationY = animObj.get("RotationY").getAsInt();
-		gGun.addAnimation(animationType,idleImage,idleWidth,idleHeight,idleNumberOfFrames, idleFramesPerSecond,idleRotationX,idleRotationY);
 	}
 	
 }

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
 
 import Inventory.Backpack;
 import Inventory.Gun;
@@ -86,6 +87,8 @@ public class Person {
 	
     public boolean hasTarget = true;
     public Person myTarget;
+    
+    public Rectangle boundingBox;
 	
 	public void update() {
 		
@@ -176,9 +179,22 @@ public class Person {
 			isDead = true;
 		}
 		
+		/*
 		if(isShooting && gun != null && !gun.equals(null)) {
 			gun.fire();
+		} 
+		*/
+		if(isShooting && gun != null && !gun.equals(null)) {
+			if(!gun.triggerDown){
+				gun.fire();
+				gun.triggerDown = true;
+			}
+		} else if(!isShooting){
+			if(gun != null && !gun.equals(null)) {
+				gun.triggerDown = false;
+			}
 		}
+		
 		
 		if(vicinity != null){
 			updateVicinity();
@@ -494,9 +510,16 @@ public class Person {
 		
 		float testX = endX;
 		
+		boolean breakNow = false;
+		
 		for (int i =0; i <= updateSpeed; i++) {
+			
 			//endX   = (float) (startX + i * currentXSpeed);
 			testX   = (float) (startX + i * currentXSpeed);
+			
+			
+			boundingBox = new Rectangle(testX-20,(float)Ypos-20,(float)40,(float)40);
+			
 			
 			Point iP = levelOne.getTileAtPoint(levelOne.tileSize,testX,endY);
 			
@@ -505,6 +528,21 @@ public class Person {
 				break;
 			}
 			if(mapArray.length <= iP.y || iP.y < 0){
+				break;
+			}
+			
+			
+			synchronized (levelOne.buildingOne.wallCollection) {  
+				for (Rectangle wallRect : levelOne.buildingOne.wallCollection) {
+					if(wallRect.intersects(boundingBox)){
+						//System.out.println("collision");
+						breakNow = true;
+						break;
+					}
+				}
+			}
+			
+			if(breakNow){
 				break;
 			}
 			
@@ -533,9 +571,13 @@ public class Person {
 		float endY = startY;
 		
 		float testY = endY;
+		
+		boolean breakNow = false;
 	
 		for (int i =0; i <= updateSpeed; i++) {
 			testY   = (float) (startY + i * currentYSpeed);
+			
+			boundingBox = new Rectangle((float)Xpos-20,testY-20,(float)40,(float)40);
 			
 			Point iP = levelOne.getTileAtPoint(levelOne.tileSize,endX,testY);
 			
@@ -546,6 +588,21 @@ public class Person {
 			if(mapArray.length <= iP.y || iP.y < 0){
 				break;
 			}
+			
+			synchronized (levelOne.buildingOne.wallCollection) {  
+				for (Rectangle wallRect : levelOne.buildingOne.wallCollection) {
+					if(wallRect.intersects(boundingBox)){
+						//System.out.println("collision");
+						breakNow = true;
+						break;
+					}
+				}
+			}
+			
+			if(breakNow){
+				break;
+			}
+			
 			//Check for collision with solid tile
 			if(mapArray[iP.y][iP.x] == 1){
 				break;

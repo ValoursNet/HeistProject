@@ -104,7 +104,8 @@ public class Bullet {
 						if(holderID != person.id){
 							person.xForce = (Math.cos(currentRotad) * knockback);
 							person.yForce = (Math.sin(currentRotad) * knockback);
-							person.health =  (int) (person.health - damage);
+							//person.health =  (int) (person.health - damage);
+							levelOne.effectCollection.addBloodSplat(levelOne, Xpos, Ypos, currentRotation);
 							stopped = true;
 							break;
 						}

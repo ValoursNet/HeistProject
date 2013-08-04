@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashSet;
 
+import map.Building;
+import map.Room;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -36,9 +39,12 @@ public class Play extends BasicGameState {
 	public Image wall;
 	public Image glockShoot;
 	public Image glockAimed;
+	public Image G9mmCasing;
+	public Image blood;
 	public static Image cop;
 
 	public static Projectiles projectiles = new Projectiles();
+	public static EffectCollection effectCollection = new EffectCollection();
 
 	Render renderObj = new Render();
 	UserInput inputObj = new UserInput();
@@ -46,6 +52,7 @@ public class Play extends BasicGameState {
 	public static HashSet<Person> people = new HashSet<Person>();
 	
 	public static Map levelOne = new Map(projectiles);
+	
 	Cop policeUnit;
 	public static Criminal playerUnit;
 
@@ -80,19 +87,25 @@ public class Play extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		
-		
+		levelOne.effectCollection = this.effectCollection;
+		levelOne.buildingOne.interriorWallImage = new Image("res/wallSection.png");
+
 		glockAimed = new Image("res/GlockAimed.png");
 		player = new Image("res/RobberBody.png");
 		 cop = new Image("res/RobberBody.png");
 		 glockShoot = new Image("res/RobberGlockShoot.png");
+		 //G9mmCasing
+		 G9mmCasing = new Image("res/G9mmCasing.png");
+		 blood = new Image("res/blood2.png");
 
 		projectiles.setMap(levelOne);
 
 		policeUnit = new Cop(levelOne, projectiles);
 		playerUnit = new Criminal(levelOne, projectiles);
 
-		renderObj.setImages(player, wall, cop, glockShoot, glockAimed);
+		renderObj.setImages(player, wall, cop, glockShoot, glockAimed, G9mmCasing, blood);
 		renderObj.setMap(levelOne);
+		renderObj.setBuilding(levelOne.buildingOne);
 		renderObj.setProjectiles(projectiles);
 
 		//people.add(policeUnit);

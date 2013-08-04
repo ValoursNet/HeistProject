@@ -8,12 +8,18 @@ import server.Multiplayer;
 public class Projectiles {
 
 	HashSet<Bullet> bulletCollection = new HashSet<Bullet>();
+	HashSet<Casing> casingCollection = new HashSet<Casing>();
 	Map level;
 
 	public void update() {
 		synchronized (bulletCollection) {  
 			for (Bullet bullet : bulletCollection) {
 				bullet.update();
+			}
+		}
+		synchronized (casingCollection) {  
+			for (Casing casing : casingCollection) {
+				casing.update();
 			}
 		}
 	}
@@ -25,8 +31,12 @@ public class Projectiles {
 	public void createProjectile(double Xpos, double Ypos,
 			double currentSpeed, float currentRotation, Person person) {
 		Bullet bullet = new Bullet(level, Xpos, Ypos, currentSpeed,currentRotation, person);
+		Casing casing = new Casing(level, Xpos, Ypos, 1, currentRotation+90, person);
 		synchronized (bulletCollection) {  
 			bulletCollection.add(bullet);
+		}
+		synchronized (casingCollection) {
+			casingCollection.add(casing);
 		}
 		Multiplayer.bullets.add(bullet);
 	}

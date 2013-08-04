@@ -34,7 +34,7 @@ public class Cop extends Person {
 		super.update();
 		//checkDirection();
 		
-		basicAI();
+		//basicAI();
 		if(shootOnSight())isShooting=true;
 		else isShooting=false;
 		//isShooting = true;

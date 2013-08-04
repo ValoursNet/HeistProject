@@ -13,11 +13,17 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import map.Building;
+import map.MapParser;
+import map.Room;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
 
 import Inventory.GroundObjects;
+import Inventory.Gun;
+import Inventory.InventoryParser;
 import Inventory.Magasine;
 
 import person.Cop;
@@ -28,6 +34,8 @@ public class Map {
 	int mapHeight = 20;
 	public int tileSize = 60;
 	int[][] mapCollisions;
+	
+	public Building buildingOne = new Building(50, 50);
 	
 	public GroundObjects groundObjects = new GroundObjects();
 
@@ -40,6 +48,7 @@ public class Map {
 
 	String openPatrolArrayTag = "<patrolPath>";
 	String closePatrolArrayTag = "</patrolPath>";
+	public EffectCollection effectCollection;
 
 	//UNUSED CURRENTLY. SEE BELOw
 	public Map() {
@@ -54,6 +63,7 @@ public class Map {
 
 		// printMapCollisions();
 
+		
 		addItemsToGround();
 		
 		System.out.println("path: " + path);
@@ -75,6 +85,18 @@ public class Map {
 	}
 
 	public Map(Projectiles projectiles) {
+		
+		
+		MapParser mapParser = new MapParser();
+		buildingOne = (Building) mapParser.parseFile("map/map1.json");
+		
+		/*
+		Room roomOne = new Room(1,0,3,3);
+		Room roomTwo = new Room(4,0,2,2);
+		buildingOne.addRoom(roomOne);
+		buildingOne.addRoom(roomTwo);
+		*/
+		
 		mapCollisions = createMap();
 		//createDirectory();
 		// writefile();
@@ -86,8 +108,8 @@ public class Map {
 	private void addExampleCop(Projectiles projectiles){
 		double[][] path = new double[2][3];
 		
-		path[0][0] = 5*(tileSize + tileSize/2);
-		path[0][1] = 2*(tileSize + tileSize/2);
+		path[0][0] = 4*(tileSize + tileSize/2);
+		path[0][1] = 4*(tileSize + tileSize/2);
 		path[0][2] = 0;
 		
 		path[1][0] = 15*(tileSize + tileSize/2);

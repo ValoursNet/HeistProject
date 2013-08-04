@@ -52,6 +52,7 @@ public class Gun extends InventoryObject {
 	public Animation current = null;// = new Animation();
 	public int currentRotationX;
 	public int currentRotationY;
+	public boolean triggerDown = false;
 	
 	public Gun(String name, String description, Image inventoryImage, Image inGameImage, int size, double fireRate, double spread, double reloadTime) {
 		super(name, description, inventoryImage,inGameImage, size);
@@ -205,19 +206,19 @@ public class Gun extends InventoryObject {
 	public boolean fire() {
 		//System.out.println("mag.isEmpty()" +mag.isEmpty());
 		if (mag != null && holder != null && !mag.isEmpty()) {
-			long timeInMillis = System.currentTimeMillis();
+			//long timeInMillis = System.currentTimeMillis();
 			//System.out.println("timeInMillis: " + timeInMillis);
 			//System.out.println("lastTime: " + lastTime);
 			//System.out.println("(((timeInMillis - lastTime)/1000)): " + (fireRate *(((timeInMillis - lastTime)/1000))));
 			//System.out.println("");
-			if (((fireRate * (timeInMillis - lastTime))/1000)/60 >= 1) {
-				lastTime = timeInMillis;
+			//if (((fireRate * (timeInMillis - lastTime))/1000)/60 >= 1) {
+				//lastTime = timeInMillis;
 				double shotAngle = spread*Math.random() + holder.currentRotation - spread/2;
 				Play.projectiles.createProjectile(holder.Xpos, holder.Ypos, 4, (float) shotAngle, holder);
 				changeAnimation("Shot");
 				current.restart();
 				return mag.fire();
-			}
+			//}
 		}
 		return false;
 	}
