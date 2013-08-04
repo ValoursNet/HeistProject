@@ -180,9 +180,32 @@ public class Gun extends InventoryObject {
 	}
 	
 	public void loadMag(Magasine mag) {
-		this.mag = mag;
-		changeAnimation("Reload");
-		current.restart();
+		if(current!=reload || (current==reload && current.isStopped())){
+			if(this.mag != null && mag != null){
+				if(this.mag.currBullets <= 0){
+					holder.weaponSlot.dropFromBackpack(this.mag, 0, 0);
+					if(holder.holster.items.contains(mag)){
+						holder.weaponSlot.addToBackpack(holder.holster.removeFromBackpack(mag), 0, 0);
+					}
+				} else {
+					if(holder.holster.items.contains(mag)){
+						InventoryObject tempInvObj = holder.weaponSlot.removeFromBackpack(this.mag);
+						holder.weaponSlot.addToBackpack(holder.holster.swapToBackpack(mag,this.mag), 0, 0);
+						System.out.println("swapToBackpack");
+					}
+				}
+				
+				
+				this.mag = mag;
+			} else if(this.mag == null && mag != null) {
+				this.mag = mag;
+				System.out.println("null mag thing ---------------------------------");
+				holder.weaponSlot.addToBackpack(this.mag, 0, 0);
+			}
+			
+			changeAnimation("Reload");
+			current.restart();
+		}
 	}
 	
 	public boolean isEmptyMag() {
@@ -196,6 +219,8 @@ public class Gun extends InventoryObject {
 	public Magasine removeMag() {
 		Magasine magasine = this.mag;
 		this.mag = null;
+		changeAnimation("Reload");
+		current.restart();
 		return magasine;
 	}
 	
@@ -206,6 +231,8 @@ public class Gun extends InventoryObject {
 	public boolean fire() {
 		//System.out.println("mag.isEmpty()" +mag.isEmpty());
 		if (mag != null && holder != null && !mag.isEmpty()) {
+			//check for reloading
+			if(current!=reload || (current==reload && current.isStopped())){
 			//long timeInMillis = System.currentTimeMillis();
 			//System.out.println("timeInMillis: " + timeInMillis);
 			//System.out.println("lastTime: " + lastTime);
@@ -219,6 +246,10 @@ public class Gun extends InventoryObject {
 				current.restart();
 				return mag.fire();
 			//}
+			}
+		} else {
+			//System.out.println("mag: + " + mag);
+		//	System.out.println("holder: + " + holder);
 		}
 		return false;
 	}

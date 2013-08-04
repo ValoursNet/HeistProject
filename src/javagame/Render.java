@@ -352,14 +352,29 @@ public class Render {
 		//long timeInMillis = System.currentTimeMillis();
 		//System.out.println("GroundObjs: " + levelOne.groundObjects.items.size());
 		
+		
+		
+		drawBuildingFloor(g, buildingOne);
+		
+		
+		
 		for( InventoryObject item : levelOne.groundObjects.items){
 			g.drawImage(item.groundImage, item.groundPositionX,  item.groundPositionY);
 			item.groundImage.setCenterOfRotation(0, 0);
 			item.groundImage.setRotation(item.groundRotation);
 		}
 		
+		
+		
+		
 		for (Person person : people) {
 			if (!person.isDead) {
+				
+				/* sight line */
+				
+				drawSightline(person, g, person.currentRotation, new  Color(255, 0, 0, 200));
+				drawSightline(person, g, person.aimedRotation, new Color(255, 255, 255, 200));
+				
 				/* Draw the person. */
 				//g.drawImage(person.image, (int) person.Xpos - 27, (int) person.Ypos - 45);
 				
@@ -453,13 +468,9 @@ public class Render {
 								person.currentRotation - 60 + (i * 4));
 					}
 					*/
-					//drawSightline(person, g, person.currentRotation, Color.blue);
-					//drawSightline(person, g, person.aimedRotation, Color.green);
 				//}
 			}
 		}
-
-		
 		
 		drawBuildingWalls(g, buildingOne);
 
@@ -491,6 +502,23 @@ public class Render {
 		}
 		
 	
+	}
+	
+	private void drawBuildingFloor(Graphics g, Building buildingOne) {
+		synchronized (buildingOne.roomCollection) {
+			for (Room room : buildingOne.roomCollection) {
+				drawRoomFloor(g, room.positionX, room.positionY, room.width, room.height);
+			}
+		}
+	}
+	
+	private void drawRoomFloor(Graphics g, int positionX, int positionY, int roomWidth, int roomHeight) {
+		for (int i = 0; i < roomWidth; i++) {
+			for (int j = 0; j < roomHeight; j++) {
+				g.drawImage(buildingOne.floorOneImage, positionX*100 + i*100, positionY*100 + j*100);
+				//g.fillRect(positionX*100 + i*100, positionY*100 + j*100,100,100);
+			}
+		}
 	}
 	
 	private void drawBuildingWalls(Graphics g, Building buildingOne) {

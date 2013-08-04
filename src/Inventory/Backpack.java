@@ -103,7 +103,7 @@ public class Backpack extends InventoryObject {
 					currentHighligtedItem = true;
 					highlightedItemX = backpackMouseX;
 					highlightedItemY = backpackMouseY;
-					System.out.println("currentHighligtedItem: " + itemLayout[backpackMouseX][backpackMouseY].name);
+					//System.out.println("currentHighligtedItem: " + itemLayout[backpackMouseX][backpackMouseY].name);
 				}
 				
 			} else {
@@ -287,5 +287,43 @@ public class Backpack extends InventoryObject {
 			return false;
 		}
 
+	}
+	
+	public InventoryObject swapToBackpack(InventoryObject io, InventoryObject newIo) {
+		if(!items.contains(io)){
+			return null;
+		}else{
+			for(int i=0; i<itemLayout.length; i++){
+				for(int j=0; j<itemLayout[i].length; j++){
+					if(io == itemLayout[i][j]){
+						itemLayout[i][j] = newIo;
+						currSize -= io.size;
+						currSize += newIo.size;
+						items.remove(io);
+						items.add(newIo);
+						return io;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public InventoryObject removeFromBackpack(InventoryObject io) {
+		if(!items.contains(io)){
+			return null;
+		}else{
+			for(int i=0; i<itemLayout.length; i++){
+				for(int j=0; j<itemLayout[i].length; j++){
+					if(io == itemLayout[i][j]){
+						itemLayout[i][j] = null;
+						currSize -= io.size;
+						items.remove(io);
+						return io;
+					}
+				}
+			}
+		}
+		return null;
 	}
 }

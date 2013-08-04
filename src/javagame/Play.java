@@ -89,6 +89,7 @@ public class Play extends BasicGameState {
 		
 		levelOne.effectCollection = this.effectCollection;
 		levelOne.buildingOne.interriorWallImage = new Image("res/wallSection.png");
+		levelOne.buildingOne.floorOneImage = new Image("res/CarpetTileRed2.png");
 
 		glockAimed = new Image("res/GlockAimed.png");
 		player = new Image("res/RobberBody.png");

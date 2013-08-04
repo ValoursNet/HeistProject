@@ -35,7 +35,8 @@ public class Game extends StateBasedGame{
 			//appgc.setDisplayMode(640, 480, false);
 			appgc.setDisplayMode(1024, 768, false);
 			appgc.setAlwaysRender(true);
-			appgc.setVSync(true);
+			//appgc.setVSync(false);
+			appgc.setTargetFrameRate(60);
 			appgc.start();
 			
 			

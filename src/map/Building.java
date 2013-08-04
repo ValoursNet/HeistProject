@@ -7,8 +7,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 public class Building {
-	int width;
-	int height;
+	public int width;
+	public int height;
 	
 	public int[][] horizontalWallCollection;
 	public int[][] verticalWallCollection;
@@ -17,6 +17,7 @@ public class Building {
 	public HashSet<Rectangle> wallCollection = new HashSet<Rectangle>();
 	
 	public Image interriorWallImage;
+	public Image floorOneImage;
 	
 	public int unitSize = 100;
 	

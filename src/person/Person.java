@@ -228,7 +228,7 @@ public class Person {
 		Magasine bestMag = null;
 		
 		//returnCollection.addAll(getAllMagasines(backpack.items, "Stanag"));
-		returnCollection.addAll(getAllMagasines(weaponSlot.items, "Stanag"));
+		returnCollection.addAll(getAllMagasines(holster.items, "Stanag"));
 		
 		int HighestAmmo = 0;
 		

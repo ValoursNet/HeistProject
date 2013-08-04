@@ -39,9 +39,9 @@ public class UserInput {
 		}
 		
 		if(input.isKeyDown(Input.KEY_R)){
-			if(Player.getBestMagasine() != null){
-				Player.gun.loadMag(Player.getBestMagasine());
-			}
+			//if(Player.getBestMagasine() != null){
+			Player.gun.loadMag(Player.getBestMagasine());
+			//}
 		}
 		
 		int xPos = input.getMouseX();
