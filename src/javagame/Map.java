@@ -20,6 +20,12 @@ import map.Room;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
+import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.util.pathfinding.TileBasedMap;
+import org.newdawn.slick.util.pathfinding.navmesh.NavMesh;
+import org.newdawn.slick.util.pathfinding.navmesh.NavMeshBuilder;
+import org.newdawn.slick.util.pathfinding.navmesh.NavPath;
+import org.newdawn.slick.util.pathfinding.navmesh.Space;
 
 import Inventory.GroundObjects;
 import Inventory.Gun;
@@ -50,8 +56,15 @@ public class Map {
 	String closePatrolArrayTag = "</patrolPath>";
 	public EffectCollection effectCollection;
 
+	
+	NavMesh navigationMesh = new NavMesh();
+	TileMap meshTileMap;
+	
 	//UNUSED CURRENTLY. SEE BELOw
 	public Map() {
+		//navigationMesh(new Space(mapHeight, mapHeight, mapHeight, mapHeight));
+		
+		
 		mapCollisions = createMap();
 
 		mapCollisions[0][1] = 1;
@@ -101,8 +114,42 @@ public class Map {
 		//createDirectory();
 		// writefile();
 		readTextFile(path + mapsDirectory + "/map1.txt");
+		
+		
+		meshTileMap = new TileMap(mapCollisions);
+		System.out.println("meshTileMap: " + meshTileMap.getWidthInTiles());
+		
+		//populateNavMesh();
+		NavMeshBuilder asdfasdfasdf = new NavMeshBuilder();
+		navigationMesh = asdfasdfasdf.build(meshTileMap);
+		
+		//NavPath goobo = navigationMesh.findPath(1, 1, 5, 5, true);
+		
+		//System.out.println("navigationMesh.getSpace(0): " + navigationMesh.getSpace(2));
+		
+		//System.out.println("navigationMesh.getSpace(0): " + navigationMesh.getSpace(1).getCost());
+		//System.out.println("goobo: " + (goobo == null));
+		//System.out.println("goobo: " + goobo.getX(1));
+		
 		addItemsToGround();
 		addExampleCop(projectiles);
+	}
+	
+	public NavPath findPath(int sX, int sY, int eX, int eY){
+		NavPath goobo = navigationMesh.findPath(sX, sY, eX, eY, true);
+		
+		return goobo;
+	}
+	
+	private void populateNavMesh(){
+		for (int i = 0; i < mapCollisions.length; i++) {
+			for (int j = 0; j < mapCollisions[i].length; j++) {
+				Space newSpace = new Space(j*tileSize, i*tileSize, tileSize, tileSize);
+				newSpace.clearCost();
+				navigationMesh.addSpace(newSpace);
+			}
+		}
+		
 	}
 
 	private void addExampleCop(Projectiles projectiles){

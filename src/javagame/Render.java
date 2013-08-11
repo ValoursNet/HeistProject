@@ -269,7 +269,7 @@ public class Render {
 		// float gY = (float) (768/2 -Player.Ypos);
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
-		g.translate(offsetX, offsetY);
+		g.translate((int)offsetX, (int)offsetY);
 		
 		//OLD COLORS
 		/*
@@ -319,6 +319,10 @@ public class Render {
 			cop.setCenterOfRotation(39, 72);
 			cop.setRotation(policeUnit.currentRotation);
 		}*/
+		drawBuildingFloor(g, buildingOne);
+		
+		
+		
 		
 		
 		synchronized (projObj.casingCollection) {  
@@ -341,7 +345,7 @@ public class Render {
 			for (BloodSplat bloodSplat : levelOne.effectCollection.bloodCollection) {
 					g.pushTransform();
 					g.rotate((int) bloodSplat.Xpos, (int) bloodSplat.Ypos, bloodSplat.currentRotation);
-					g.drawImage(blood, (float) bloodSplat.Xpos, (float) bloodSplat.Ypos);
+					g.drawImage(blood, (int) bloodSplat.Xpos, (int) bloodSplat.Ypos);
 					g.popTransform();
 				//}
 			}
@@ -354,7 +358,7 @@ public class Render {
 		
 		
 		
-		drawBuildingFloor(g, buildingOne);
+		
 		
 		
 		
@@ -515,7 +519,7 @@ public class Render {
 	private void drawRoomFloor(Graphics g, int positionX, int positionY, int roomWidth, int roomHeight) {
 		for (int i = 0; i < roomWidth; i++) {
 			for (int j = 0; j < roomHeight; j++) {
-				g.drawImage(buildingOne.floorOneImage, positionX*100 + i*100, positionY*100 + j*100);
+				g.drawImage(buildingOne.floorOneImage, (int) Math.ceil(positionX*100 + i*100), (int) Math.ceil(positionY*100 + j*100));
 				//g.fillRect(positionX*100 + i*100, positionY*100 + j*100,100,100);
 			}
 		}

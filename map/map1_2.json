@@ -1,0 +1,90 @@
+{
+	"Type":"Map",
+	"Name":"Updown bank",
+	"Description":"Bank with wonga",
+	"Image":"res/bankpic",
+	"Buildings":[
+		{
+			"Name":"Bank",
+			"Position": [5,4],
+			"Width":15,
+			"Height":15,
+			"Rooms":[
+				{
+					"Position":[2,0],
+					"Width":1,
+					"Height":2,
+					"Doors":[
+						{
+							"Orientation": 1,
+							"Position":[0,2]
+						}
+					]
+				},
+				{
+					"Position":[3,0],
+					"Width":3,
+					"Height":2,
+					"Doors":[
+						{
+							"Orientation": 1,
+							"Position":[2,2]
+						}
+					]
+				},
+				{
+					"Position":[6,0],
+					"Width":3,
+					"Height":2,
+					"Doors":[
+						{
+							"Orientation": 1,
+							"Position":[2,2]
+						}
+					]
+				},
+				{
+					"Position":[0,2],
+					"Width":2,
+					"Height":3,
+					"Doors":[
+						{
+							"Orientation": 1,
+							"Position":[0,0]
+						},
+						{
+							"Orientation": 0,
+							"Position":[2,0]
+						}
+					]
+				},
+				{
+					"Position":[3,3],
+					"Width":3,
+					"Height":3
+				},
+				{
+					"Position":[6,3],
+					"Width":2,
+					"Height":3
+				},
+				{
+					"Position":[0,5],
+					"Width":2,
+					"Height":3
+				},
+				{
+					"Position":[0,8],
+					"Width":3,
+					"Height":5
+				},
+				{
+					"Position":[3,7],
+					"Width":6,
+					"Height":6
+				}
+			]
+		}
+	]
+	
+}
