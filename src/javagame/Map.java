@@ -33,6 +33,7 @@ import Inventory.InventoryParser;
 import Inventory.Magasine;
 
 import person.Cop;
+import person.Person;
 
 public class Map {
 
@@ -59,6 +60,8 @@ public class Map {
 	
 	NavMesh navigationMesh = new NavMesh();
 	TileMap meshTileMap;
+	
+	Person targetUnit;
 	
 	//UNUSED CURRENTLY. SEE BELOw
 	public Map() {
@@ -331,6 +334,7 @@ public class Map {
 		
 		try {
 			policeUnit = new Cop(this, proj);
+			policeUnit.targetUnit = targetUnit;
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

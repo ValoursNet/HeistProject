@@ -7,6 +7,7 @@ import java.util.Random;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.util.pathfinding.navmesh.NavPath;
 
 import Inventory.Backpack;
 import Inventory.Gun;
@@ -89,6 +90,7 @@ public class Person {
     public Person myTarget;
     
     public Rectangle boundingBox;
+	public NavPath currentPath;
 	
 	public void update() {
 		

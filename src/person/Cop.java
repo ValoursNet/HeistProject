@@ -5,6 +5,7 @@ import java.awt.Polygon;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.loading.LoadingList;
+import org.newdawn.slick.util.pathfinding.navmesh.NavPath;
 
 import javagame.Map;
 import javagame.Play;
@@ -13,6 +14,7 @@ import javagame.Projectiles;
 public class Cop extends Person {
 	
 	int viewDistance = 400;
+	public Person targetUnit;
 	
 	public Cop(Map glevelOne, Projectiles projectiles) throws SlickException {
 		levelOne = glevelOne;
@@ -33,6 +35,13 @@ public class Cop extends Person {
 	public void update() {
 		super.update();
 		//checkDirection();
+		
+		System.out.println("targetUnit: " + (targetUnit == null));
+		
+		if(targetUnit != null){
+			currentPath = levelOne.findPath((int)Math.round(Xpos/levelOne.tileSize), (int)Math.round(Ypos/levelOne.tileSize), (int)Math.round(targetUnit.Xpos/levelOne.tileSize), (int)Math.round(targetUnit.Ypos/levelOne.tileSize));
+			System.out.println("currentPath: " + (currentPath == null));
+		}
 		
 		//basicAI();
 		if(shootOnSight())isShooting=true;

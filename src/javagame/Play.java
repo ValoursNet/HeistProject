@@ -101,15 +101,18 @@ public class Play extends BasicGameState {
 
 		projectiles.setMap(levelOne);
 
-		policeUnit = new Cop(levelOne, projectiles);
 		playerUnit = new Criminal(levelOne, projectiles);
-
+		policeUnit = new Cop(levelOne, projectiles);
+		policeUnit.targetUnit = playerUnit;
+		
+		levelOne.targetUnit = playerUnit;
+		
 		renderObj.setImages(player, wall, cop, glockShoot, glockAimed, G9mmCasing, blood);
 		renderObj.setMap(levelOne);
 		renderObj.setBuilding(levelOne.buildingOne);
 		renderObj.setProjectiles(projectiles);
 
-		//people.add(policeUnit);
+		people.add(policeUnit);
 		people.add(playerUnit);
 		playerUnit.directControl = true;
 		Multiplayer.people.add(playerUnit);

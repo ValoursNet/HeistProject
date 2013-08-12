@@ -24,7 +24,7 @@ public class TileMap implements TileBasedMap {
 		//System.out.println("arg1:" + arg1);
 		//System.out.println("arg2:" + arg2);
 		
-		if(mapCollisions[arg2][arg1] != 0){
+		if(mapCollisions[arg2][arg1] == 1){
 			//System.out.println("blocked");
 			return true;
 		} else {

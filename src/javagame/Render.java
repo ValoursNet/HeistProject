@@ -372,7 +372,27 @@ public class Render {
 		
 		
 		for (Person person : people) {
+			
 			if (!person.isDead) {
+				
+				
+				if(person.currentPath != null){
+					for(int pc=0; pc<person.currentPath.length(); pc++){
+						
+						if((pc+1) != person.currentPath.length()){
+							int pcx = (int) person.currentPath.getX(pc);
+							int pcy = (int) person.currentPath.getY(pc);
+							
+							int pcx2 = (int) person.currentPath.getX(pc+1);
+							int pcy2 = (int) person.currentPath.getY(pc+1);
+							
+							g.drawString("" + pc,(float) pcx*60,(float) pcy*60);
+							g.setColor(Color.red);
+							g.drawLine(pcx*60, pcy*60, pcx2*60, pcy2*60);
+							System.out.println("patj");
+						}
+					}
+				}
 				
 				/* sight line */
 				
