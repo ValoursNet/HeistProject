@@ -15,6 +15,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.pathfinding.navmesh.Space;
 
 import Inventory.Backpack;
 import Inventory.InventoryObject;
@@ -386,9 +387,9 @@ public class Render {
 							int pcx2 = (int) person.currentPath.getX(pc+1);
 							int pcy2 = (int) person.currentPath.getY(pc+1);
 							
-							g.drawString("" + pc,(float) pcx*60,(float) pcy*60);
+							g.drawString("" + pc,(float) pcx*100,(float) pcy*100);
 							g.setColor(Color.red);
-							g.drawLine(pcx*60, pcy*60, pcx2*60, pcy2*60);
+							g.drawLine(pcx*100, pcy*100, pcx2*100, pcy2*100);
 							System.out.println("patj");
 						}
 					}
@@ -509,6 +510,14 @@ public class Render {
 			Player.isShooting = false;
 			lastTimeInMillis = timeInMillis;
 		}*/
+		
+		g.setColor(Color.green);
+		int drawTileSize = 100;
+		for(int sc=0; sc<levelOne.navigationMesh.getSpaceCount(); sc++){
+			Space currentspace = levelOne.navigationMesh.getSpace(sc);
+			g.drawRect(currentspace.getX()*drawTileSize, currentspace.getY()*drawTileSize, currentspace.getWidth()*drawTileSize, currentspace.getHeight()*drawTileSize);
+		}
+		
 		
 		synchronized (projObj.bulletCollection) {  
 			for (Bullet bullet : projObj.bulletCollection) {

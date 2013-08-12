@@ -39,7 +39,7 @@ public class Map {
 
 	int mapWidth = 20;
 	int mapHeight = 20;
-	public int tileSize = 60;
+	public int tileSize = 100;
 	int[][] mapCollisions;
 	
 	public Building buildingOne = new Building(50, 50);
@@ -122,9 +122,33 @@ public class Map {
 		meshTileMap = new TileMap(mapCollisions);
 		System.out.println("meshTileMap: " + meshTileMap.getWidthInTiles());
 		
+		
 		//populateNavMesh();
 		NavMeshBuilder asdfasdfasdf = new NavMeshBuilder();
-		navigationMesh = asdfasdfasdf.build(meshTileMap);
+		//navigationMesh = asdfasdfasdf.build(meshTileMap);
+		
+		navigationMesh = new NavMesh();
+		
+		
+		ArrayList spaces = new ArrayList();
+		
+		for (Room room : buildingOne.roomCollection) {
+			ArrayList roomSpaces = new ArrayList();
+			for (int i = 0; i < room.height; i++) {
+				for (int j = 0; j < room.width; j++) {
+					//Space roomSpace = new Space(room.positionX + i, room.positionY + j, room.width, room.height);
+					Space roomSpace = new Space(room.positionX + j, room.positionY + i, 1, 1);
+					spaces.add(roomSpace);
+					roomSpaces.add(roomSpace);
+				}
+			}
+			//while (mergeSpaces(spaces)) {}
+			linkSpaces(roomSpaces);
+					
+			//navigationMesh.addSpace(roomSpace);
+		}
+		
+		navigationMesh = new NavMesh(spaces);
 		
 		//NavPath goobo = navigationMesh.findPath(1, 1, 5, 5, true);
 		
@@ -136,6 +160,21 @@ public class Map {
 		
 		addItemsToGround();
 		addExampleCop(projectiles);
+	}
+	
+	private void linkSpaces(ArrayList spaces) {
+		for (int source=0;source<spaces.size();source++) {
+			Space a = (Space) spaces.get(source);
+
+			for (int target=source+1;target<spaces.size();target++) {
+				Space b = (Space) spaces.get(target);
+
+				if (a.hasJoinedEdge(b)) {
+					a.link(b);
+					b.link(a);
+				}
+			}
+		}
 	}
 	
 	public NavPath findPath(int sX, int sY, int eX, int eY){
