@@ -49,7 +49,6 @@ public class Criminal extends Person {
 			image = new Image("res/RobberBody.png");
 		} catch (SlickException e) {
 		}
-		LoadingList.setDeferredLoading(false);
 
 		//directControl = true;
 		InventoryParser inventoryParser = new InventoryParser();
@@ -59,6 +58,9 @@ public class Criminal extends Person {
 		Magasine mag = new Magasine("Stanag", "M4 Stanag", "M4 Stanag mag", new Image("res/Stanag.png"), new Image("res/StanagGround.png"), 1, 30, 30);
 		gun.setHolder(this);
 		gun.loadMag(mag);
+		
+		//LoadingList.setDeferredLoading(false);
+		
 		System.out.println("CRIMINAL ERE");
 	}
 

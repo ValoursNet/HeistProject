@@ -377,30 +377,12 @@ public class Render {
 			if (!person.isDead) {
 				
 				
-				if(person.currentPath != null){
-					for(int pc=0; pc<person.currentPath.length(); pc++){
-						
-						if((pc+1) != person.currentPath.length()){
-							int pcx = (int) person.currentPath.getX(pc);
-							int pcy = (int) person.currentPath.getY(pc);
-							
-							int pcx2 = (int) person.currentPath.getX(pc+1);
-							int pcy2 = (int) person.currentPath.getY(pc+1);
-							
-							g.drawString("" + pc,(float) pcx*100,(float) pcy*100);
-							g.setColor(Color.red);
-							g.drawLine(pcx*100, pcy*100, pcx2*100, pcy2*100);
-							//System.out.println("patj");
-						}
-					}
-				}
+				//sight line 
 				
-				/* sight line */
+				//drawSightline(person, g, person.currentRotation, new  Color(255, 0, 0, 200));
+				//drawSightline(person, g, person.aimedRotation, new Color(255, 255, 255, 200));
 				
-				drawSightline(person, g, person.currentRotation, new  Color(255, 0, 0, 200));
-				drawSightline(person, g, person.aimedRotation, new Color(255, 255, 255, 200));
-				
-				/* Draw the person. */
+				// Draw the person. 
 				//g.drawImage(person.image, (int) person.Xpos - 27, (int) person.Ypos - 45);
 				
 				//if(glockShoot != null){
@@ -479,13 +461,43 @@ public class Render {
 					//showGroundObjects(person, g, -300, -300);
 				}
 				
-				/* Render hit boxes if in debug mode. */
+				// Render hit boxes if in debug mode. 
 				if (drawDebug) {
 					g.setColor(Color.red);
-					g.fillRect((float) person.Xpos - 19, (float) person.Ypos - 22,
-							(float) 40, (float) 40);
+					//g.drawRect((float) person.Xpos - 19, (float) person.Ypos - 22, (float) 40, (float) 40);
+					
+					if(person.leftReactive != null){
+						g.draw(person.leftReactive);
+						if(person.leftReactiveCollision){
+							g.fill(person.leftReactive);
+							//System.out.println("leftReactiveCollision");
+						}
+					}
+					if(person.rightReactive != null){
+						g.draw(person.rightReactive);
+						if(person.rightReactiveCollision){
+							g.fill(person.rightReactive);
+							//System.out.println("rightReactiveCollision");
+						}
+					}
+					
+					//g.fillRect((float) person.Xpos - 19, (float) person.Ypos - 22, (float) 40, (float) 40);
 				}	
-				/* Render lines of sight. */
+				
+				if(person.hasTargetSight){
+					//if(person.hasTarget){
+					
+					//System.out.println("asdasdasdasdasdasdas");
+					
+						if(person.targetUnit != null){
+							
+							g.setColor(Color.green);
+							g.drawLine((float) person.Xpos, (float) person.Ypos, (float) person.targetUnit.Xpos, (float) person.targetUnit.Ypos);
+						}
+					//}
+				}
+				
+				// Render lines of sight. 
 				//if (drawDebug) {
 					/*
 					for (int i = 0; i < 30; i++) {
@@ -511,12 +523,14 @@ public class Render {
 			lastTimeInMillis = timeInMillis;
 		}*/
 		
+		/*
 		g.setColor(Color.green);
 		int drawTileSize = 100;
 		for(int sc=0; sc<levelOne.navigationMesh.getSpaceCount(); sc++){
 			Space currentspace = levelOne.navigationMesh.getSpace(sc);
 			g.drawRect(currentspace.getX()*drawTileSize, currentspace.getY()*drawTileSize, currentspace.getWidth()*drawTileSize, currentspace.getHeight()*drawTileSize);
 		}
+		*/
 		
 		
 		synchronized (projObj.bulletCollection) {  
@@ -534,6 +548,64 @@ public class Render {
 			projObj.update();
 		}
 		
+		
+		/*
+		for (Person person : people) {
+					
+					if (!person.isDead) {
+						
+						
+						if(person.currentPath != null){
+							for(int pc=0; pc<person.currentPath.length(); pc++){
+								
+								if((pc+1) != person.currentPath.length()){
+									int pcx = (int) person.currentPath.getX(pc);
+									int pcy = (int) person.currentPath.getY(pc);
+									
+									int pcx2 = (int) person.currentPath.getX(pc+1);
+									int pcy2 = (int) person.currentPath.getY(pc+1);
+									
+									g.setColor(Color.red);
+									g.drawString("" + pc,(float) pcx*100+50,(float) pcy*100+50);
+									g.drawLine(pcx*100 + 50, pcy*100+50, pcx2*100+50, pcy2*100+50);
+									
+									
+									//should not be ints. yolo.
+									/*
+									double pcx = (double) person.currentPath.getX(pc);
+									double pcy = (double) person.currentPath.getY(pc);
+									
+									double pcx2 = (double) person.currentPath.getX(pc+1);
+									double pcy2 = (double) person.currentPath.getY(pc+1);
+									
+									g.setColor(Color.red);
+									g.drawString("" + pc,(float) pcx*100+50,(float) pcy*100+50);
+									g.drawLine((int)pcx*100 + 50, (int) pcy*100+50, (int)pcx2*100+50, (int) pcy2*100+50);
+									*/
+									 
+									
+									//g.drawString("" + pc,(float) pcx*100,(float) pcy*100);
+									//g.drawLine(pcx*100, pcy*100, pcx2*100, pcy2*100);
+									//System.out.println("patj");
+							/*
+								}
+							}
+							
+							
+							if(person.currentPath.length() > 2){
+								if(person.currentPath.getX(0) == person.currentPath.getX(1) && person.currentPath.getY(0) == person.currentPath.getY(1)){
+									System.out.println("wtf?");
+								} else {
+									System.out.println("person.currentPath.getX(0) == person.currentPath.getX(1) && person.currentPath.getY(0) == person.currentPath.getY(1)");
+									System.out.println(person.currentPath.getX(0) + " : " + person.currentPath.getX(1));
+									System.out.println(person.currentPath.getY(0) + " : " + person.currentPath.getY(1));
+									System.out.println("" );
+								}
+							}
+						}
+					}
+			}
+		*/
 	
 	}
 	
@@ -558,8 +630,8 @@ public class Render {
 		synchronized (buildingOne.wallCollection) {
 			for (Rectangle wallRect : buildingOne.wallCollection) {
 				//System.out.println("asd");
-				g.setColor(Color.lightGray);
-				g.fillRect(wallRect.getX(),wallRect.getY(),wallRect.getWidth(),wallRect.getHeight());
+				//g.setColor(Color.lightGray);
+				//g.fillRect(wallRect.getX(),wallRect.getY(),wallRect.getWidth(),wallRect.getHeight());
 			}
 		}
 		drawHorizontalWalls(g,buildingOne);
@@ -572,7 +644,7 @@ public class Render {
 			for (int j = 0; j < currentWallLine.length; j++) {
 				int currentWall = currentWallLine[j];
 				if(currentWall == 1){
-					//g.drawImage(buildingOne.interriorWallImage, j*100, i*100);
+					g.drawImage(buildingOne.interriorWallImage, j*100, i*100-6);
 				}
 			}
 		}
@@ -587,7 +659,7 @@ public class Render {
 			for (int j = 0; j < currentWallLine.length; j++) {
 				int currentWall = currentWallLine[j];
 				if(currentWall == 1){
-				//	g.drawImage(rotatedWall, i*100+13, j*100);
+					g.drawImage(rotatedWall, i*100+6, j*100);
 				}
 			}
 		}
@@ -665,6 +737,7 @@ public class Render {
 
 		float endX = (float) (startX + 1 * Math.cos(playerRotad));
 		float endY = (float) (startY + 1 * Math.sin(playerRotad));
+		/*
 		for (int i = 0; i < lineLength; i++) {
 			endX = (float) (startX + i * Math.cos(playerRotad));
 			endY = (float) (startY + i * Math.sin(playerRotad));
@@ -683,7 +756,29 @@ public class Render {
 				break;
 			}
 		}
-
+		*/
+		
+		for (int i = 0; i < lineLength; i++) {
+			endX = (float) (startX + i * Math.cos(playerRotad));
+			endY = (float) (startY + i * Math.sin(playerRotad));
+			Boolean breakNow = false;
+			
+			synchronized (levelOne.buildingOne.wallCollection) {  
+				for (Rectangle wallRect : levelOne.buildingOne.wallCollection) {
+					if(wallRect.contains(endX, endY)){
+						//System.out.println("collision");
+						breakNow = true;
+						break;
+					}
+				}
+			}
+			
+			if(breakNow){
+				break;
+			}
+			
+		}
+		
 		g.setColor(Color.red);
 		g.drawLine(startX, startY, endX, endY);
 	}

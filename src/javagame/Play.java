@@ -16,6 +16,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import Inventory.WeaponCreator;
+
 import person.Cop;
 import person.Criminal;
 import person.Person;
@@ -90,6 +92,8 @@ public class Play extends BasicGameState {
 		levelOne.effectCollection = this.effectCollection;
 		levelOne.buildingOne.interriorWallImage = new Image("res/wallSection.png");
 		levelOne.buildingOne.floorOneImage = new Image("res/CarpetTileRed2.png");
+		
+		levelOne.weaponCreator = new WeaponCreator();
 
 		glockAimed = new Image("res/GlockAimed.png");
 		player = new Image("res/RobberBody.png");

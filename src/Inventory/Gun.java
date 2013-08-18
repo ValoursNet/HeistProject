@@ -54,6 +54,8 @@ public class Gun extends InventoryObject {
 	public int currentRotationY;
 	public boolean triggerDown = false;
 	
+	public int shotCooldown = 0;
+	
 	public Gun(String name, String description, Image inventoryImage, Image inGameImage, int size, double fireRate, double spread, double reloadTime) {
 		super(name, description, inventoryImage,inGameImage, size);
 		this.inGameImage = inGameImage;
@@ -200,7 +202,7 @@ public class Gun extends InventoryObject {
 			} else if(this.mag == null && mag != null) {
 				this.mag = mag;
 				System.out.println("null mag thing ---------------------------------");
-				holder.weaponSlot.addToBackpack(this.mag, 0, 0);
+				//holder.weaponSlot.addToBackpack(this.mag, 0, 0);
 			}
 			
 			changeAnimation("Reload");

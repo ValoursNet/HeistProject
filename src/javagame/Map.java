@@ -31,6 +31,7 @@ import Inventory.GroundObjects;
 import Inventory.Gun;
 import Inventory.InventoryParser;
 import Inventory.Magasine;
+import Inventory.WeaponCreator;
 
 import person.Cop;
 import person.Person;
@@ -45,6 +46,8 @@ public class Map {
 	public Building buildingOne = new Building(50, 50);
 	
 	public GroundObjects groundObjects = new GroundObjects();
+	
+	public WeaponCreator weaponCreator;// = new WeaponCreator();
 
 	String path = Map.class.getProtectionDomain().getCodeSource().getLocation()
 			.getPath();
@@ -142,13 +145,28 @@ public class Map {
 					roomSpaces.add(roomSpace);
 				}
 			}
-			//while (mergeSpaces(spaces)) {}
+			//while (mergeSpaces(roomSpaces)) {}
+			
+			
 			linkSpaces(roomSpaces);
 					
 			//navigationMesh.addSpace(roomSpace);
 		}
 		
+		
+		
+		
 		navigationMesh = new NavMesh(spaces);
+		
+		
+		
+		linkHorizontalDoors();
+		linkVerticalDoors();
+		
+		
+		
+		System.out.println("navigationMesh.findSpace(0, 0): " + navigationMesh.findSpace(2, 3).getLinkCount());
+		
 		
 		//NavPath goobo = navigationMesh.findPath(1, 1, 5, 5, true);
 		
@@ -159,9 +177,75 @@ public class Map {
 		//System.out.println("goobo: " + goobo.getX(1));
 		
 		addItemsToGround();
-		addExampleCop(projectiles);
+		//addExampleCop(projectiles);
 	}
 	
+	private boolean mergeSpaces(ArrayList spaces) {
+		for (int source=0;source<spaces.size();source++) {
+			Space a = (Space) spaces.get(source);
+
+			for (int target=source+1;target<spaces.size();target++) {
+				Space b = (Space) spaces.get(target);
+
+				if (a.canMerge(b)) {
+					spaces.remove(a);
+					spaces.remove(b);
+					spaces.add(a.merge(b));
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	
+	private void linkVerticalDoors() {
+		for (int i = 0; i < buildingOne.verticalDoorCollection.length; i++) {
+			for (int j = 0; j < buildingOne.verticalDoorCollection[i].length; j++) {
+				if(buildingOne.verticalDoorCollection[i][j] == 1){
+					ArrayList spaces = new ArrayList();
+					Space spaceOne = navigationMesh.findSpace(i, j);
+					Space spaceTwo = navigationMesh.findSpace(i-1, j);
+					
+					spaces.add(spaceOne);
+					spaces.add(spaceTwo);
+					
+					System.out.println(navigationMesh.findSpace(i, j));
+					System.out.println(navigationMesh.findSpace(i-1, j));
+					
+					if(spaceOne != null && spaceTwo != null){
+						linkSpaces(spaces);
+						System.out.println("linked");
+					}
+				}
+			}
+		}
+	}
+	
+	private void linkHorizontalDoors() {
+		for (int i = 0; i < buildingOne.horizontalDoorCollection.length; i++) {
+			for (int j = 0; j < buildingOne.horizontalDoorCollection[i].length; j++) {
+				if(buildingOne.horizontalDoorCollection[i][j] == 1){
+					ArrayList spaces = new ArrayList();
+					Space spaceOne = navigationMesh.findSpace(j, i);
+					Space spaceTwo = navigationMesh.findSpace(j, i-1);
+					
+					spaces.add(spaceOne);
+					spaces.add(spaceTwo);
+					
+					System.out.println(navigationMesh.findSpace(j, i));
+					System.out.println(navigationMesh.findSpace(j, i-1));
+					
+					if(spaceOne != null && spaceTwo != null){
+						linkSpaces(spaces);
+						System.out.println("linked");
+					}
+				}
+			}
+		}
+	}
+
 	private void linkSpaces(ArrayList spaces) {
 		for (int source=0;source<spaces.size();source++) {
 			Space a = (Space) spaces.get(source);
@@ -178,7 +262,7 @@ public class Map {
 	}
 	
 	public NavPath findPath(int sX, int sY, int eX, int eY){
-		NavPath goobo = navigationMesh.findPath(sX, sY, eX, eY, true);
+		NavPath goobo = navigationMesh.findPath(sX, sY, eX, eY, false);
 		
 		return goobo;
 	}

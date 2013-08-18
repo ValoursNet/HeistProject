@@ -7,6 +7,7 @@ import java.util.Random;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.util.pathfinding.navmesh.NavPath;
 
 import Inventory.Backpack;
@@ -88,9 +89,18 @@ public class Person {
 	
     public boolean hasTarget = true;
     public Person myTarget;
+    public boolean hasTargetSight = false;
     
     public Rectangle boundingBox;
 	public NavPath currentPath;
+	
+	public Shape leftReactive;
+	public Shape rightReactive;
+	
+	public Boolean leftReactiveCollision = false;
+	public Boolean rightReactiveCollision = false;
+	
+	public Person targetUnit;
 	
 	public void update() {
 		
@@ -637,9 +647,6 @@ public class Person {
 	
 	protected void updatePosition(int[][] mapArray){
 		
-		ySpeed = 0;
-		xSpeed = 0;
-		
 		xSpeed = xSpeed + xForce;
 		ySpeed = ySpeed + yForce;
 		
@@ -662,8 +669,59 @@ public class Person {
 			lastTimeInMillis = timeInMillis;
 		}
 		
+		
+		if(leftReactive != null && rightReactive != null){
+			Boolean leftReactiveCollisionTrue = false;
+			Boolean rightReactiveCollisionTrue = false;
+			synchronized (levelOne.buildingOne.wallCollection) {  
+				for (Rectangle wallRect : levelOne.buildingOne.wallCollection) {
+					if(wallRect.intersects(leftReactive)){
+						leftReactiveCollisionTrue = true;
+					}
+					if(wallRect.intersects(rightReactive)){
+						rightReactiveCollisionTrue = true;
+					}
+				}
+			}
+			if(leftReactiveCollisionTrue){
+				leftReactiveCollision = true;
+			} else {
+				leftReactiveCollision = false;
+			}
+			
+			if(rightReactiveCollisionTrue){
+				rightReactiveCollision = true;
+			} else {
+				rightReactiveCollision = false;
+			}
+			
+		}
+		
+		if(leftReactiveCollision){
+			double scaleX = Math.sin(Math.toRadians(aimedRotation+90));
+			double scaleY = -Math.cos(Math.toRadians(aimedRotation+90));
+			xSpeed = xSpeed + (currentSpeed * scaleX);
+			//x2 = x2 + (MOVE_SPEED * scaleX);
+			ySpeed= ySpeed + (currentSpeed * scaleY);
+			//y2 = y2 + (MOVE_SPEED * scaleY);
+			
+		}
+		if(rightReactiveCollision){
+			double scaleX = Math.sin(Math.toRadians(aimedRotation-90));
+			double scaleY = -Math.cos(Math.toRadians(aimedRotation-90));
+			xSpeed = xSpeed + (currentSpeed * scaleX);
+			//x2 = x2 + (MOVE_SPEED * scaleX);
+			ySpeed= ySpeed + (currentSpeed * scaleY);
+			//y2 = y2 + (MOVE_SPEED * scaleY);
+		}
+		
+		
 		updateX(mapArray,xSpeed,updateXspeed);
 		updateY(mapArray,ySpeed,updateYspeed);
+		
+		
+		ySpeed = 0;
+		xSpeed = 0;
 		
 		//Works, but essentially just spaming it. Not cool.
 		Multiplayer.people.add(this);
