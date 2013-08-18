@@ -36,11 +36,11 @@ public class Cop extends Person {
 		super.update();
 		//checkDirection();
 		
-		System.out.println("targetUnit: " + (targetUnit == null));
+		//System.out.println("targetUnit: " + (targetUnit == null));
 		
 		if(targetUnit != null){
 			currentPath = levelOne.findPath((int)Math.round(Xpos/levelOne.tileSize), (int)Math.round(Ypos/levelOne.tileSize), (int)Math.round(targetUnit.Xpos/levelOne.tileSize), (int)Math.round(targetUnit.Ypos/levelOne.tileSize));
-			System.out.println("currentPath: " + (currentPath == null));
+			//System.out.println("currentPath: " + (currentPath == null));
 		}
 		
 		//basicAI();

@@ -105,6 +105,9 @@ public class MapParser {
 				
 				return gun;
 				*/
+				
+				building.addWallsToCollection();
+				
 				return building;
 			}
 			br.close();

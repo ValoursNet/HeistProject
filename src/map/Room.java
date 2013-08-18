@@ -9,8 +9,11 @@ public class Room {
 	
 	public int unitSize = 100;
 	
-	int[][] horizontalWallCollection;
-	int[][] verticalWallCollection;
+	public int[][] horizontalWallCollection;
+	public int[][] verticalWallCollection;
+	
+	public int[][] horizontalDoorCollection;
+	public int[][] verticalDoorCollection;
 	
 	public Room(int positionX, int positionY, int width, int height){
 		this.positionX = positionX;
@@ -23,6 +26,10 @@ public class Room {
 	private void populateWallCollection(){
 		horizontalWallCollection = new int[height+1][width];
 		verticalWallCollection = new int[width+1][height];
+		
+		//size up and create door collection
+		horizontalDoorCollection = new int[height+1][width];
+		verticalDoorCollection = new int[width+1][height];
 		
 		for (int i = 0; i < horizontalWallCollection[0].length; i++) {
 			horizontalWallCollection[0][i] = 1;
@@ -37,9 +44,11 @@ public class Room {
 	
 	void addDoor(int orientation, int xPos, int yPos){
 		if(orientation == 1){
-			horizontalWallCollection[yPos][xPos] = 0;
+			//horizontalWallCollection[yPos][xPos] = 0;
+			horizontalDoorCollection[yPos][xPos] = 1;
 		} else if(orientation == 0){
-			verticalWallCollection[xPos][yPos] = 0;
+			verticalDoorCollection[xPos][yPos] = 1;
+			//verticalWallCollection[xPos][yPos] = 0;
 		}
 	}
 	

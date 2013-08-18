@@ -13,6 +13,9 @@ public class Building {
 	public int[][] horizontalWallCollection;
 	public int[][] verticalWallCollection;
 	
+	public int[][] horizontalDoorCollection;
+	public int[][] verticalDoorCollection;
+	
 	public HashSet<Room> roomCollection = new HashSet<Room>();
 	public HashSet<Rectangle> wallCollection = new HashSet<Rectangle>();
 	
@@ -28,14 +31,79 @@ public class Building {
 		horizontalWallCollection = new int[height+1][width];
 		verticalWallCollection = new int[width+1][height];
 		
-		//horizontalWallCollection[0][0] = 1;
-		//verticalWallCollection[0][1] = 1;
+		horizontalDoorCollection = new int[height+1][width];
+		verticalDoorCollection = new int[width+1][height];
+
 	}	
 	
 	public void addRoom(Room newRoom){
 		roomCollection.add(newRoom);
+		
+		//walls
 		combineHorizontalWallCollection(newRoom);
 		combineVerticalWallCollection(newRoom);
+		
+		//doors
+		combineVerticalDoorCollection(newRoom);
+		combineHorizontalDoorCollection(newRoom);
+		
+		//doors
+		removeVerticalWallsCollection();
+		removeHorizontalWallsCollection();
+	}
+	
+	private void removeVerticalWallsCollection(){
+		for (int i = 0; i < verticalDoorCollection.length; i++) {
+			int[] currentLine = verticalDoorCollection[i];
+			for (int j = 0; j < currentLine.length; j++) {
+				if( verticalDoorCollection[i][j] == 1){
+					verticalWallCollection[i][j] = 0;
+				}
+			}
+		}
+	}
+	
+	private void removeHorizontalWallsCollection(){
+		for (int i = 0; i < horizontalDoorCollection.length; i++) {
+			int[] currentLine = horizontalDoorCollection[i];
+			for (int j = 0; j < currentLine.length; j++) {
+				if( horizontalDoorCollection[i][j] == 1){
+					horizontalWallCollection[i][j] = 0;
+				}
+			}
+		}
+	}
+	
+	private void combineVerticalDoorCollection(Room newRoom){
+		if(newRoom.verticalDoorCollection.length + newRoom.positionX < this.verticalDoorCollection.length){
+			for (int i = 0; i < newRoom.verticalDoorCollection.length; i++) {
+				int[] currentLine = newRoom.verticalDoorCollection[i];
+				for (int j = 0; j < currentLine.length; j++) {
+					if( newRoom.verticalDoorCollection[i][j] == 1){
+						int wallX = i+newRoom.positionX;
+						int wallY = j+newRoom.positionY;
+						verticalDoorCollection[wallX][wallY] = 1;
+						//wallCollection.add(new Rectangle(wallX*unitSize,wallY*unitSize,13,100));
+					}
+				}
+			}
+		}
+	}
+	
+	private void combineHorizontalDoorCollection(Room newRoom){
+		if(newRoom.horizontalDoorCollection.length + newRoom.positionY < this.horizontalDoorCollection.length){
+			for (int i = 0; i < newRoom.horizontalDoorCollection.length; i++) {
+				int[] currentLine = newRoom.horizontalDoorCollection[i];
+				for (int j = 0; j < currentLine.length; j++) {
+					if( newRoom.horizontalDoorCollection[i][j] == 1){
+						int wallX = j+newRoom.positionX;
+						int wallY = i+newRoom.positionY;
+						horizontalDoorCollection[wallY][wallX] = 1;
+						//wallCollection.add(new Rectangle(wallX*unitSize,wallY*unitSize,100,13));
+					}
+				}
+			}
+		}
 	}
 	
 	private void combineVerticalWallCollection(Room newRoom){
@@ -47,7 +115,7 @@ public class Building {
 						int wallX = i+newRoom.positionX;
 						int wallY = j+newRoom.positionY;
 						verticalWallCollection[wallX][wallY] = 1;
-						wallCollection.add(new Rectangle(wallX*unitSize,wallY*unitSize,13,100));
+						//wallCollection.add(new Rectangle(wallX*unitSize,wallY*unitSize,13,100));
 					}
 				}
 			}
@@ -63,10 +131,32 @@ public class Building {
 						int wallX = j+newRoom.positionX;
 						int wallY = i+newRoom.positionY;
 						horizontalWallCollection[wallY][wallX] = 1;
-						wallCollection.add(new Rectangle(wallX*unitSize,wallY*unitSize,100,13));
+						//wallCollection.add(new Rectangle(wallX*unitSize,wallY*unitSize,100,13));
 					}
 				}
 			}
 		}
 	}
+
+	public void addWallsToCollection() {
+		for (int i = 0; i < verticalWallCollection.length; i++) {
+			int[] currentLine = verticalWallCollection[i];
+			for (int j = 0; j < currentLine.length; j++) {
+				if( verticalWallCollection[i][j] == 1){
+					wallCollection.add(new Rectangle(i*unitSize,j*unitSize,13,100));
+				}
+			}
+		}
+			
+		for (int k = 0; k < horizontalWallCollection.length; k++) {
+			int[] currentLine = horizontalWallCollection[k];
+			for (int l = 0; l < currentLine.length; l++) {
+				if( horizontalWallCollection[k][l] == 1){
+					wallCollection.add(new Rectangle(l*unitSize,k*unitSize,100,13));
+				}
+			}
+		}
+		
+	}
+	
 }

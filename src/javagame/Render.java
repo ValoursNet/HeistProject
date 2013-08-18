@@ -390,7 +390,7 @@ public class Render {
 							g.drawString("" + pc,(float) pcx*100,(float) pcy*100);
 							g.setColor(Color.red);
 							g.drawLine(pcx*100, pcy*100, pcx2*100, pcy2*100);
-							System.out.println("patj");
+							//System.out.println("patj");
 						}
 					}
 				}
@@ -558,6 +558,7 @@ public class Render {
 		synchronized (buildingOne.wallCollection) {
 			for (Rectangle wallRect : buildingOne.wallCollection) {
 				//System.out.println("asd");
+				g.setColor(Color.lightGray);
 				g.fillRect(wallRect.getX(),wallRect.getY(),wallRect.getWidth(),wallRect.getHeight());
 			}
 		}
@@ -571,7 +572,7 @@ public class Render {
 			for (int j = 0; j < currentWallLine.length; j++) {
 				int currentWall = currentWallLine[j];
 				if(currentWall == 1){
-					g.drawImage(buildingOne.interriorWallImage, j*100, i*100);
+					//g.drawImage(buildingOne.interriorWallImage, j*100, i*100);
 				}
 			}
 		}
@@ -586,7 +587,7 @@ public class Render {
 			for (int j = 0; j < currentWallLine.length; j++) {
 				int currentWall = currentWallLine[j];
 				if(currentWall == 1){
-					g.drawImage(rotatedWall, i*100+13, j*100);
+				//	g.drawImage(rotatedWall, i*100+13, j*100);
 				}
 			}
 		}
