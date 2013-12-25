@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashSet;
 
-import map.Building;
-import map.Room;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -16,14 +13,15 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import Inventory.WeaponCreator;
-
 import person.Cop;
 import person.Criminal;
 import person.Person;
 import server.Client;
 import server.Multiplayer;
 import server.Server;
+import Inventory.WeaponCreator;
+
+import haxe.root.*;
 
 //Suppressing unused multiplayer
 //@SuppressWarnings("unused")
@@ -60,7 +58,7 @@ public class Play extends BasicGameState {
 
 	Server server;
 
-	
+	public Visibility vis = new Visibility();
 
 	float offsetX = 0;
 	float offsetY = 0;
@@ -70,7 +68,18 @@ public class Play extends BasicGameState {
 	public static boolean update = false;
 
 	public Play(int state) {
-
+		int size = 10;
+		int gridMargin = 20;
+		vis.loadMap(size, gridMargin,new Array(),new Array());
+		/*
+		vis.demo_intersectionsDetected.forEach(function (segment) {
+            g.moveTo(segment[0].x, segment[0].y);
+            g.lineTo(segment[1].x, segment[1].y);
+            g.moveTo(segment[2].x, segment[2].y);
+            g.lineTo(segment[3].x, segment[3].y);
+        });
+        */
+		//vis.loadMap(size, margin, blocks, walls)
 	}
 
 	public Play() throws SlickException {
