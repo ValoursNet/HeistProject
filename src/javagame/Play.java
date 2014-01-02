@@ -58,8 +58,6 @@ public class Play extends BasicGameState {
 
 	Server server;
 
-	public Visibility vis = new Visibility();
-
 	float offsetX = 0;
 	float offsetY = 0;
 
@@ -68,18 +66,6 @@ public class Play extends BasicGameState {
 	public static boolean update = false;
 
 	public Play(int state) {
-		int size = 10;
-		int gridMargin = 20;
-		vis.loadMap(size, gridMargin,new Array(),new Array());
-		/*
-		vis.demo_intersectionsDetected.forEach(function (segment) {
-            g.moveTo(segment[0].x, segment[0].y);
-            g.lineTo(segment[1].x, segment[1].y);
-            g.moveTo(segment[2].x, segment[2].y);
-            g.lineTo(segment[3].x, segment[3].y);
-        });
-        */
-		//vis.loadMap(size, margin, blocks, walls)
 	}
 
 	public Play() throws SlickException {

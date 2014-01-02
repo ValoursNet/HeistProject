@@ -13,6 +13,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.pathfinding.navmesh.Space;
@@ -22,6 +23,8 @@ import Inventory.InventoryObject;
 import Inventory.Vicinity;
 
 import person.Person;
+import vision.VisibilityPath;
+import vision.Vision;
 
 public class Render {
 
@@ -48,6 +51,8 @@ public class Render {
 	
 	SpriteSheet sheet;
 	Animation glockShootAnim;
+	
+	Vision vision;
 
 	public Render(){
 		createColours();
@@ -109,6 +114,100 @@ public class Render {
 		colours[3] = new  Color(60, 60, 60);
 		colours[4] = new  Color(80, 209, 56);
 		colours[5] = new  Color(220, 46, 46);;
+	}
+	
+	private void drawVision(Graphics g){
+		
+		//vision.visibility.loadMap(size, margin, blocks, walls);
+		vision.redrawAll();
+		
+		VisibilityPath path = vision.computeVisibleAreaPathsFloor();
+		
+		drawFloor(g, path);
+	}
+	
+	private void interpretSvg(Graphics g, VisibilityPath path){
+		
+		//Polygon pathPoly = new Polygon();
+		
+		System.out.println("//Start");
+		
+		//pathPoly.addPoint((float) vision.center.Xpos, (float) vision.center.Ypos);
+		//Point lineFrom = new Point();
+		double lineFromX = vision.center.Xpos;
+		double lineFromY = vision.center.Ypos;
+		
+		for(int i = 0; i < path.size(); i++){
+			if (path.get(i).type == 'M') { 
+				//pathPoly.addPoint((float) path.get(i).x, (float) path.get(i).y);
+				//g.drawLine((float)vision.center.Xpos,(float) vision.center.Ypos, (float)  path.get(i).x,(float) path.get(i).y);
+				lineFromX = path.get(i).x;
+				lineFromY = path.get(i).y;
+				
+				System.out.println("g.moveTo(" + path.get(i).x + "," + path.get(i).y + ");");
+				
+				//i += 1; 
+				//g.moveTo(path.get(i).x, path.get(i).y); i += 2; 
+			}
+            if (path.get(i).type == 'L') { 
+            	//pathPoly.addPoint((float) path.get(i).x, (float) path.get(i).y);
+            	g.drawLine((float)lineFromX,(float) lineFromY, (float)  path.get(i).x,(float) path.get(i).y);
+            	lineFromX = path.get(i).x;
+				lineFromY = path.get(i).y;
+				
+				System.out.println("g.lineTo(" + path.get(i).x + "," + path.get(i).y + ");");
+				
+            	//i += 1; 
+            	//g.lineTo(path.get(i).x, path.get(i).y); i += 2; 
+            }
+		}
+		
+		g.drawLine((float)lineFromX,(float) lineFromY, (float)  vision.center.Xpos,(float) vision.center.Ypos);
+		
+		System.out.println("//End");
+		
+		//g.draw(pathPoly);
+		/*
+		function interpretSvg(g, path) {
+	        for (var i = 0; i < path.length; i++) {
+	            if (path[i] == 'M') { g.moveTo(path[i+1], path[i+2]); i += 2; }
+	            if (path[i] == 'L') { g.lineTo(path[i+1], path[i+2]); i += 2; }
+	        }
+	    }
+		 */
+	}
+	
+	private void drawFloor(Graphics g, VisibilityPath path){
+		
+		//Shape should be filled with gradient
+		 interpretSvg(g, path);
+		/*
+		 function drawFloor(g, path, solidStyle) {
+	        var gradient = g.createRadialGradient(center.x, center.y, 0,
+	                                              center.x, center.y, size*0.75);
+	        gradient.addColorStop(0.0, 'hsla(60, 100%, 75%, 0.5)');
+	        gradient.addColorStop(0.5, 'hsla(60, 50%, 50%, 0.3)');
+	        gradient.addColorStop(1.0, 'hsla(60, 60%, 30%, 0.1)');
+	        
+	        g.save();
+	        g.fillStyle = solidStyle? 'hsla(60, 75%, 60%, 0.2)' : gradient;
+	        g.beginPath();
+	        g.moveTo(center.x, center.y);
+	        interpretSvg(g, path);
+	        g.lineTo(center.x, center.y);
+	        
+	        if (drawLights) {
+	            // When lights are involved, the lighting has already been
+	            // applied. Instead of lighting up the areas we can see,
+	            // invert the fill region, blacking out areas we can't
+	            // see.
+	            g.fillStyle = 'rgba(0, 0, 16, 0.8)';
+	            g.moveTo(0, 0); g.lineTo(0, size); g.lineTo(size, size); g.lineTo(size, 0);
+	        }
+	        g.fill();
+	        g.restore();
+	    }
+		 */
 	}
 	
 	/*
@@ -376,7 +475,11 @@ public class Render {
 			
 			if (!person.isDead) {
 				
-				
+				if(vision == null){
+					if(person.directControl){
+						vision = new Vision(person);
+					}
+				}
 				//sight line 
 				
 				//drawSightline(person, g, person.currentRotation, new  Color(255, 0, 0, 200));
@@ -606,6 +709,10 @@ public class Render {
 					}
 			}
 		*/
+		
+		if(vision != null){
+			drawVision(g);
+		}
 	
 	}
 	
